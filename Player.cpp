@@ -30,7 +30,7 @@ void OOP::Player::setVelocityY(float newVelocity)
 	velocityY = newVelocity;
 }
 
-void OOP::Player::updateVelocities(float positionY)
+void OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform)
 {
 	if (keyBoard.getRightArrow() == true) {
 		velocityX = -10;
@@ -41,7 +41,9 @@ void OOP::Player::updateVelocities(float positionY)
 	else {
 		velocityX = 0;
 	}
-	toCalculate.newVelocityY(velocityY, positionY, keyBoard.getUpArrow());
+
+	toCalculate.checkOnGround(&onGround, m_MainCharacter, platform);
+	toCalculate.newVelocityY(velocityY, keyBoard.getUpArrow(), &onGround, m_MainCharacter, platform);
 	velocityY = toCalculate.getVelocityY();
 }
 

@@ -26,8 +26,8 @@ namespace OOP {
 		float getVelocityY();
 		void setVelocityX(float newVelocity);
 		void setVelocityY(float newVelocity);
-		void updateVelocities(float positionY);
-
+		void updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform);
+		
 		cocos2d::EventListenerKeyboard *getListener(); //Returns the listener that holds the event
 
 
@@ -39,6 +39,7 @@ namespace OOP {
 		float velocityY = 0;
 		Physics toCalculate;
 		KeyboardListener keyBoard;
+		bool onGround = false;
 	};
 }
 
