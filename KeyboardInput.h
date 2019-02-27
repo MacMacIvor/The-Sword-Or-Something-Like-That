@@ -1,4 +1,5 @@
-#pragma once
+#ifndef H_KEYBOARD
+#define H_KEYBOARD
 #include <functional>
 #include <iostream>
 #include "cocos2d.h"
@@ -28,6 +29,8 @@ namespace OOP //Our namespace
 		bool getLeftArrow();
 		bool getRightArrow();
 		bool getUpArrow();
+		bool getShiftKey();
+		bool getZKey();
 
 
 		cocos2d::EventListenerKeyboard *getListener(); //Returns the listener that holds the event
@@ -38,5 +41,9 @@ namespace OOP //Our namespace
 		bool upArrow = false;
 		bool leftArrow = false;
 		bool rightArrow = false;
+		bool shiftKey = false;
+		bool zKey = false;
 	};
 }
+
+#endif //!H_KEYBOARD

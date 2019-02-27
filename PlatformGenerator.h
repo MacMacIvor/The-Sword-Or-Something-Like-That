@@ -4,6 +4,7 @@
 #include <functional>
 #include "cocos2d.h"
 #include <vector>
+#include "myLevels.h"
 
 namespace cocos2d {
 	class Vec2;
@@ -18,20 +19,32 @@ namespace cocos2d {
 
 namespace OOP {
 
-	class PlatformGenerator {
+	class PlatformGenerator : public cocos2d::Scene, public OOP::myLevels {
 	public:
 		PlatformGenerator();
 		cocos2d::Sprite *getPlatform(int reference);
-		void generateNew(int index);
-		int getSize();
-		int getClosest(cocos2d::Sprite* character);
+		void generateNew(cocos2d::Scene *help, OOP::myLevels* level);
+		int getClosestY(cocos2d::Sprite* character, float velocityY);
+		int getClosestX(cocos2d::Sprite* character, float velocityX);
+
+		void moveHitBoxesX(float X);
+		void moveHitBoxesY(float Y);
+
+		int getTypeHitBoxX();
+		int getTypeHitBoxY();
+
+		void resetHitBox(cocos2d::Scene *help, OOP::myLevels* level);
+
+
 	private:
-		//cocos2d::Sprite *;
 		std::vector <cocos2d::Sprite *> m_Platform;
-		std::vector <float> positionX, positionY;
+		std::vector <int> types;
+		int typeHitBoxX;
+		int typeHitBoxY;
 
+		int number = 0;
+		int index;
 	};
-
 }
 
 #endif //H_PLATFORM

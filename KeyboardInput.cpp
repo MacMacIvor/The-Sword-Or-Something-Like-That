@@ -24,11 +24,16 @@ void OOP::KeyboardListener::OnKeyReleased(cocos2d::EventKeyboard::KeyCode keyCod
 	case cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		rightArrow = false;
 		break;
-
 	}
 	switch (keyCode) {
 	case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
 		upArrow = false;
+	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_Z) {
+		zKey = false;
+	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_SHIFT) {
+		shiftKey = false;
 	}
 }
 
@@ -46,6 +51,12 @@ void OOP::KeyboardListener::OnKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode
 	case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
 		upArrow = true;
 	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_Z) {
+		zKey = true;
+	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_SHIFT) {
+		shiftKey = true;
+	}
 	log("Key with keycode %d pressed", keyCode);
 }
 
@@ -62,6 +73,16 @@ bool OOP::KeyboardListener::getRightArrow()
 bool OOP::KeyboardListener::getUpArrow()
 {
 	return upArrow;
+}
+
+bool OOP::KeyboardListener::getShiftKey()
+{
+	return shiftKey;
+}
+
+bool OOP::KeyboardListener::getZKey()
+{
+	return zKey;
 }
 
 cocos2d::EventListenerKeyboard * OOP::KeyboardListener::getListener()
