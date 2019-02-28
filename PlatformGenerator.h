@@ -23,17 +23,17 @@ namespace OOP {
 	public:
 		PlatformGenerator();
 		cocos2d::Sprite *getPlatform(int reference);
-		void generateNew(cocos2d::Scene *help, OOP::myLevels* level);
-		int getClosestY(cocos2d::Sprite* character, float velocityY);
-		int getClosestX(cocos2d::Sprite* character, float velocityX);
+		void const generateNew(cocos2d::Scene *help, OOP::myLevels* level);
+		int const getClosestY(cocos2d::Sprite* character, float velocityY);
+		int const getClosestX(cocos2d::Sprite* character, float velocityX);
 
-		void moveHitBoxesX(float X);
-		void moveHitBoxesY(float Y);
+		void const moveHitBoxesX(float X);
+		void const moveHitBoxesY(float Y);
 
-		int getTypeHitBoxX();
-		int getTypeHitBoxY();
+		int const getTypeHitBoxX() const;
+		int const getTypeHitBoxY() const;
 
-		void resetHitBox(cocos2d::Scene *help, OOP::myLevels* level);
+		void const resetHitBox(cocos2d::Scene *help, OOP::myLevels* level);
 
 
 	private:

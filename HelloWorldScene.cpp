@@ -65,6 +65,9 @@ bool HelloWorld::init()
 	
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(m_mainCharacter.getListener(), this);
 	
+	m_mainCharacter.saveScene(this);
+	//m_mainCharacter.updateHealthSprite();
+	m_mainCharacter.initHealth();
 
 	auto label = Label::createWithTTF("This is what a killer's Smile looks like!\n"
 										"               Fear it!", "fonts/Marker Felt.ttf", 24);
@@ -148,6 +151,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		}
 
 		m_mainCharacter.getMainCharacter()->setPosition(position);
+		m_mainCharacter.updateHealthSprite();
 	}
 	else if (m_mainCharacter.getHealth() <= 0 && taunt != 100) {
 		if (taunt == 0) {
@@ -159,9 +163,9 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
 		taunt = 0;
 		m_mainCharacter.resetPlayer();
-		m_Platform.resetHitBox(this, &m_Level);
 		m_Level.resetLevel(this);
-		
+		m_Platform.resetHitBox(this, &m_Level);
+		m_mainCharacter.saveScene(this);
 	}
 
 }

@@ -26,11 +26,11 @@ namespace OOP //Our namespace
 		void OnKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event *a_Event); //Gets called when the mouse button is pressed
 
 
-		bool getLeftArrow();
-		bool getRightArrow();
-		bool getUpArrow();
-		bool getShiftKey();
-		bool getZKey();
+		bool const getLeftArrow() const;
+		bool const getRightArrow() const;
+		bool const getUpArrow() const;
+		bool const getShiftKey() const;
+		bool const getZKey() const;
 
 
 		cocos2d::EventListenerKeyboard *getListener(); //Returns the listener that holds the event

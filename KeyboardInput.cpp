@@ -60,27 +60,27 @@ void OOP::KeyboardListener::OnKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode
 	log("Key with keycode %d pressed", keyCode);
 }
 
-bool OOP::KeyboardListener::getLeftArrow()
+bool const OOP::KeyboardListener::getLeftArrow() const
 {
 	return leftArrow;
 }
-
-bool OOP::KeyboardListener::getRightArrow()
+	  
+bool const OOP::KeyboardListener::getRightArrow() const
 {
 	return rightArrow;
 }
-
-bool OOP::KeyboardListener::getUpArrow()
+	  
+bool const OOP::KeyboardListener::getUpArrow() const
 {
 	return upArrow;
 }
-
-bool OOP::KeyboardListener::getShiftKey()
+	  
+bool const OOP::KeyboardListener::getShiftKey() const
 {
 	return shiftKey;
 }
-
-bool OOP::KeyboardListener::getZKey()
+	  
+bool const OOP::KeyboardListener::getZKey() const 
 {
 	return zKey;
 }

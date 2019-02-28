@@ -19,27 +19,27 @@ namespace OOP {
 	public:
 		myLevels();
 		~myLevels();
-		void initLevel(cocos2d::Scene *help);
-		void setLevel(int newLevel);
-		cocos2d::Sprite* getLevel(int currentLevel);
-		int getLevel();
+		void const initLevel(cocos2d::Scene *help) const;
+		void const setLevel(int newLevel);
+		cocos2d::Sprite* const getLevel(int currentLevel) const;
+		int const getLevel() const;
 
-		bool checkMaxX(int dir, cocos2d::Scene *help);
+		bool const checkMaxX(int dir, cocos2d::Scene *help);
 
-		bool checkMaxY(int dir, cocos2d::Scene *help);
+		bool const checkMaxY(int dir, cocos2d::Scene *help);
 
-		void moveBackGroundX(float X, cocos2d::Scene *help);
+		void const moveBackGroundX(float X, cocos2d::Scene *help);
 		
-		float getMovedAmountX();
+		float const getMovedAmountX() const;
 
-		void moveBackGroundY(float Y, cocos2d::Scene *help);
+		void const moveBackGroundY(float Y, cocos2d::Scene *help);
 
-		float getMovedAmountY();
+		float const getMovedAmountY() const;
 
-		void resetLevel(cocos2d::Scene *help);
+		void const resetLevel(cocos2d::Scene *help) const;
 
 
-		int levelOneHitBox[16][9]
+		const int levelOneHitBox[16][9]
 			=
 		{
 			{1,0,0,0,0,0,0,0,0},

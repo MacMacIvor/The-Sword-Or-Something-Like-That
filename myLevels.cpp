@@ -14,29 +14,29 @@ OOP::myLevels::~myLevels()
 {
 }
 
-void OOP::myLevels::initLevel(cocos2d::Scene *help)
+void const OOP::myLevels::initLevel(cocos2d::Scene *help) const
 {
 	m_Levels[currentLevel]->setPosition((m_Levels[currentLevel]->getBoundingBox().size.width / 2), m_Levels[currentLevel]->getBoundingBox().size.height / 2);
 	help->addChild(m_Levels[currentLevel], 0);
 }
 
-void OOP::myLevels::setLevel(int newLevel)
+void const OOP::myLevels::setLevel(int newLevel)
 {
 	m_Levels[currentLevel]->release();
 	currentLevel = newLevel;
 }
 
-cocos2d::Sprite * OOP::myLevels::getLevel(int currentLevel)
+cocos2d::Sprite * const OOP::myLevels::getLevel(int currentLevel) const
 {
 	return m_Levels[currentLevel];
 }
 
-int OOP::myLevels::getLevel()
+int const OOP::myLevels::getLevel() const
 {
 	return currentLevel;
 }
 
-bool OOP::myLevels::checkMaxX(int dir, cocos2d::Scene *help)
+bool const OOP::myLevels::checkMaxX(int dir, cocos2d::Scene *help)
 {
 	
 	if (dir > 0) {
@@ -57,7 +57,7 @@ bool OOP::myLevels::checkMaxX(int dir, cocos2d::Scene *help)
 	return false;
 }
 
-bool OOP::myLevels::checkMaxY(int dir, cocos2d::Scene * help)
+bool const OOP::myLevels::checkMaxY(int dir, cocos2d::Scene * help)
 {
 	if (dir < 0) {
 		if (m_Levels[currentLevel]->getBoundingBox().getMinY() == help->getBoundingBox().getMinY()) {
@@ -77,7 +77,7 @@ bool OOP::myLevels::checkMaxY(int dir, cocos2d::Scene * help)
 	return false;
 }
 
-void OOP::myLevels::moveBackGroundX(float X, cocos2d::Scene *help)
+void const OOP::myLevels::moveBackGroundX(float X, cocos2d::Scene *help)
 {
 	movedAmountX = X;
 	
@@ -107,42 +107,44 @@ void OOP::myLevels::moveBackGroundX(float X, cocos2d::Scene *help)
 	}
 }
 
-float OOP::myLevels::getMovedAmountX()
+float const OOP::myLevels::getMovedAmountX() const
 {
 	return movedAmountX;
 }
 
-void OOP::myLevels::moveBackGroundY(float Y, cocos2d::Scene * help)
+void const OOP::myLevels::moveBackGroundY(float Y, cocos2d::Scene * help)
 {
 	movedAmountY = Y;
-		if (m_Levels[currentLevel]->getBoundingBox().getMaxY() - Y < help->getBoundingBox().getMaxY() && Y < 0) {
-			movedAmountY = (help->getBoundingBox().getMaxY() - m_Levels[currentLevel]->getBoundingBox().getMaxY());
+		
+	if (m_Levels[currentLevel]->getBoundingBox().getMinY() - Y > help->getBoundingBox().getMinY() || m_Levels[currentLevel]->getBoundingBox().getMaxY() - Y < help->getBoundingBox().getMaxY()) {
+		if (m_Levels[currentLevel]->getBoundingBox().getMinY() - Y > help->getBoundingBox().getMinY()) {
+			movedAmountY = m_Levels[currentLevel]->getBoundingBox().getMinY() - help->getBoundingBox().getMinY();
 			m_Levels[currentLevel]->setPosition(
 				m_Levels[currentLevel]->getPositionX(),
-				m_Levels[currentLevel]->getPositionY() + (help->getBoundingBox().getMaxY() - m_Levels[currentLevel]->getBoundingBox().getMaxY())
-			);
-		}
-		else if (m_Levels[currentLevel]->getBoundingBox().getMinY() - Y > help->getBoundingBox().getMinY() && Y > 0) {
-			movedAmountY = help->getBoundingBox().getMinY() - m_Levels[currentLevel]->getBoundingBox().getMinY();
-			m_Levels[currentLevel]->setPosition(
-				m_Levels[currentLevel]->getPositionX(),
-				m_Levels[currentLevel]->getPositionY() + (help->getBoundingBox().getMinY() - m_Levels[currentLevel]->getBoundingBox().getMinY())
-			);
+				m_Levels[currentLevel]->getPositionY() - movedAmountY);
 		}
 		else {
+			movedAmountY = m_Levels[currentLevel]->getBoundingBox().getMaxY() - help->getBoundingBox().getMaxY();
 			m_Levels[currentLevel]->setPosition(
 				m_Levels[currentLevel]->getPositionX(),
-				m_Levels[currentLevel]->getPositionY() - Y
-			);
+				m_Levels[currentLevel]->getPositionY() - movedAmountY);
 		}
+	}
+
+	else {
+		m_Levels[currentLevel]->setPosition(
+			m_Levels[currentLevel]->getPositionX(),
+			m_Levels[currentLevel]->getPositionY() - Y
+		);
+	}
 }
 
-float OOP::myLevels::getMovedAmountY()
+float const OOP::myLevels::getMovedAmountY() const 
 {
 	return -movedAmountY;
 }
 
-void OOP::myLevels::resetLevel(cocos2d::Scene * help)
+void const OOP::myLevels::resetLevel(cocos2d::Scene * help) const
 {
 	m_Levels[currentLevel]->setPosition((m_Levels[currentLevel]->getBoundingBox().size.width / 2), m_Levels[currentLevel]->getBoundingBox().size.height / 2);
 }

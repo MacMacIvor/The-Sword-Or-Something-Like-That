@@ -1,6 +1,6 @@
 #include "GamePhysics.h"
 
-void OOP::Physics::newVelocityY(float velocityY, bool upArrow, bool leftArrow, bool rightArrow, bool zKey, bool shiftKey, int * againstWall, bool *onGround, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform)
+void const OOP::Physics::newVelocityY(float velocityY, bool upArrow, bool leftArrow, bool rightArrow, bool zKey, bool shiftKey, int * againstWall, bool *onGround, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform)
 {
 	if (wallJumpBonus > 0) {
 		wallJumpBonus -= 1;
@@ -105,7 +105,7 @@ void OOP::Physics::newVelocityY(float velocityY, bool upArrow, bool leftArrow, b
 	}
 }
 
-void OOP::Physics::newVelocityX(float velocityX, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform)
+void const OOP::Physics::newVelocityX(float velocityX, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform)
 {
 	new_VelocityX = 0;
 	if (wallJumpBonus != 0) {
@@ -150,17 +150,17 @@ void OOP::Physics::newVelocityX(float velocityX, cocos2d::Sprite * m_MainCharact
 	}
 }
 
-float OOP::Physics::getVelocityY()
+float const OOP::Physics::getVelocityY() const 
 {
 	return new_VelocityY;
 }
 
-float OOP::Physics::getVelocityX()
+float const OOP::Physics::getVelocityX() const 
 {
 	return new_VelocityX;
 }
 
-void OOP::Physics::checkOnGround(bool *onGround, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxY, int * health)
+void const OOP::Physics::checkOnGround(bool *onGround, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxY, int * health)
 {
 	if (m_MainCharacter->getPositionY() == 25) {
 		;//*onGround = true;
@@ -187,7 +187,7 @@ void OOP::Physics::checkOnGround(bool *onGround, cocos2d::Sprite * m_MainCharact
 	
 }
 
-void OOP::Physics::checkAgainstWall(int * againstWall, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxX, int * health)
+void const OOP::Physics::checkAgainstWall(int * againstWall, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxX, int * health)
 {
 	//if left = right vise versa
 	//if player sprite in platform sprite

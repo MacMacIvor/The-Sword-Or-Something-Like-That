@@ -23,16 +23,16 @@ namespace OOP {
 		Player();
 		~Player();
 
-		float getVelocityX() const;
-		float getVelocityY() const;
-		void setVelocityX(float newVelocity);
-		void setVelocityY(float newVelocity);
-		void updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platformY, cocos2d::Sprite * platformX, int typeOfHitBoxX, int typeOfHitBoxY);
-		
-
-
-		void resetPlayer();
-		int getHealth();
+		float const getVelocityX() const;
+		float const getVelocityY() const;
+		void const setVelocityX(float newVelocity);
+		void const setVelocityY(float newVelocity);
+		void const updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platformY, cocos2d::Sprite * platformX, int typeOfHitBoxX, int typeOfHitBoxY);
+		void const updateHealthSprite() const;
+		void const saveScene(cocos2d::Scene * helloThere);
+		void const initHealth() const;
+		void const resetPlayer();
+		int const getHealth() const;
 
 		cocos2d::EventListenerKeyboard *getListener(); //Returns the listener that holds the event
 
@@ -41,8 +41,10 @@ namespace OOP {
 		cocos2d::Sprite *getTheLastAmountOfPatienceIHaveWithCocos(); //Returns the listener that holds the event
 
 	private:
+		cocos2d::Scene* m_scene;
 		cocos2d::Sprite *m_MainCharacter;
 		cocos2d::Sprite *IHATECOCOSIDONTKNOWWHYTHISISSOFINICKYTOGETTOWORK;
+		std::vector <cocos2d::Sprite *> m_Health;
 		float velocityX = 0;
 		float velocityY = 0;
 		Physics toCalculate;

@@ -9,7 +9,7 @@ cocos2d::Sprite * OOP::PlatformGenerator::getPlatform(int reference)
 	return m_Platform[reference];
 }
 
-void OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OOP::myLevels* level)
+void const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OOP::myLevels* level)
 {
 	number = 0;
 	for (int i = 0; i < (sizeof levelOneHitBox / sizeof levelOneHitBox[level->getLevel()]); i++) { //rows
@@ -49,7 +49,7 @@ void OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OOP::myLevels* le
 
 }
 
-int OOP::PlatformGenerator::getClosestY(cocos2d::Sprite * character, float velocityY)
+int const OOP::PlatformGenerator::getClosestY(cocos2d::Sprite * character, float velocityY)
 {
 	int tempClosest = 0;
 	typeHitBoxY = types[0];
@@ -85,7 +85,7 @@ int OOP::PlatformGenerator::getClosestY(cocos2d::Sprite * character, float veloc
 	return tempClosest;
 }
 
-int OOP::PlatformGenerator::getClosestX(cocos2d::Sprite * character, float velocityX)
+int const OOP::PlatformGenerator::getClosestX(cocos2d::Sprite * character, float velocityX)
 {
 	int tempClosest = 0;
 	typeHitBoxX = types[0];
@@ -157,7 +157,7 @@ int OOP::PlatformGenerator::getClosestX(cocos2d::Sprite * character, float veloc
 	return tempClosest;
 }
 
-void OOP::PlatformGenerator::moveHitBoxesX(float X)
+void const OOP::PlatformGenerator::moveHitBoxesX(float X)
 {
 	for (int i = 0; i < m_Platform.size(); i++) {
 		m_Platform[i]->setPosition(
@@ -167,7 +167,7 @@ void OOP::PlatformGenerator::moveHitBoxesX(float X)
 	}
 }
 
-void OOP::PlatformGenerator::moveHitBoxesY(float Y)
+void const OOP::PlatformGenerator::moveHitBoxesY(float Y)
 {
 	for (int i = 0; i < m_Platform.size(); i++) {
 		m_Platform[i]->setPosition(
@@ -177,17 +177,17 @@ void OOP::PlatformGenerator::moveHitBoxesY(float Y)
 	}
 }
 
-int OOP::PlatformGenerator::getTypeHitBoxX()
+int const OOP::PlatformGenerator::getTypeHitBoxX() const
 {
 	return typeHitBoxX;
 }
 
-int OOP::PlatformGenerator::getTypeHitBoxY()
+int const OOP::PlatformGenerator::getTypeHitBoxY() const
 {
 	return typeHitBoxY;
 }
 
-void OOP::PlatformGenerator::resetHitBox(cocos2d::Scene *help, OOP::myLevels* level)
+void const OOP::PlatformGenerator::resetHitBox(cocos2d::Scene *help, OOP::myLevels* level)
 {
 	for (int i = m_Platform.size() - 1; i >= 0; i--) {
 		m_Platform[i]->removeFromParentAndCleanup(true);
