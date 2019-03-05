@@ -33,6 +33,9 @@ namespace OOP {
 		void const initHealth() const;
 		void const resetPlayer();
 		int const getHealth() const;
+		void damage(cocos2d::Sprite * m_MainCharacter, bool left, bool right);
+
+		int getInvincible() { return invincible; };
 
 		cocos2d::EventListenerKeyboard *getListener(); //Returns the listener that holds the event
 
@@ -51,8 +54,9 @@ namespace OOP {
 		KeyboardListener keyBoard;
 		bool onGround = false;
 		int againstWall = 0;
+		const int MAX_HEALTH = 3;
 		int health = 3;
-
+		int invincible = 0;
 
 	};
 }

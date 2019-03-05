@@ -30,6 +30,7 @@
 #include "proj.win32\Player.h"
 #include "proj.win32\PlatformGenerator.h"
 #include "proj.win32\myLevels.h"
+#include "proj.win32\Monster.h"
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -46,7 +47,7 @@ public:
 
 	void update(float);
 	
-	
+	OOP::MonsterManager m_MonsterManager;
 	OOP::PlatformGenerator m_Platform;
 	OOP::Player m_mainCharacter;
 	OOP::myLevels m_Level;

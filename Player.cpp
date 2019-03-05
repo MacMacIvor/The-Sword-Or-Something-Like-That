@@ -66,7 +66,7 @@ void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, coco
 		else {
 			velocityX = 0;
 		}
-
+		
 		toCalculate.checkOnGround(&onGround, m_MainCharacter, platformY, typeOfHitBoxY, &health);
 		toCalculate.checkAgainstWall(&againstWall, m_MainCharacter, platformX, typeOfHitBoxX, &health);
 
@@ -80,12 +80,12 @@ void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, coco
 void const OOP::Player::updateHealthSprite() const
 {
 	if (health > 0) {
-		for (unsigned int i = 0; i < health; i++) {
+		for (unsigned int i = 0; i < MAX_HEALTH; i++) {
 			if (i < health) {
 				m_Health[i]->setPosition(m_Health[0]->getBoundingBox().size.width / 2 + m_Health[0]->getBoundingBox().size.width * i, m_scene->getBoundingBox().getMaxY() - m_Health[i]->getBoundingBox().size.height / 2);
 			}
 			else {
-				m_Health[i]->setPosition(m_Health[0]->getBoundingBox().size.width / 2 + m_Health[0]->getBoundingBox().size.width * i, m_scene->getBoundingBox().getMaxY() + m_Health[i]->getBoundingBox().size.height / 2);
+				m_Health[i]->setPosition(m_Health[0]->getBoundingBox().size.width / 2 + m_Health[0]->getBoundingBox().size.width * i, m_scene->getBoundingBox().getMaxY() + m_Health[i]->getBoundingBox().size.height);
 			}
 		}
 	}
@@ -113,13 +113,31 @@ void const OOP::Player::resetPlayer()
 {
 	velocityX = 0;
 	velocityY = 0;
-	health = 3;
+	health = MAX_HEALTH;
+	invincible = 0;
 	m_MainCharacter->setPosition(100, 100);
 }
 
 int const OOP::Player::getHealth() const
 {
 	return health;
+}
+
+void OOP::Player::damage(cocos2d::Sprite * m_MainCharacter, bool left, bool right)
+{
+	if (invincible != 0) {
+		invincible--;
+	}
+	else if (left == true) {
+		health--;
+		invincible = 100;
+		velocityX = 40;
+	}
+	else if (right == true) {
+		health--;
+		invincible = 100;
+		velocityX = -40;
+	}
 }
 
 cocos2d::EventListenerKeyboard * OOP::Player::getListener()

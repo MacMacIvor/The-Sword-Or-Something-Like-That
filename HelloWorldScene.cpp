@@ -84,7 +84,7 @@ bool HelloWorld::init()
 		    this->addChild(label, 1);
 		}
 
-		
+		m_MonsterManager.spawn(this, &m_Platform);
 
 
     return true;
@@ -92,11 +92,15 @@ bool HelloWorld::init()
 
 void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction) {
 	static int taunt = 0;
+	
 
 	if (m_mainCharacter.getHealth() > 0 && taunt == 0) {
 
 		cocos2d::Vec2 position = m_mainCharacter.getMainCharacter()->getPosition();
 
+		
+		m_Platform.getClosestY(m_mainCharacter.getMainCharacter(), m_mainCharacter.getVelocityY());
+		m_Platform.getClosestX(m_mainCharacter.getMainCharacter(), m_mainCharacter.getVelocityX());
 
 		m_mainCharacter.updateVelocities(m_mainCharacter.getMainCharacter(),
 			m_Platform.getPlatform(m_Platform.getClosestY(m_mainCharacter.getMainCharacter(), m_mainCharacter.getVelocityY())),
@@ -112,6 +116,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 			if (m_Level.checkMaxX(m_mainCharacter.getVelocityX(), this) != true) {
 				m_Level.moveBackGroundX(m_mainCharacter.getVelocityX(), this);
 				m_Platform.moveHitBoxesX(m_Level.getMovedAmountX());
+				m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountX(), 0);
 				position.x = 100 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
 			}
 			position.x = 100 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
@@ -122,7 +127,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 			if (m_Level.checkMaxX(m_mainCharacter.getVelocityX(), this) == false) {
 				m_Level.moveBackGroundX(m_mainCharacter.getVelocityX(), this);
 				m_Platform.moveHitBoxesX(m_Level.getMovedAmountX());
-
+				m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountX(), 0);
 			}
 			position.x = this->getBoundingBox().getMaxX() - (50 + m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
 		}
@@ -132,6 +137,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 				m_Level.moveBackGroundY(m_mainCharacter.getVelocityY(), this);
 				m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
 				position.y = this->getBoundingBox().getMaxY() - 100;
+				m_MonsterManager.moveMonstersWithScreen(0, m_Level.getMovedAmountY());
 
 			}
 			position.y = this->getBoundingBox().getMaxY() - 100;
@@ -141,6 +147,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 			if (m_Level.checkMaxY(m_mainCharacter.getVelocityY(), this) == false) {
 				m_Level.moveBackGroundY(m_mainCharacter.getVelocityY(), this);
 				m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
+				m_MonsterManager.moveMonstersWithScreen(0, m_Level.getMovedAmountY());
 				position.y = 100;
 			}
 			else {
@@ -149,9 +156,12 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 				}
 			}
 		}
-
 		m_mainCharacter.getMainCharacter()->setPosition(position);
 		m_mainCharacter.updateHealthSprite();
+
+		m_MonsterManager.update(justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction);
+		m_mainCharacter.damage(m_mainCharacter.getMainCharacter(), m_MonsterManager.damageLeft(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()), m_MonsterManager.damageRight(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()));
+		
 	}
 	else if (m_mainCharacter.getHealth() <= 0 && taunt != 100) {
 		if (taunt == 0) {
