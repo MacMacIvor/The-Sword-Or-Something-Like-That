@@ -36,6 +36,7 @@ void OOP::MonsterManager::update(float a_DeltaTime)
 {
 	for (unsigned int w = 0; w < m_MonsterContainer.size(); w++) {
 		m_MonsterContainer[w]->Update(a_DeltaTime);
+		//m_MonsterContainer[w]->m_Monster.getPrimitive()->setTexture("Monster2.png");
 	}
 }
 

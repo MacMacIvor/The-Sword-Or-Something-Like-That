@@ -24,6 +24,7 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include <string>
 
 USING_NS_CC;
 
@@ -54,8 +55,42 @@ bool HelloWorld::init()
 	m_Platform.generateNew(this, &m_Level);
 
 
-	m_mainCharacter.getMainCharacter()->setPosition(100,100);
+	m_mainCharacter.getMainCharacter()->setPosition(100,200);
+	std::string s = "a1.png";
+	m_mainCharacter.getMainCharacter()->setTexture(s);
 	this->addChild(m_mainCharacter.getMainCharacter(), 0);
+	//this be thing
+
+
+	//code for animation
+	CCSpriteFrameCache* frameCache = CCSpriteFrameCache::sharedSpriteFrameCache();
+	frameCache->addSpriteFramesWithFile("B.plist");
+
+	CCSpriteBatchNode* spriteSheet = CCSpriteBatchNode::create("Monster1.png");
+	this->addChild(spriteSheet);
+
+	Vector<CCSpriteFrame *> testframes;
+	//CCArray* testFrames = new CCArray;
+	for (int i = 1; i <= 3; i++)
+	{
+		CCString* filename = CCString::createWithFormat("a%d.png", i);
+		CCSpriteFrame* frame = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(filename->getCString());
+		//testFrames->addObject(frame);
+		testframes.pushBack(frame);
+	}
+
+	CCAnimation* testAnim = CCAnimation::createWithSpriteFrames(testframes, 0.1f);
+	//CCSprite* test = CCSprite::createWithSpriteFrameName("a1.png");
+	//test->setPosition(Vec2(400, 200));
+
+	CCAction* action = CCRepeatForever::create(CCAnimate::create(testAnim));
+	m_mainCharacter.runAnimation(action);
+
+	//test->runAction(action);
+	//spriteSheet->addChild(test);
+	//m_mainCharacter.getMainCharacter()->runAction(action);
+
+
 
 	m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
 	this->addChild(m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos(), 3);
@@ -64,6 +99,7 @@ bool HelloWorld::init()
 
 	
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(m_mainCharacter.getListener(), this);
+	
 	
 	m_mainCharacter.saveScene(this);
 	//m_mainCharacter.updateHealthSprite();
@@ -90,8 +126,12 @@ bool HelloWorld::init()
     return true;
 }
 
+
+
+
 void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction) {
 	static int taunt = 0;
+	
 	
 
 	if (m_mainCharacter.getHealth() > 0 && taunt == 0) {
