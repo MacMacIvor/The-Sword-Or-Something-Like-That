@@ -27,6 +27,7 @@ namespace OOP {
 		int const getClosestY(cocos2d::Sprite* character, float velocityY);
 		int const getClosestX(cocos2d::Sprite* character, float velocityX);
 
+
 		void const moveHitBoxesX(float X);
 		void const moveHitBoxesY(float Y);
 
@@ -39,8 +40,9 @@ namespace OOP {
 	private:
 		std::vector <cocos2d::Sprite *> m_Platform;
 		std::vector <int> types;
-		int typeHitBoxX;
-		int typeHitBoxY;
+		int typeHitBoxX, monsterTypeHitBoxX;
+		int typeHitBoxY, monsterTypeHitBoxY;
+
 
 		int number = 0;
 		int index;

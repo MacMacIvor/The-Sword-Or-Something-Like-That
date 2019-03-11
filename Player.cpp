@@ -1,19 +1,13 @@
 #include "Player.h"
 
-
-
 OOP::Player::Player()
 	:m_MainCharacter(cocos2d::Sprite::create("Capture1.PNG")), IHATECOCOSIDONTKNOWWHYTHISISSOFINICKYTOGETTOWORK(cocos2d::Sprite::create("Dead.png")), velocityX(0), velocityY(0)
 {
 	m_Health.push_back(cocos2d::Sprite::create("Health.png"));
 	m_Health.push_back(cocos2d::Sprite::create("Health.png"));
 	m_Health.push_back(cocos2d::Sprite::create("Health.png"));
-	
-	animation.push_back("a1");
-	animation.push_back("a2");
-	animation.push_back("a3");
-	animation.push_back("a4");
 
+	initAnimations();
 }
 
 OOP::Player::~Player()
@@ -43,9 +37,6 @@ void const OOP::Player::setVelocityY(float newVelocity)
 void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platformY, cocos2d::Sprite * platformX, int typeOfHitBoxX, int typeOfHitBoxY)
 {
 		if (keyBoard.getRightArrow() == true) {
-			aniCount++;
-			if (aniCount > 3) 
-				{ aniCount = 0; }
 			if (velocityX == 0) {
 				velocityX = -1;
 			}
@@ -58,6 +49,7 @@ void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, coco
 					velocityX = 0;
 				}
 			}
+			runAnimation(action);
 
 		}
 		else if (keyBoard.getLeftArrow() == true) {
@@ -126,7 +118,7 @@ void const OOP::Player::resetPlayer()
 	velocityY = 0;
 	health = MAX_HEALTH;
 	invincible = 0;
-	m_MainCharacter->setPosition(100, 100);
+	m_MainCharacter->setPosition(100, 400);
 }
 
 int const OOP::Player::getHealth() const
@@ -165,9 +157,33 @@ cocos2d::Sprite * OOP::Player::getTheLastAmountOfPatienceIHaveWithCocos()
 {
 	return IHATECOCOSIDONTKNOWWHYTHISISSOFINICKYTOGETTOWORK;
 }
+void OOP::Player::initAnimations()
+{
 
+	frameCache = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache();
+	frameCache->addSpriteFramesWithFile("B.plist");
+	//CCArray* testFrames = new CCArray;
+	for (int i = 1; i <= 3; i++)
+	{
+		cocos2d::CCString* filename = cocos2d::CCString::createWithFormat("a%d.png", i);
+		cocos2d::CCSpriteFrame* frame = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(filename->getCString());
+		testframes.pushBack(frame);
+	}
+
+	testAnim = cocos2d::CCAnimation::createWithSpriteFrames(testframes, 0.1f);
+	action = cocos2d::CCRepeatForever::create(cocos2d::CCAnimate::create(testAnim));
+
+	//runAnimation(action);
+
+
+}
 
 void OOP::Player::runAnimation(cocos2d::CCAction* animation)
 {
-	this->getMainCharacter()->runAction(animation);
+	cocos2d::CCAnimation *newtestAnim = cocos2d::CCAnimation::createWithSpriteFrames(testframes, 0.1f);
+	cocos2d::CCAction *action = cocos2d::CCRepeatForever::create(cocos2d::CCAnimate::create(newtestAnim));
+
+	m_MainCharacter->runAction(action);
+	//m_MainCharacter = cocos2d::Sprite::create("Monster3.png");
 }
+
