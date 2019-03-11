@@ -59,8 +59,6 @@ public:
     */
     virtual void applicationWillEnterForeground();
 
-	//private bois for anime
-private:
 
 };
 

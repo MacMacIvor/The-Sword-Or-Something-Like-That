@@ -24,12 +24,10 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include <string>
+#include <string> 
 
 USING_NS_CC;
 
-
-CCAction* action;
 Scene* HelloWorld::createScene()
 {
 	cocos2d::Scene *scene = Scene::create();
@@ -57,18 +55,19 @@ bool HelloWorld::init()
 	m_Platform.generateNew(this, &m_Level);
 
 
-	m_mainCharacter.getMainCharacter()->setPosition(100,200);
+	m_mainCharacter.getMainCharacter()->setPosition(100, 400);
+	//this->addChild(m_mainCharacter.getMainCharacter(), 0);
 	std::string s = "a1.png";
 	m_mainCharacter.getMainCharacter()->setTexture(s);
 	this->addChild(m_mainCharacter.getMainCharacter(), 0);
-	//this be thing
+	//this be thing 
 
 
-	//code for animation
+	//code for animation 
 	CCSpriteFrameCache* frameCache = CCSpriteFrameCache::sharedSpriteFrameCache();
 	frameCache->addSpriteFramesWithFile("B.plist");
 
-	CCSpriteBatchNode* spriteSheet = CCSpriteBatchNode::create("B.png");
+	CCSpriteBatchNode* spriteSheet = CCSpriteBatchNode::create("Monster1.png");
 	this->addChild(spriteSheet);
 
 	Vector<CCSpriteFrame *> testframes;
@@ -82,20 +81,11 @@ bool HelloWorld::init()
 	}
 
 	CCAnimation* testAnim = CCAnimation::createWithSpriteFrames(testframes, 0.1f);
-	CCSprite* test = CCSprite::createWithSpriteFrameName("a1.png");
-	test->setPosition(Vec2(400, 200));
+	//CCSprite* test = CCSprite::createWithSpriteFrameName("a1.png");
+	//test->setPosition(Vec2(400, 200));
 
-	action = CCRepeatForever::create(CCAnimate::create(testAnim));
-	//m_mainCharacter.runAnimation(action);
-	
-	//m_mainCharacter.action = action;
-	spriteSheet->addChild(test);
-	test->setPosition(Vec2(0, 0));
-	
-
-	test->runAction(action);
-	//m_mainCharacter.getMainCharacter()->runAction(action);
-
+	CCAction* action = CCRepeatForever::create(CCAnimate::create(testAnim));
+	m_mainCharacter.runAnimation(action);
 
 
 	m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
@@ -105,7 +95,6 @@ bool HelloWorld::init()
 
 	
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(m_mainCharacter.getListener(), this);
-	
 	
 	m_mainCharacter.saveScene(this);
 	//m_mainCharacter.updateHealthSprite();
@@ -120,24 +109,21 @@ bool HelloWorld::init()
 	   else
 	    {
 	// position the label
-	        label->setPosition(Vec2(200, 250));
+	        label->setPosition(Vec2(300, 300));
 
 		//	 add the label as a child to this layer
 		    this->addChild(label, 1);
 		}
 
 		m_MonsterManager.spawn(this, &m_Platform);
+		m_MonsterManager.spawn(this, &m_Platform);
 
 
     return true;
 }
 
-
-
-
 void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction) {
 	static int taunt = 0;
-	
 	
 
 	if (m_mainCharacter.getHealth() > 0 && taunt == 0) {
@@ -213,8 +199,6 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		if (taunt == 0) {
 			m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(m_mainCharacter.getMainCharacter()->getBoundingBox().getMidX(), m_mainCharacter.getMainCharacter()->getBoundingBox().getMidY());
 		}
-		//m_mainCharacter.runAnimation(action);
-
 		taunt++;
 	}
 	else {
@@ -224,6 +208,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		m_Level.resetLevel(this);
 		m_Platform.resetHitBox(this, &m_Level);
 		m_mainCharacter.saveScene(this);
+		m_MonsterManager.monsterResest(this, &m_Platform);
 	}
 
 }
