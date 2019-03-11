@@ -1,17 +1,13 @@
 #include "Player.h"
 
-
-
-
 OOP::Player::Player()
 	:m_MainCharacter(cocos2d::Sprite::create("Capture1.PNG")), IHATECOCOSIDONTKNOWWHYTHISISSOFINICKYTOGETTOWORK(cocos2d::Sprite::create("Dead.png")), velocityX(0), velocityY(0)
 {
 	m_Health.push_back(cocos2d::Sprite::create("Health.png"));
 	m_Health.push_back(cocos2d::Sprite::create("Health.png"));
 	m_Health.push_back(cocos2d::Sprite::create("Health.png"));
-	
-	initAnimations();
 
+	initAnimations();
 }
 
 OOP::Player::~Player()
@@ -41,8 +37,6 @@ void const OOP::Player::setVelocityY(float newVelocity)
 void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platformY, cocos2d::Sprite * platformX, int typeOfHitBoxX, int typeOfHitBoxY)
 {
 		if (keyBoard.getRightArrow() == true) {
-			if (aniCount > 3) 
-				{ aniCount = 0; }
 			if (velocityX == 0) {
 				velocityX = -1;
 			}
@@ -124,7 +118,7 @@ void const OOP::Player::resetPlayer()
 	velocityY = 0;
 	health = MAX_HEALTH;
 	invincible = 0;
-	m_MainCharacter->setPosition(100, 100);
+	m_MainCharacter->setPosition(100, 400);
 }
 
 int const OOP::Player::getHealth() const
@@ -163,7 +157,6 @@ cocos2d::Sprite * OOP::Player::getTheLastAmountOfPatienceIHaveWithCocos()
 {
 	return IHATECOCOSIDONTKNOWWHYTHISISSOFINICKYTOGETTOWORK;
 }
-
 void OOP::Player::initAnimations()
 {
 
@@ -181,7 +174,7 @@ void OOP::Player::initAnimations()
 	action = cocos2d::CCRepeatForever::create(cocos2d::CCAnimate::create(testAnim));
 
 	//runAnimation(action);
-	
+
 
 }
 
@@ -193,3 +186,4 @@ void OOP::Player::runAnimation(cocos2d::CCAction* animation)
 	m_MainCharacter->runAction(action);
 	//m_MainCharacter = cocos2d::Sprite::create("Monster3.png");
 }
+

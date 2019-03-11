@@ -4,9 +4,9 @@
 #include "myLevels.h"
 
 OOP::myLevels::myLevels()
-	:testing(cocos2d::Sprite::create("Level 1.jpg"))
+	:testing(cocos2d::Sprite::create("TutorialFinalTiles2.jpg"))
 {
-	m_Levels.push_back(cocos2d::Sprite::create("Level 1.jpg"));
+	m_Levels.push_back(cocos2d::Sprite::create("TutorialFinalTiles2.jpg"));
 	//testing = cocos2d::Sprite::create("Level 1.PNG");
 }
 

@@ -4,7 +4,6 @@
 #include <functional>
 #include "proj.win32\GamePhysics.h"
 #include "KeyboardInput.h"
-#include <vector>
 
 namespace cocos2d {
 	class Vec2;
@@ -44,10 +43,9 @@ namespace OOP {
 		cocos2d::Sprite *getMainCharacter(); //Returns the listener that holds the event
 		cocos2d::Sprite *getTheLastAmountOfPatienceIHaveWithCocos(); //Returns the listener that holds the event
 
-
-
 		void initAnimations();
 		void runAnimation(cocos2d::CCAction*);
+
 
 	private:
 		cocos2d::Scene* m_scene;
@@ -73,7 +71,6 @@ namespace OOP {
 		cocos2d::CCSpriteFrameCache* frameCache;
 		cocos2d::Vector<cocos2d::CCSpriteFrame *> testframes;
 		cocos2d::CCAnimation* testAnim;
-
 	};
 }
 
