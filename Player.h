@@ -46,6 +46,9 @@ namespace OOP {
 		void initAnimations();
 		void runAnimation(cocos2d::CCAction*);
 
+		void attack();
+		bool isattack();
+
 
 	private:
 		cocos2d::Scene* m_scene;
@@ -63,7 +66,7 @@ namespace OOP {
 		const int MAX_HEALTH = 3;
 		int health = 3;
 		int invincible = 0;
-
+		int attCooldown = 0;
 		cocos2d::CCAction *action;
 
 

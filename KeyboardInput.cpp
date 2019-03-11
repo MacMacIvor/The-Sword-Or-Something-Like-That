@@ -32,6 +32,9 @@ void OOP::KeyboardListener::OnKeyReleased(cocos2d::EventKeyboard::KeyCode keyCod
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_Z) {
 		zKey = false;
 	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_X) {
+		xKey = false;
+	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_SHIFT) {
 		shiftKey = false;
 	}
@@ -53,6 +56,9 @@ void OOP::KeyboardListener::OnKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_Z) {
 		zKey = true;
+	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_X) {
+		xKey = true;
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_SHIFT) {
 		shiftKey = true;
@@ -84,6 +90,11 @@ bool const OOP::KeyboardListener::getZKey() const
 {
 	return zKey;
 }
+bool const OOP::KeyboardListener::getXKey() const
+{
+	return xKey;
+}
+
 
 cocos2d::EventListenerKeyboard * OOP::KeyboardListener::getListener()
 {

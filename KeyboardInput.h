@@ -31,6 +31,8 @@ namespace OOP //Our namespace
 		bool const getUpArrow() const;
 		bool const getShiftKey() const;
 		bool const getZKey() const;
+		bool const getXKey() const;
+
 
 
 		cocos2d::EventListenerKeyboard *getListener(); //Returns the listener that holds the event
@@ -43,6 +45,7 @@ namespace OOP //Our namespace
 		bool rightArrow = false;
 		bool shiftKey = false;
 		bool zKey = false;
+		bool xKey = false;
 	};
 }
 

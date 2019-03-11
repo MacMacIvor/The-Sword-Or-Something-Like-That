@@ -59,6 +59,26 @@ void const OOP::baseMonster::reset()
 	this->m_Monster.getPrimitive()->setPosition(m_Spawn);
 }
 
+void OOP::baseMonster::beHert(int dmg, bool isHit)
+{
+	if (isHit)
+	{
+		this->HP--;
+	}
+}
+
+bool OOP::baseMonster::isDead()
+{
+	return (HP <= 0);
+}
+
+void OOP::baseMonster::setHP(int)
+{
+	HP = 0;
+}
+
+
+
 
 OOP::MonsterManager::~MonsterManager()
 {
@@ -72,7 +92,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 	static int i = 0;
 	if (i == 0) {
 		//64 bottom of edge and 64 for half the emeny sprite size
-		BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2(600.0f + 64, 64.0f + 64), 200, 0);
+		BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2(600.0f + 64, 64.0f + 240), 200, 0);
 		l_Monster->saveScene(scene);
 		l_Monster->savePlatforms(toSave);
 		scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -105,6 +125,12 @@ void OOP::MonsterManager::update(float a_DeltaTime)
 {
 	for (unsigned int w = 0; w < m_MonsterContainer.size(); w++) {
 		m_MonsterContainer[w]->Update(a_DeltaTime);
+		if (m_MonsterContainer[w]->isDead() == true) {
+			m_MonsterContainer[w]->m_Monster.getPrimitive()->removeFromParentAndCleanup(true);
+			m_MonsterContainer.erase(m_MonsterContainer.begin() + w);
+			//delete m_MonsterContainer[w];
+			
+		}
 	}
 }
 
@@ -174,6 +200,34 @@ bool OOP::MonsterManager::damageRight(cocos2d::Sprite * m_MainCharacter, int inv
 	return false;
 }
 
+bool OOP::MonsterManager::isZipZilchZero()
+{
+	return (m_MonsterContainer.size() > 0);
+}
+
+bool OOP::MonsterManager::getHurt(cocos2d::Sprite * m_MainCharacter)
+{
+	for (unsigned int y = 0; y < m_MonsterContainer.size(); y++) {
+		
+		if (m_MainCharacter->getBoundingBox().getMaxX() >= m_MonsterContainer[y]->m_Monster.getPrimitive()->getBoundingBox().getMinX()
+			&& m_MainCharacter->getBoundingBox().getMinX() <= m_MonsterContainer[y]->m_Monster.getPrimitive()->getBoundingBox().getMaxX()
+			&& (m_MainCharacter->getBoundingBox().getMinY() <= m_MonsterContainer[y]->m_Monster.getPrimitive()->getBoundingBox().getMaxY() &&
+				m_MainCharacter->getBoundingBox().getMaxY() >= m_MonsterContainer[y]->m_Monster.getPrimitive()->getBoundingBox().getMinY())
+			) {
+			m_MonsterContainer[y]->setHP(0);
+			return true;
+		}
+	}
+	return false;
+}
+
+
+
+//void OOP::MonsterManager::beTheDead()
+//{
+	
+//}
+
 
 OOP::BasicMonster::BasicMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite)
 	:baseMonster(a_Spawn, a_Speed, a_Sprite) {}
@@ -202,6 +256,8 @@ void OOP::BasicMonster::savePlatforms(OOP::PlatformGenerator * toSave)
 {
 	forCalculations = toSave;
 }
+
+
 
 OOP::ShootingMonster::ShootingMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite)
 	:baseMonster(a_Spawn, a_Sprite, a_Speed)

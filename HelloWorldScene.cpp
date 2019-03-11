@@ -55,7 +55,7 @@ bool HelloWorld::init()
 	m_Platform.generateNew(this, &m_Level);
 
 
-	m_mainCharacter.getMainCharacter()->setPosition(100,200);
+	m_mainCharacter.getMainCharacter()->setPosition(100,400);
 	std::string s = "a1.png";
 	m_mainCharacter.getMainCharacter()->setTexture(s);
 	this->addChild(m_mainCharacter.getMainCharacter(), 0);
@@ -150,7 +150,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		position.y += m_mainCharacter.getVelocityY();
 
 
-
+		
 
 		if (position.x < 100 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2)) {
 			if (m_Level.checkMaxX(m_mainCharacter.getVelocityX(), this) != true) {
@@ -198,10 +198,12 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		}
 		m_mainCharacter.getMainCharacter()->setPosition(position);
 		m_mainCharacter.updateHealthSprite();
+		if (m_MonsterManager.isZipZilchZero()) {
 
-		m_MonsterManager.update(justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction);
-		m_mainCharacter.damage(m_mainCharacter.getMainCharacter(), m_MonsterManager.damageLeft(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()), m_MonsterManager.damageRight(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()));
-		
+			m_mainCharacter.damage(m_mainCharacter.getMainCharacter(), m_MonsterManager.damageLeft(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()), m_MonsterManager.damageRight(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()));
+			m_MonsterManager.update(justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction);
+
+		}
 	}
 	else if (m_mainCharacter.getHealth() <= 0 && taunt != 100) {
 		if (taunt == 0) {
@@ -217,7 +219,14 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		m_Platform.resetHitBox(this, &m_Level);
 		m_mainCharacter.saveScene(this);
 	}
-
+	if (m_mainCharacter.isattack())
+	{
+		Sprite *attackBox = Sprite::create("Dead.png");
+		attackBox->setPosition(m_mainCharacter.getMainCharacter()->getPosition());
+		this->addChild(attackBox);
+		m_MonsterManager.getHurt(attackBox);
+		attackBox->removeFromParentAndCleanup(true);
+	}
 }
 
 void HelloWorld::menuCloseCallback(Ref* pSender)

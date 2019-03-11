@@ -6,6 +6,7 @@
 #include "EnemySpriteHolder.h"
 #include "PlatformGenerator.h"
 #include "Bullet.h"
+#include <vector>
 
 
 namespace cocos2d {
@@ -35,7 +36,12 @@ namespace OOP {
 		void const reset();
 		cocos2d::Sprite m_MainCharacter;
 
+		void beHert(int, bool);
+		bool isDead();
+		void setHP(int);
+
 	private:
+		int HP = 1;//health
 		cocos2d::Vec2 m_Spawn;
 		int spriteToUse = 0;
 		int swingCoolDown;
@@ -73,11 +79,13 @@ namespace OOP {
 		void moveMonstersWithScreen(float amountX, float amountY);
 		bool damageLeft(cocos2d::Sprite *m_MainCharacter, int invincible);
 		bool damageRight(cocos2d::Sprite *m_MainCharacter, int invincible);
+		bool isZipZilchZero();
+		bool getHurt(cocos2d::Sprite *m_MainCharacter);
 
 		
 	private:
 		std::vector <BasicMonster*> m_MonsterContainer;
-		std::vector <ShootingMonster *> m_ShootingMonsterContainer;
+		std::vector <ShootingMonster*> m_ShootingMonsterContainer;
 	};
 }
 
