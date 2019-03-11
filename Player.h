@@ -44,6 +44,9 @@ namespace OOP {
 		cocos2d::Sprite *getMainCharacter(); //Returns the listener that holds the event
 		cocos2d::Sprite *getTheLastAmountOfPatienceIHaveWithCocos(); //Returns the listener that holds the event
 
+
+
+		void initAnimations();
 		void runAnimation(cocos2d::CCAction*);
 
 	private:
@@ -63,8 +66,13 @@ namespace OOP {
 		int health = 3;
 		int invincible = 0;
 
+		cocos2d::CCAction *action;
+
+
 		//animation things
-		
+		cocos2d::CCSpriteFrameCache* frameCache;
+		cocos2d::Vector<cocos2d::CCSpriteFrame *> testframes;
+		cocos2d::CCAnimation* testAnim;
 
 	};
 }

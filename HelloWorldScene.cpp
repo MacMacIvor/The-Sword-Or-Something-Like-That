@@ -28,6 +28,8 @@
 
 USING_NS_CC;
 
+
+CCAction* action;
 Scene* HelloWorld::createScene()
 {
 	cocos2d::Scene *scene = Scene::create();
@@ -66,7 +68,7 @@ bool HelloWorld::init()
 	CCSpriteFrameCache* frameCache = CCSpriteFrameCache::sharedSpriteFrameCache();
 	frameCache->addSpriteFramesWithFile("B.plist");
 
-	CCSpriteBatchNode* spriteSheet = CCSpriteBatchNode::create("Monster1.png");
+	CCSpriteBatchNode* spriteSheet = CCSpriteBatchNode::create("B.png");
 	this->addChild(spriteSheet);
 
 	Vector<CCSpriteFrame *> testframes;
@@ -80,14 +82,18 @@ bool HelloWorld::init()
 	}
 
 	CCAnimation* testAnim = CCAnimation::createWithSpriteFrames(testframes, 0.1f);
-	//CCSprite* test = CCSprite::createWithSpriteFrameName("a1.png");
-	//test->setPosition(Vec2(400, 200));
+	CCSprite* test = CCSprite::createWithSpriteFrameName("a1.png");
+	test->setPosition(Vec2(400, 200));
 
-	CCAction* action = CCRepeatForever::create(CCAnimate::create(testAnim));
-	m_mainCharacter.runAnimation(action);
+	action = CCRepeatForever::create(CCAnimate::create(testAnim));
+	//m_mainCharacter.runAnimation(action);
+	
+	//m_mainCharacter.action = action;
+	spriteSheet->addChild(test);
+	test->setPosition(Vec2(0, 0));
+	
 
-	//test->runAction(action);
-	//spriteSheet->addChild(test);
+	test->runAction(action);
 	//m_mainCharacter.getMainCharacter()->runAction(action);
 
 
@@ -207,6 +213,8 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		if (taunt == 0) {
 			m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(m_mainCharacter.getMainCharacter()->getBoundingBox().getMidX(), m_mainCharacter.getMainCharacter()->getBoundingBox().getMidY());
 		}
+		//m_mainCharacter.runAnimation(action);
+
 		taunt++;
 	}
 	else {
