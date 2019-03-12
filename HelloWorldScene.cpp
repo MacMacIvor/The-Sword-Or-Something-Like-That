@@ -115,8 +115,13 @@ bool HelloWorld::init()
 		    this->addChild(label, 1);
 		}
 
+		
 		m_MonsterManager.spawn(this, &m_Platform);
 		m_MonsterManager.spawn(this, &m_Platform);
+		m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
+		
+		//m_MonsterManager.addMonster(*l_Monster2)
+		//l_Monster2->savePlatforms(toSave);
 
 
     return true;
@@ -191,8 +196,14 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		m_mainCharacter.getMainCharacter()->setPosition(position);
 		m_mainCharacter.updateHealthSprite();
 
-		m_MonsterManager.update(justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction);
-		m_mainCharacter.damage(m_mainCharacter.getMainCharacter(), m_MonsterManager.damageLeft(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()), m_MonsterManager.damageRight(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()));
+		if (m_MonsterManager.isZipZilchZero()) {
+
+			m_mainCharacter.damage(m_mainCharacter.getMainCharacter(), m_MonsterManager.damageLeft(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()), m_MonsterManager.damageRight(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()));
+			m_MonsterManager.update(justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction);
+
+		}
+		//m_MonsterManager.update(justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction);
+		//m_mainCharacter.damage(m_mainCharacter.getMainCharacter(), m_MonsterManager.damageLeft(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()), m_MonsterManager.damageRight(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()));
 		
 	}
 	else if (m_mainCharacter.getHealth() <= 0 && taunt != 100) {
@@ -209,6 +220,16 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		m_Platform.resetHitBox(this, &m_Level);
 		m_mainCharacter.saveScene(this);
 		m_MonsterManager.monsterResest(this, &m_Platform);
+		m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
+
+	}
+	if (m_mainCharacter.isattack())
+	{
+		Sprite *attackBox = Sprite::create("Dead.png");
+		attackBox->setPosition(m_mainCharacter.getMainCharacter()->getPosition());
+		this->addChild(attackBox);
+		m_MonsterManager.getHurt(attackBox);
+		attackBox->removeFromParentAndCleanup(true);
 	}
 
 }

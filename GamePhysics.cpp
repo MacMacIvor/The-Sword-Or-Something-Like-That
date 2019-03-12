@@ -72,15 +72,29 @@ void const OOP::Physics::newVelocityY(float velocityY, bool upArrow, bool leftAr
 
 		if (new_VelocityY < 0) {
 			if (m_MainCharacter->getBoundingBox().getMinY() > platform->getBoundingBox().getMaxY()) {
-				if ((m_MainCharacter->getBoundingBox().getMinY() + new_VelocityY) < platform->getBoundingBox().getMaxY()) {
-					new_VelocityY = -(m_MainCharacter->getBoundingBox().getMinY() - platform->getBoundingBox().getMaxY());
+				if ((m_MainCharacter->getPositionX() > platform->getBoundingBox().getMinX()
+					&& (m_MainCharacter->getPositionX()) <= platform->getBoundingBox().getMaxX()) ||
+					(m_MainCharacter->getBoundingBox().getMaxX() > platform->getBoundingBox().getMinX() &&
+						m_MainCharacter->getBoundingBox().getMaxX() < platform->getBoundingBox().getMaxX()) ||
+						(m_MainCharacter->getBoundingBox().getMinX() > platform->getBoundingBox().getMinX() &&
+							m_MainCharacter->getBoundingBox().getMinX() < platform->getBoundingBox().getMaxX())) {
+					if ((m_MainCharacter->getBoundingBox().getMinY() + new_VelocityY) < platform->getBoundingBox().getMaxY()) {
+						new_VelocityY = -(m_MainCharacter->getBoundingBox().getMinY() - platform->getBoundingBox().getMaxY());
+					}
 				}
 			}
 		}
 		else if (new_VelocityY > 0) {
 			if (m_MainCharacter->getBoundingBox().getMaxY() < platform->getBoundingBox().getMinY()) {
-				if ((m_MainCharacter->getBoundingBox().getMaxY() + new_VelocityY) > platform->getBoundingBox().getMinY()) {
-					new_VelocityY = (platform->getBoundingBox().getMinY() - m_MainCharacter->getBoundingBox().getMaxY());
+				if ((m_MainCharacter->getPositionX() > platform->getBoundingBox().getMinX()
+					&& (m_MainCharacter->getPositionX()) <= platform->getBoundingBox().getMaxX()) ||
+					(m_MainCharacter->getBoundingBox().getMaxX() > platform->getBoundingBox().getMinX() &&
+						m_MainCharacter->getBoundingBox().getMaxX() < platform->getBoundingBox().getMaxX()) ||
+						(m_MainCharacter->getBoundingBox().getMinX() > platform->getBoundingBox().getMinX() &&
+							m_MainCharacter->getBoundingBox().getMinX() < platform->getBoundingBox().getMaxX())) {
+					if ((m_MainCharacter->getBoundingBox().getMaxY() + new_VelocityY) > platform->getBoundingBox().getMinY()) {
+						new_VelocityY = (platform->getBoundingBox().getMinY() - m_MainCharacter->getBoundingBox().getMaxY());
+					}
 				}
 			}
 			if (m_MainCharacter->getBoundingBox().getMaxY() == platform->getBoundingBox().getMinY()) {

@@ -17,8 +17,14 @@ void const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OOP::myLeve
 			if (levelOneHitBox[i][j] != -1) {
 				if (levelOneHitBox[i][j] == 25)
 				{
-					types.push_back(1);
-					m_Platform.push_back(cocos2d::Sprite::create("testforms3.png"));
+					if (number == 60 || number == 36) {
+						types.push_back(1);
+						m_Platform.push_back(cocos2d::Sprite::create("testforms2.png"));
+					}
+					else {
+						types.push_back(1);
+						m_Platform.push_back(cocos2d::Sprite::create("testforms3.png"));
+					}
 				}
 				else {
 					types.push_back(2);
@@ -60,12 +66,12 @@ int const OOP::PlatformGenerator::getClosestY(cocos2d::Sprite * character, float
 		for (int i = 0; i < m_Platform.size(); i++) {
 			if ((character->getPositionX() > m_Platform[i]->getBoundingBox().getMinX()
 				&& (character->getPositionX()) <= m_Platform[i]->getBoundingBox().getMaxX()) || 
-				(character->getBoundingBox().getMaxX() >= m_Platform[i]->getBoundingBox().getMinX() && 
+				(character->getBoundingBox().getMaxX() > m_Platform[i]->getBoundingBox().getMinX() && 
 					character->getBoundingBox().getMaxX() < m_Platform[i]->getBoundingBox().getMaxX()) ||
 					(character->getBoundingBox().getMinX() > m_Platform[i]->getBoundingBox().getMinX() &&
 						character->getBoundingBox().getMinX() < m_Platform[i]->getBoundingBox().getMaxX())) {
 				if (character->getBoundingBox().getMinY() >= m_Platform[i]->getBoundingBox().getMaxY()) {
-					if (((m_Platform[tempClosest]->getBoundingBox().getMaxY()) <= (m_Platform[i]->getBoundingBox().getMaxY())) || ((m_Platform[tempClosest]->getBoundingBox().getMinY() - character->getBoundingBox().getMaxY() > 0))) {
+					if (((m_Platform[tempClosest]->getBoundingBox().getMaxY()) <= (m_Platform[i]->getBoundingBox().getMaxY())) || ((character->getBoundingBox().getMinY() - m_Platform[tempClosest]->getBoundingBox().getMaxY()) < 0)) {
 						float distance = character->getBoundingBox().getMidX() - m_Platform[tempClosest]->getBoundingBox().getMidX();
 						if (distance < 0) {
 							distance *= -1;
@@ -120,17 +126,15 @@ int const OOP::PlatformGenerator::getClosestX(cocos2d::Sprite * character, float
 					//character->getPositionY() >= m_Platform[i]->getBoundingBox().getMinY()
 					//)
 					//) {
-
-
 			if ((character->getBoundingBox().getMaxY() >= m_Platform[i]->getBoundingBox().getMinY() &&
 				character->getBoundingBox().getMinY() < m_Platform[i]->getBoundingBox().getMaxY()) || (
 					character->getBoundingBox().getMidY() < m_Platform[i]->getBoundingBox().getMaxY() &&
 					character->getBoundingBox().getMidY() >= m_Platform[i]->getBoundingBox().getMinY()) ) {
 
 				if (character->getBoundingBox().getMinX() >= m_Platform[i]->getBoundingBox().getMaxX()) {
-					if ((character->getBoundingBox().getMinX() - m_Platform[tempClosest]->getBoundingBox().getMaxX()) >
-						(character->getBoundingBox().getMinX() - m_Platform[i]->getBoundingBox().getMaxX()) ||
-						(m_Platform[tempClosest]->getBoundingBox().getMinX() - character->getBoundingBox().getMaxX() < 0)) {
+					if (((character->getBoundingBox().getMinX() - m_Platform[tempClosest]->getBoundingBox().getMaxX()) >=
+						(character->getBoundingBox().getMinX() - m_Platform[i]->getBoundingBox().getMaxX())) ||
+						(character->getBoundingBox().getMinX() - m_Platform[tempClosest]->getBoundingBox().getMaxX() < 0)) {
 						tempClosest = i;
 						typeHitBoxX = types[i];
 					}

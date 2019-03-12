@@ -78,6 +78,17 @@ void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, coco
 
 		toCalculate.newVelocityX(velocityX, m_MainCharacter, platformX);
 		velocityX = toCalculate.getVelocityX();
+
+		attack();
+		if (attCooldown)
+		{
+			attCooldown++;
+		}
+		if (attCooldown >= 60)
+		{
+			attCooldown = 0;
+		}
+
 }
 
 void const OOP::Player::updateHealthSprite() const
@@ -187,3 +198,16 @@ void OOP::Player::runAnimation(cocos2d::CCAction* animation)
 	//m_MainCharacter = cocos2d::Sprite::create("Monster3.png");
 }
 
+void OOP::Player::attack()
+{
+	if (keyBoard.getXKey())
+	{
+		//spawn hitbox
+		attCooldown = 1;
+	}
+}
+
+bool OOP::Player::isattack()
+{
+	return attCooldown;
+}

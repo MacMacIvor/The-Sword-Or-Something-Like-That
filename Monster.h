@@ -27,6 +27,8 @@ namespace OOP {
 		
 		void saveScene(cocos2d::Scene *scene) { m_Scene = scene; };
 
+		virtual void moveBullets(float X, float Y) {};
+
 		//I HAAAAAAATTTTTTEEEEE CCCCOOOOOOCCCCCOOOOSSSS!!!!
 		OOP::MonsterSpriteHolder m_Monster;
 		cocos2d::Scene *m_Scene;
@@ -34,22 +36,29 @@ namespace OOP {
 		float m_Speed = 0.0f;
 		void const reset();
 		cocos2d::Sprite m_MainCharacter;
+		cocos2d::Vec2 m_Spawn;
+
+		void beHert(int, bool);
+		bool isDead();
+		void setHP(int);
 
 	private:
-		cocos2d::Vec2 m_Spawn;
+		int HP = 1;//health
 		int spriteToUse = 0;
 		int swingCoolDown;
 	};
 	class ShootingMonster : public baseMonster {
 	public:
-		ShootingMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite);
+		ShootingMonster(cocos2d::Vec2 a_Spawn, float a_Speed, int a_Sprite);
 		bool attack(cocos2d::Sprite *character);
 		void savePlatforms(OOP::PlatformGenerator *toSave);
 		virtual void Update(float a_DeltaTime);
+		virtual void moveBullets(float X, float Y);
+
 
 	private:
+		std::vector <OOP::Bullet *> m_Bullets;
 		OOP::PlatformGenerator *forCalculations;
-		OOP::Bullet *m_Bullets;
 		int shotCoolDown = 0;
 	};
 
@@ -73,11 +82,16 @@ namespace OOP {
 		void moveMonstersWithScreen(float amountX, float amountY);
 		bool damageLeft(cocos2d::Sprite *m_MainCharacter, int invincible);
 		bool damageRight(cocos2d::Sprite *m_MainCharacter, int invincible);
+		void getMainCharacter(cocos2d::Sprite* n_Character) { m_Character = n_Character; }
+		void saveScene(cocos2d::Scene *scene) { m_Scene = scene; };
+		bool isZipZilchZero();
+		bool getHurt(cocos2d::Sprite *m_MainCharacter);
 
-		
 	private:
-		std::vector <BasicMonster*> m_MonsterContainer;
-		std::vector <ShootingMonster *> m_ShootingMonsterContainer;
+		std::vector <baseMonster*> m_MonsterContainer;
+		cocos2d::Sprite* m_Character;
+		cocos2d::Scene *m_Scene;
+
 	};
 }
 
