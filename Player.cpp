@@ -49,7 +49,11 @@ void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, coco
 					velocityX = 0;
 				}
 			}
-			runAnimation(action);
+			if (aniCount != 1) {
+				direction = false;
+				runAnimation(testframes);
+				aniCount = 1;
+			}
 
 		}
 		else if (keyBoard.getLeftArrow() == true) {
@@ -65,9 +69,21 @@ void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, coco
 					velocityX = 0;
 				}
 			}
+			if (aniCount != 2) {
+				direction = true;
+				runAnimation(testframes);
+				aniCount = 2;
+			}
+			
+			
 		}
 		else {
 			velocityX = 0;
+			if (aniCount != 0)
+			{
+				runAnimation(A_idle);
+				aniCount = 0;
+			}
 		}
 		
 		toCalculate.checkOnGround(&onGround, m_MainCharacter, platformY, typeOfHitBoxY, &health);
@@ -84,7 +100,7 @@ void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, coco
 		{
 			attCooldown++;
 		}
-		if (attCooldown >= 60)
+		if (attCooldown >= 30)
 		{
 			attCooldown = 0;
 		}
@@ -174,7 +190,7 @@ void OOP::Player::initAnimations()
 	frameCache = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache();
 	frameCache->addSpriteFramesWithFile("B.plist");
 	//CCArray* testFrames = new CCArray;
-	for (int i = 1; i <= 3; i++)
+	for (int i = 1; i <= 4; i++)
 	{
 		cocos2d::CCString* filename = cocos2d::CCString::createWithFormat("a%d.png", i);
 		cocos2d::CCSpriteFrame* frame = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(filename->getCString());
@@ -184,17 +200,36 @@ void OOP::Player::initAnimations()
 	testAnim = cocos2d::CCAnimation::createWithSpriteFrames(testframes, 0.1f);
 	action = cocos2d::CCRepeatForever::create(cocos2d::CCAnimate::create(testAnim));
 
-	//runAnimation(action);
+	//idle animation
+	for (int i = 1; i <= 5; i++)
+	{
+		cocos2d::CCString* filename = cocos2d::CCString::createWithFormat("a1.png", i);
+		cocos2d::CCSpriteFrame* frame = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(filename->getCString());
+		
+		A_idle.pushBack(frame);
+	}
+	
 
 
 }
 
-void OOP::Player::runAnimation(cocos2d::CCAction* animation)
+void OOP::Player::runAnimation(cocos2d::Vector<cocos2d::CCSpriteFrame *> animation)
 {
-	cocos2d::CCAnimation *newtestAnim = cocos2d::CCAnimation::createWithSpriteFrames(testframes, 0.1f);
+	m_MainCharacter->stopAllActions();
+		cocos2d::CCAnimation *newtestAnim = cocos2d::CCAnimation::createWithSpriteFrames(animation, 0.1f);
 	cocos2d::CCAction *action = cocos2d::CCRepeatForever::create(cocos2d::CCAnimate::create(newtestAnim));
-
 	m_MainCharacter->runAction(action);
+	
+	if (direction == true)
+	{
+		m_MainCharacter->setScaleX(-1.0f);
+	}
+	else
+	{
+		m_MainCharacter->setScaleX(1.0f);
+
+	}
+
 	//m_MainCharacter = cocos2d::Sprite::create("Monster3.png");
 }
 
@@ -210,4 +245,9 @@ void OOP::Player::attack()
 bool OOP::Player::isattack()
 {
 	return attCooldown;
+}
+
+bool OOP::Player::getDir()
+{
+	return direction;
 }

@@ -85,7 +85,7 @@ bool HelloWorld::init()
 	//test->setPosition(Vec2(400, 200));
 
 	CCAction* action = CCRepeatForever::create(CCAnimate::create(testAnim));
-	m_mainCharacter.runAnimation(action);
+	//m_mainCharacter.runAnimation(action);
 
 
 	m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
@@ -110,7 +110,7 @@ bool HelloWorld::init()
 	    {
 	// position the label
 	        label->setPosition(Vec2(300, 300));
-
+			
 		//	 add the label as a child to this layer
 		    this->addChild(label, 1);
 		}
@@ -226,7 +226,14 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 	if (m_mainCharacter.isattack())
 	{
 		Sprite *attackBox = Sprite::create("Dead.png");
-		attackBox->setPosition(m_mainCharacter.getMainCharacter()->getPosition());
+		if (m_mainCharacter.getDir()) {
+			attackBox->setPosition(Vec2(m_mainCharacter.getMainCharacter()->getPosition().x - 100, m_mainCharacter.getMainCharacter()->getPosition().y));
+		}
+		else
+		{
+			attackBox->setPosition(Vec2(m_mainCharacter.getMainCharacter()->getPosition().x + 100, m_mainCharacter.getMainCharacter()->getPosition().y));
+		
+		}
 		this->addChild(attackBox);
 		m_MonsterManager.getHurt(attackBox);
 		attackBox->removeFromParentAndCleanup(true);

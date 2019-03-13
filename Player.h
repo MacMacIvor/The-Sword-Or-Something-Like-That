@@ -44,10 +44,11 @@ namespace OOP {
 		cocos2d::Sprite *getTheLastAmountOfPatienceIHaveWithCocos(); //Returns the listener that holds the event
 
 		void initAnimations();
-		void runAnimation(cocos2d::CCAction*);
+		void runAnimation(cocos2d::Vector<cocos2d::CCSpriteFrame *>);
 
 		void attack();
 		bool isattack();
+		bool getDir();
 
 
 	private:
@@ -56,7 +57,7 @@ namespace OOP {
 		cocos2d::Sprite *IHATECOCOSIDONTKNOWWHYTHISISSOFINICKYTOGETTOWORK;
 		std::vector <cocos2d::Sprite *> m_Health;
 		std::vector <std::string> animation;
-		int aniCount = 0;
+		int aniCount = -1;
 		float velocityX = 0;
 		float velocityY = 0;
 		Physics toCalculate;
@@ -68,12 +69,17 @@ namespace OOP {
 		int invincible = 0;
 		int attCooldown = 0;
 		cocos2d::CCAction *action;
+		bool direction = false;//true==left     false==right
 
 
 		//animation things
 		cocos2d::CCSpriteFrameCache* frameCache;
 		cocos2d::Vector<cocos2d::CCSpriteFrame *> testframes;
 		cocos2d::CCAnimation* testAnim;
+
+
+		//animations
+		cocos2d::Vector<cocos2d::CCSpriteFrame *> A_idle;
 	};
 }
 

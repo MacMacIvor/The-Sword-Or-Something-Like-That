@@ -19,11 +19,11 @@ void const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OOP::myLeve
 				{
 					if (number == 60 || number == 36) {
 						types.push_back(1);
-						m_Platform.push_back(cocos2d::Sprite::create("testforms2.png"));
+						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
 					}
 					else {
 						types.push_back(1);
-						m_Platform.push_back(cocos2d::Sprite::create("testforms3.png"));
+						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
 					}
 				}
 				else {
