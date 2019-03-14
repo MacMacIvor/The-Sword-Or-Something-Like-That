@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -100,8 +100,8 @@ bool HelloWorld::init()
 	//m_mainCharacter.updateHealthSprite();
 	m_mainCharacter.initHealth();
 
-	auto label = Label::createWithTTF("This is what a killer's Smile looks like!\n"
-										"               Fear it!", "fonts/Marker Felt.ttf", 24);
+	auto label = Label::createWithTTF("The killer's Smile is gone!\n"
+										"               I miss it (;*.*;)", "fonts/Marker Felt.ttf", 24);
 	    if (label == nullptr)
 	    {
 	        problemLoading("'fonts/Marker Felt.ttf'");
@@ -109,7 +109,7 @@ bool HelloWorld::init()
 	   else
 	    {
 	// position the label
-	        label->setPosition(Vec2(300, 300));
+	        label->setPosition(Vec2(300, 600));
 			
 		//	 add the label as a child to this layer
 		    this->addChild(label, 1);

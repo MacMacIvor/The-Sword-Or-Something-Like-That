@@ -101,7 +101,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 	}
 	else {
 		//64 bottom of edge and 64 for half the emeny sprite size
-		ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2(0.0f + 64, 64.0f + 240), 30, 0);
+		ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2(0.0f + 64, 64.0f + 240), 30, 1);
 		l_Monster2->saveScene(scene);
 		scene->addChild(l_Monster2->m_Monster.getPrimitive());
 		m_MonsterContainer.push_back(l_Monster2);
@@ -121,6 +121,7 @@ void OOP::MonsterManager::update(float a_DeltaTime)
 		m_MonsterContainer[w]->Update(a_DeltaTime);
 		if (m_MonsterContainer[w]->isDead() == true) {
 			m_MonsterContainer[w]->m_Monster.getPrimitive()->removeFromParentAndCleanup(true);
+			m_MonsterContainer[w]->cleanBullets();
 			m_MonsterContainer.erase(m_MonsterContainer.begin() + w);
 			//delete m_MonsterContainer[w];
 
@@ -169,6 +170,9 @@ bool OOP::MonsterManager::damageLeft(cocos2d::Sprite * m_MainCharacter, int invi
 	}
 	for (unsigned int y = 0; y < m_MonsterContainer.size(); y++) {
 		if (true == m_MonsterContainer[y]->attack(m_MainCharacter) && invincible == 0) {
+			return true;
+		}
+		if (true == m_MonsterContainer[y]->bulletDamage(m_MainCharacter) && invincible == 0) {
 			return true;
 		}
 	}
@@ -335,4 +339,37 @@ void OOP::ShootingMonster::moveBullets(float X, float Y)
 			m_Bullets[i]->getBullet()->getBullet()->getPositionY() + Y
 		);
 	}
+}
+
+void OOP::ShootingMonster::cleanBullets()
+{
+	for (int i = m_Bullets.size() - 1; i > -1; i--) {
+		m_Bullets[i]->getBullet()->getBullet()->removeFromParentAndCleanup(true);
+		m_Bullets.erase(m_Bullets.begin() + i);
+	}
+}
+
+bool OOP::ShootingMonster::bulletDamage(cocos2d::Sprite * character)
+{
+	for (int i = 0; i < m_Bullets.size(); i++) {
+		if (((m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMaxX() > character->getBoundingBox().getMinX() &&
+			m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMaxX() < character->getBoundingBox().getMaxX()) && //Right of bullet within the player
+			((m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMinY() > character->getBoundingBox().getMinY() &&
+				m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMinY() < character->getBoundingBox().getMaxY()) ||
+				(m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMaxY() > character->getBoundingBox().getMinY() &&
+					m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMaxY() < character->getBoundingBox().getMaxY())) ||
+			(((m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMinX() > m_MainCharacter.getBoundingBox().getMinX() &&
+				m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMinX() < m_MainCharacter.getBoundingBox().getMaxX()) && //Left of bullet within the player
+				(m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMinY() > m_MainCharacter.getBoundingBox().getMinY() &&
+					(m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMinY() < m_MainCharacter.getBoundingBox().getMaxY()) ||
+					(m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMaxY() > m_MainCharacter.getBoundingBox().getMinY() &&
+						m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMaxY() < m_MainCharacter.getBoundingBox().getMaxY()))))) == true) {
+			//m_Bullets[i]->getBullet()->~BulletSprite();
+			m_Bullets[i]->getBullet()->getBullet()->removeFromParentAndCleanup(true);
+			m_Bullets.erase(m_Bullets.begin() + i);
+			return true;
+		}
+
+	}
+	return false;
 }

@@ -28,7 +28,9 @@ namespace OOP {
 		void saveScene(cocos2d::Scene *scene) { m_Scene = scene; };
 
 		virtual void moveBullets(float X, float Y) {};
-
+		virtual void cleanBullets() {};
+		virtual bool bulletDamage(cocos2d::Sprite *character) { return false; };
+		
 		//I HAAAAAAATTTTTTEEEEE CCCCOOOOOOCCCCCOOOOSSSS!!!!
 		OOP::MonsterSpriteHolder m_Monster;
 		cocos2d::Scene *m_Scene;
@@ -54,6 +56,9 @@ namespace OOP {
 		void savePlatforms(OOP::PlatformGenerator *toSave);
 		virtual void Update(float a_DeltaTime);
 		virtual void moveBullets(float X, float Y);
+		virtual void cleanBullets();
+		virtual bool bulletDamage(cocos2d::Sprite *character);
+
 
 
 	private:
