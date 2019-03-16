@@ -19,16 +19,16 @@ void const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OOP::myLeve
 				{
 					if (number == 60 || number == 36) {
 						types.push_back(1);
-						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
+						m_Platform.push_back(cocos2d::Sprite::create("testforms3.png"));
 					}
 					else {
 						types.push_back(1);
-						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
+						m_Platform.push_back(cocos2d::Sprite::create("testforms3.png"));
 					}
 				}
 				else {
 					types.push_back(2);
-					m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
+					m_Platform.push_back(cocos2d::Sprite::create("testforms3.png"));
 				}
 				m_Platform[number]->setPosition( 
 					level->getLevel(level->getLevel())->getBoundingBox().getMinX() + (128 * j) + 64,

@@ -176,8 +176,9 @@ float const OOP::Physics::getVelocityX() const
 
 void const OOP::Physics::checkOnGround(bool *onGround, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxY, int * health)
 {
-	if (m_MainCharacter->getPositionY() == 25) {
-		;//*onGround = true;
+	if (m_MainCharacter->getBoundingBox().getMinY() <= platform->getBoundingBox().getMaxY() && m_MainCharacter->getBoundingBox().getMinY() >= platform->getBoundingBox().getMinY()) {
+		m_MainCharacter->setPositionY(platform->getBoundingBox().getMaxY());
+		*onGround = true;
 	}
 	//		bottom player > top plat
 	//		center of player in box + box width

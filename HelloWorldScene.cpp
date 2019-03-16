@@ -149,24 +149,30 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 
 
 
-		if (position.x < 100 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2)) {
+		if (position.x < this->getBoundingBox().getMidX() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2) && m_mainCharacter.getVelocityX() >= 0) {
 			if (m_Level.checkMaxX(m_mainCharacter.getVelocityX(), this) != true) {
 				m_Level.moveBackGroundX(m_mainCharacter.getVelocityX(), this);
 				m_Platform.moveHitBoxesX(m_Level.getMovedAmountX());
 				m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountX(), 0);
-				position.x = 100 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
+				position.x = this->getBoundingBox().getMidX() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
 			}
-			position.x = 100 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
-
+			else {
+				if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMidX() <= this->getBoundingBox().getMinX() + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2))
+					position.x = this->getBoundingBox().getMinX() + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
+			}
 		}
 
-		else if (position.x > this->getBoundingBox().getMaxX() - (50 + m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2)) {
+		else if (position.x > this->getBoundingBox().getMidX() + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2) && m_mainCharacter.getVelocityX() <= 0) {
 			if (m_Level.checkMaxX(m_mainCharacter.getVelocityX(), this) == false) {
 				m_Level.moveBackGroundX(m_mainCharacter.getVelocityX(), this);
 				m_Platform.moveHitBoxesX(m_Level.getMovedAmountX());
 				m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountX(), 0);
+				position.x = this->getBoundingBox().getMidX() + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
 			}
-			position.x = this->getBoundingBox().getMaxX() - (50 + m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
+			else {
+				if(m_mainCharacter.getMainCharacter()->getBoundingBox().getMidX() >= this->getBoundingBox().getMaxX() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2))
+				position.x = this->getBoundingBox().getMaxX() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
+			}
 		}
 
 		if (position.y > this->getBoundingBox().getMaxY() - 100) {

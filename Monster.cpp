@@ -257,6 +257,7 @@ OOP::ShootingMonster::ShootingMonster(cocos2d::Vec2 a_Spawn, float a_Speed, int 
 
 bool OOP::ShootingMonster::attack(cocos2d::Sprite * character)
 {
+
 	if (shotCoolDown == 0) {
 		if (character->getBoundingBox().getMidX() - m_Spawn.x < 500) {
 			float l_TempX = character->getPosition().x - m_Spawn.x;
