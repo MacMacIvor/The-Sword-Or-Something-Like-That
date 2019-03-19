@@ -39,7 +39,6 @@ void const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OOP::myLeve
 				number++;
 			}
 		}
-
 	}
 
 		//m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
@@ -51,6 +50,7 @@ void const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OOP::myLeve
 		//}
 		//help->addChild(m_Platform[number]);
 		//number++;
+	vectorSize = m_Platform.size();
 
 
 }

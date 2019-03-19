@@ -26,8 +26,8 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
-#include "proj.win32\KeyboardInput.h"
 #include "proj.win32\Player.h"
+#include "proj.win32\KeyboardInput.h"
 #include "proj.win32\PlatformGenerator.h"
 #include "proj.win32\myLevels.h"
 #include "proj.win32\Monster.h"

@@ -39,6 +39,10 @@ namespace OOP {
 		void const resetLevel(cocos2d::Scene *help) const;
 
 
+		double const playerMoveBackgroundX(double X, cocos2d::Scene *helloWorld);
+		double const playerMoveBackgroundY(double Y, cocos2d::Scene *helloWorld);
+
+
 		const int levelOneHitBox[9][90]
 			=
 		{	{-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},

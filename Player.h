@@ -1,9 +1,15 @@
 #ifndef H_PLAYER
 #define H_PLAYER
+
+#ifndef H_INCLUDE
+#define H_INCLUDE
 #include "cocos2d.h"
 #include <functional>
-#include "proj.win32\GamePhysics.h"
 #include "KeyboardInput.h"
+#include "proj.win32\GamePhysics.h"
+#endif
+
+
 
 namespace cocos2d {
 	class Vec2;
@@ -23,6 +29,12 @@ namespace OOP {
 		Player();
 		~Player();
 
+		bool const getLeftArrow() const { return keyBoard.getLeftArrow(); }
+		bool const getRightArrow() const { return keyBoard.getRightArrow(); }
+		bool const getUpArrow() const { return keyBoard.getUpArrow(); }
+		bool const getShiftKey() const { return keyBoard.getShiftKey(); }
+		bool const getZKey() const { return keyBoard.getZKey(); }
+		bool const getXKey() const { return keyBoard.getXKey(); }
 		float const getVelocityX() const;
 		float const getVelocityY() const;
 		void const setVelocityX(float newVelocity);
@@ -34,6 +46,12 @@ namespace OOP {
 		void const resetPlayer();
 		int const getHealth() const;
 		void damage(cocos2d::Sprite * m_MainCharacter, bool left, bool right);
+
+
+		void const updatePlayer();
+		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health);
+
+
 
 		int getInvincible() { return invincible; };
 
@@ -50,6 +68,17 @@ namespace OOP {
 		bool isattack();
 		bool getDir();
 
+		
+		double const getPlayerVelocityX() const { return playerVelocityX; }
+		double const getPlayerVelocityY() const { return playerVelocityY; }
+		
+		bool playerOnGround = false;
+		int playerAgainstWall = 0;
+		int health = 3;
+		int invincible = 0;
+		double playerVelocityY = 0;
+		double playerVelocityX = 0;
+		
 
 	private:
 		cocos2d::Scene* m_scene;
@@ -60,13 +89,12 @@ namespace OOP {
 		int aniCount = -1;
 		float velocityX = 0;
 		float velocityY = 0;
-		Physics toCalculate;
+		//OOP::Physics toCalculate;
+		OOP::Physics toCalculate;
 		KeyboardListener keyBoard;
 		bool onGround = false;
 		int againstWall = 0;
 		const int MAX_HEALTH = 3;
-		int health = 3;
-		int invincible = 0;
 		int attCooldown = 0;
 		cocos2d::CCAction *action;
 		bool direction = false;//true==left     false==right

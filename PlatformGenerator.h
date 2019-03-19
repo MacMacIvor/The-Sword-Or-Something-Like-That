@@ -36,7 +36,8 @@ namespace OOP {
 
 		void const resetHitBox(cocos2d::Scene *help, OOP::myLevels* level);
 
-
+		int vectorSize = 0;
+		int getPlayerTypeOfHitBox(int index) { return types[index]; }
 	private:
 		std::vector <cocos2d::Sprite *> m_Platform;
 		std::vector <int> types;

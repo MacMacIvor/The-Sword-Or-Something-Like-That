@@ -1,5 +1,6 @@
 #include "GamePhysics.h"
 
+
 void const OOP::Physics::newVelocityY(float velocityY, bool upArrow, bool leftArrow, bool rightArrow, bool zKey, bool shiftKey, int * againstWall, bool *onGround, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform)
 {
 	if (wallJumpBonus > 0) {
@@ -235,3 +236,354 @@ void const OOP::Physics::checkAgainstWall(int * againstWall, cocos2d::Sprite * m
 
 
 }
+
+void const OOP::Physics::saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double * velocityY, double * velocityX, int * againstWall, bool * a_onGround, cocos2d::Sprite * a_MainCharacter, int * health)
+{
+	playerVelocityX = velocityX;
+	playerVelocityY = velocityY;
+	m_PlatformManager = a_PlatformManager;
+	onGround = a_onGround;
+	playerAgainstWall = againstWall;
+	m_MainCharacter = a_MainCharacter;
+	playerHealth = health;
+}
+
+void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightArrow, bool zKey, bool shiftKey)
+{
+
+	//Possibilities
+	//Against wall falling
+	//Falling normally
+	//Falling slower (until reaches max height)
+	//Moving Left
+	//Moving Right
+	//Wall Jump
+	//Hold Wall
+	//Movement in X direction
+	if (*playerAgainstWall == 0) {
+		if (rightArrow == true) {
+			if (*playerVelocityX == 0) {
+				*playerVelocityX = -1;
+			}
+			else if (*playerVelocityX >= -10 && *playerVelocityX < 0) {
+				*playerVelocityX *= 1.5;
+			}
+			else if (*playerVelocityX > 0) {
+				*playerVelocityX /= 1.5;
+				if (*playerVelocityX <= 1) {
+					*playerVelocityX = 0;
+				}
+			}
+		}
+		else if (leftArrow == true) {
+			if (*playerVelocityX == 0) {
+				*playerVelocityX = 1;
+			}
+			else if (*playerVelocityX <= 10 && *playerVelocityX > 0) {
+				*playerVelocityX *= 1.5;
+			}
+			else if (*playerVelocityX < 0) {
+				*playerVelocityX /= 1.5;
+				if (*playerVelocityX >= -1) {
+					*playerVelocityX = 0;
+				}
+			}
+		}
+		else {
+			if (*playerVelocityX >= 1 || *playerVelocityX <= -1) {
+				*playerVelocityX /= 1.25;
+			}
+			else {
+				*playerVelocityX = 0;
+			}
+		}
+	}
+	else if (*playerAgainstWall == 1) {
+		if (leftArrow == true) {
+			if (*playerVelocityX == 0) {
+				*playerVelocityX = 1;
+			}
+			else if (*playerVelocityX <= 10 && *playerVelocityX > 0) {
+				*playerVelocityX *= 1.5;
+			}
+			else if (*playerVelocityX < 0) {
+				*playerVelocityX /= 1.5;
+				if (*playerVelocityX >= -1) {
+					*playerVelocityX = 0;
+				}
+			}
+		}
+		else {
+			if (*playerVelocityX >= 1 || *playerVelocityX <= -1) {
+				*playerVelocityX /= 1.25;
+			}
+			else {
+				*playerVelocityX = 0;
+			}
+		}
+	}
+	else {
+		if (rightArrow == true) {
+			if (*playerVelocityX == 0) {
+				*playerVelocityX = -1;
+			}
+			else if (*playerVelocityX >= -10 && *playerVelocityX < 0) {
+				*playerVelocityX *= 1.5;
+			}
+			else if (*playerVelocityX > 0) {
+				*playerVelocityX /= 1.5;
+				if (*playerVelocityX <= 1) {
+					*playerVelocityX = 0;
+				}
+			}
+		}
+		else {
+			if (*playerVelocityX >= 1 || *playerVelocityX <= -1) {
+				*playerVelocityX /= 1.25;
+			}
+			else {
+				*playerVelocityX = 0;
+			}
+		}
+	}
+	//Movement in Y direction and wall Jump in hererererererere
+	if (*onGround == false && *playerAgainstWall == 0) {
+		if (upArrow == true && *playerVelocityY > 0) {
+			*playerVelocityY -= 0.5 * GRAVITY * TIME_INTERVAL;
+		}
+		else if (upArrow == false && *playerVelocityY > 0) {
+			*playerVelocityY -= 2 * GRAVITY * TIME_INTERVAL;
+		}
+		else {
+			*playerVelocityY -= GRAVITY * TIME_INTERVAL;
+		}
+	}
+	else if (*onGround == false && *playerAgainstWall == 1) {
+		if (upArrow == true && *playerVelocityY > 0) {
+			*playerVelocityY -= 0.5 * GRAVITY * TIME_INTERVAL;
+		}
+		else if (upArrow == false && *playerVelocityY > 0) {
+			*playerVelocityY -= 2 * GRAVITY * TIME_INTERVAL;
+		}
+		else if (shiftKey == true) {
+			if (zKey == true) {
+				*playerVelocityX = 20;
+				*playerVelocityY = 8;
+			}
+			else {
+				*playerVelocityY = 0;
+			}
+		}
+		else if (rightArrow == true) {
+			if (zKey == true) {
+				*playerVelocityX = 20;
+				*playerVelocityY = 8;
+			}
+			else {
+				*playerVelocityY -= 0.15 * GRAVITY * TIME_INTERVAL;
+			}
+		}
+		else {
+			*playerVelocityY -= GRAVITY * TIME_INTERVAL;
+		}
+	}
+	else if (*onGround == false && *playerAgainstWall == 2) {
+		if (upArrow == true && *playerVelocityY > 0) {
+			*playerVelocityY -= 0.5 * GRAVITY * TIME_INTERVAL;
+		}
+		else if (upArrow == false && *playerVelocityY > 0) {
+			*playerVelocityY -= 2 * GRAVITY * TIME_INTERVAL;
+		}
+		else if (shiftKey == true) {
+			if (zKey == true) {
+				*playerVelocityX = -20;
+				*playerVelocityY = 8;
+			}
+			else {
+				*playerVelocityY = 0;
+			}
+		}
+		else if (leftArrow == true) {
+			if (zKey == true) {
+				*playerVelocityX = -20;
+				*playerVelocityY = 8;
+			}
+			else {
+				*playerVelocityY -= 0.15 * GRAVITY * TIME_INTERVAL;
+			}
+		}
+		else {
+			*playerVelocityY -= GRAVITY * TIME_INTERVAL;
+		}
+	}
+	else {
+		if (upArrow == true) {
+			*playerVelocityY = 10;
+		}
+	}
+
+	//position.x -= m_mainCharacter.getVelocityX();
+	//position.y += m_mainCharacter.getVelocityY();
+
+	m_MainCharacter->setPosition(m_MainCharacter->getPositionX() - *playerVelocityX, m_MainCharacter->getPositionY() + *playerVelocityY);
+	
+	bool alreadyMovedX = false;
+	bool alreadyMovedY = false;
+	double Goal1 = 999;
+	double Goal2 = 999;
+	double Goal3 = 999;
+	double Goal4 = 999;
+	for (unsigned int i = 0; i < m_PlatformManager->vectorSize; i++) { 
+		//Needs to check:
+		//Bottom -top
+		//Top -bottom
+		//Left -right
+		//Right -left
+		//Bottom -top
+		//Right -left
+
+		
+
+		if (m_MainCharacter->getBoundingBox().getMinY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+			m_MainCharacter->getBoundingBox().getMinY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY() && ((
+				m_MainCharacter->getBoundingBox().getMinX() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() &&
+				m_MainCharacter->getBoundingBox().getMinX() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX()) || (
+					m_MainCharacter->getBoundingBox().getMaxX() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() &&
+					m_MainCharacter->getBoundingBox().getMaxX() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX()))) {
+			if (*playerVelocityY < 0) {
+				if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 2) {
+					*playerHealth = 0;
+				}
+				//m_MainCharacter->setPositionY(m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() + m_MainCharacter->getBoundingBox().size.height / 2);
+				Goal1 = m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() - m_MainCharacter->getBoundingBox().getMinY();
+				//*playerVelocityY = 0;
+				//*onGround = true;
+				alreadyMovedY = true;
+			}
+		}
+		//Top -bottom
+		else if (m_MainCharacter->getBoundingBox().getMaxY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+			m_MainCharacter->getBoundingBox().getMaxY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY() && ((
+				m_MainCharacter->getBoundingBox().getMinX() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() &&
+				m_MainCharacter->getBoundingBox().getMinX() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX()) || (
+					m_MainCharacter->getBoundingBox().getMaxX() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() &&
+					m_MainCharacter->getBoundingBox().getMaxX() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX()))) {
+			if (*playerVelocityY > 0) {
+				if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 2) {
+					*playerHealth = 0;
+				}
+				alreadyMovedY = true;
+				//m_MainCharacter->setPositionY(m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY() - m_MainCharacter->getBoundingBox().size.height / 2);
+				Goal2 = m_MainCharacter->getBoundingBox().getMaxY() - m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY();
+			}
+		}
+		//Checks on the ground
+		else {
+			if (m_MainCharacter->getBoundingBox().getMinY() == m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() && ((
+				m_MainCharacter->getBoundingBox().getMinX() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() &&
+				m_MainCharacter->getBoundingBox().getMinX() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX()) || (
+					m_MainCharacter->getBoundingBox().getMaxX() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() &&
+					m_MainCharacter->getBoundingBox().getMaxX() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX()))) {
+				alreadyMovedY = true;
+				*onGround = true;
+			}
+			else if (alreadyMovedY == false) {
+				*onGround = false;
+			}
+		}
+
+
+
+
+		if ((m_MainCharacter->getBoundingBox().getMaxX() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() &&
+			m_MainCharacter->getBoundingBox().getMaxX() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX()) &&
+			((m_MainCharacter->getBoundingBox().getMinY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+				m_MainCharacter->getBoundingBox().getMinY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY())
+				||
+				(m_MainCharacter->getBoundingBox().getMaxY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+					m_MainCharacter->getBoundingBox().getMaxY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY())
+				||
+				(m_MainCharacter->getBoundingBox().getMidY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+					m_MainCharacter->getBoundingBox().getMidY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()))
+			) {
+			if (*playerVelocityX < 0) {
+				//m_MainCharacter->setPositionX(m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX() - m_MainCharacter->getBoundingBox().size.width / 2);
+				Goal3 = m_MainCharacter->getBoundingBox().getMaxX() - m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX();
+				alreadyMovedX = true;
+				//*playerAgainstWall = 1;
+				//*playerVelocityX = 0;
+			}
+		}
+		//Left -right
+		else if ((m_MainCharacter->getBoundingBox().getMinX() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() &&
+			m_MainCharacter->getBoundingBox().getMinX() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX()) &&
+			((m_MainCharacter->getBoundingBox().getMinY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+				m_MainCharacter->getBoundingBox().getMinY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY())
+				||
+				(m_MainCharacter->getBoundingBox().getMaxY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+					m_MainCharacter->getBoundingBox().getMaxY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY())
+				||
+				(m_MainCharacter->getBoundingBox().getMidY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+					m_MainCharacter->getBoundingBox().getMidY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()))
+			) {
+			if (*playerVelocityX > 0) {
+				//m_MainCharacter->setPositionX(m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() + m_MainCharacter->getBoundingBox().size.width / 2);
+				//*playerAgainstWall = 2;
+				//*playerVelocityX = 0;
+				alreadyMovedX = true;
+				Goal4 = m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() - m_MainCharacter->getBoundingBox().getMinX();
+			}
+			
+		}
+		//If not inside a box
+		else if (alreadyMovedX == false) {
+			//Left of player
+			if (m_MainCharacter->getBoundingBox().getMinX() == m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() && ((
+				m_MainCharacter->getBoundingBox().getMinY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+				m_MainCharacter->getBoundingBox().getMinY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()) || (
+					m_MainCharacter->getBoundingBox().getMaxY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+					m_MainCharacter->getBoundingBox().getMaxY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()) || (
+						m_MainCharacter->getBoundingBox().getMidY() <= m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+						m_MainCharacter->getBoundingBox().getMidY() >= m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()))) {
+				alreadyMovedX = true;
+				*playerAgainstWall = 2;
+			}
+			//Right
+			else if (m_MainCharacter->getBoundingBox().getMaxX() == m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX() && ((
+				m_MainCharacter->getBoundingBox().getMinY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+				m_MainCharacter->getBoundingBox().getMinY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()) || (
+					m_MainCharacter->getBoundingBox().getMaxY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+					m_MainCharacter->getBoundingBox().getMaxY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()) || (
+						m_MainCharacter->getBoundingBox().getMidY() <= m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+						m_MainCharacter->getBoundingBox().getMidY() >= m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()))) {
+				alreadyMovedX = true;
+				*playerAgainstWall = 1;
+			}
+			else {
+				*playerAgainstWall = 0;
+			}
+		}
+	}
+	if (Goal1 <= Goal2 && Goal1 <= Goal3 && Goal1 <= Goal4 && Goal1 != 999) {
+		*playerVelocityY = 0;
+		*onGround = true;
+		m_MainCharacter->setPositionY((m_MainCharacter->getPositionY() + Goal1));
+	}
+	else if (Goal2 <= Goal1 && Goal2<= Goal3 && Goal2 <= Goal4 && Goal2 != 999) {
+		//m_MainCharacter->setPositionY(m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY() - m_MainCharacter->getBoundingBox().size.height / 2);
+		m_MainCharacter->setPositionY((m_MainCharacter->getPositionY() - Goal1));
+	}
+	else if (Goal3 <= Goal1 && Goal3 <= Goal2 && Goal3 <= Goal4 && Goal3 != 999) {
+		//m_MainCharacter->setPositionX(m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX() - m_MainCharacter->getBoundingBox().size.width / 2);
+		m_MainCharacter->setPositionX(m_MainCharacter->getPositionX() - Goal3);
+		*playerAgainstWall = 1;
+		*playerVelocityX = 0;
+	}
+	else if (Goal4 <= Goal1 && Goal4 <= Goal2 && Goal4 <= Goal3 && Goal4 != 999) {
+		//m_MainCharacter->setPositionX(m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() + m_MainCharacter->getBoundingBox().size.width / 2);
+		m_MainCharacter->setPositionX(m_MainCharacter->getPositionX() + Goal4);
+		*playerAgainstWall = 2;
+		*playerVelocityX = 0;
+	}
+}
+

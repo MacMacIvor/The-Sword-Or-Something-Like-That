@@ -37,48 +37,20 @@ void const OOP::Player::setVelocityY(float newVelocity)
 void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platformY, cocos2d::Sprite * platformX, int typeOfHitBoxX, int typeOfHitBoxY)
 {
 		if (keyBoard.getRightArrow() == true) {
-			if (velocityX == 0) {
-				velocityX = -1;
-			}
-			else if (velocityX >= -10 && velocityX < 0) {
-				velocityX *= 1.5;
-			}
-			else if (velocityX > 0) {
-				velocityX /= 1.5;
-				if (velocityX <= 1) {
-					velocityX = 0;
-				}
-			}
 			if (aniCount != 1) {
 				direction = false;
 				runAnimation(testframes);
 				aniCount = 1;
 			}
-
 		}
 		else if (keyBoard.getLeftArrow() == true) {
-			if (velocityX == 0) {
-				velocityX = 1;
-			}
-			else if (velocityX <= 10 && velocityX > 0) {
-				velocityX *= 1.5;
-			}
-			else if (velocityX < 0) {
-				velocityX /= 1.5;
-				if (velocityX >= -1) {
-					velocityX = 0;
-				}
-			}
 			if (aniCount != 2) {
 				direction = true;
 				runAnimation(testframes);
 				aniCount = 2;
 			}
-			
-			
 		}
 		else {
-			velocityX = 0;
 			if (aniCount != 0)
 			{
 				runAnimation(A_idle);
@@ -168,6 +140,48 @@ void OOP::Player::damage(cocos2d::Sprite * m_MainCharacter, bool left, bool righ
 		invincible = 100;
 		velocityX = -40;
 	}
+}
+
+void const OOP::Player::updatePlayer()
+{
+	if (keyBoard.getRightArrow() == true) {
+		if (aniCount != 1) {
+			direction = false;
+			runAnimation(testframes);
+			aniCount = 1;
+		}
+	}
+	else if (keyBoard.getLeftArrow() == true) {
+		if (aniCount != 2) {
+			direction = true;
+			runAnimation(testframes);
+			aniCount = 2;
+		}
+	}
+	else {
+		if (aniCount != 0)
+		{
+			runAnimation(A_idle);
+			aniCount = 0;
+		}
+	}
+
+	toCalculate.playerPhysics(keyBoard.getUpArrow(), keyBoard.getLeftArrow(), keyBoard.getRightArrow(), keyBoard.getZKey(), keyBoard.getShiftKey());
+
+	attack();
+	if (attCooldown)
+	{
+		attCooldown++;
+	}
+	if (attCooldown >= 30)
+	{
+		attCooldown = 0;
+	}
+}
+
+void const OOP::Player::saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double * velocityY, double * velocityX, int * againstWall, bool * onGround, cocos2d::Sprite * a_MainCharacter, int * health)
+{
+	toCalculate.saveInfoBecauseIHateCocos(a_PlatformManager, velocityY, velocityX, againstWall, onGround, a_MainCharacter, health);
 }
 
 cocos2d::EventListenerKeyboard * OOP::Player::getListener()

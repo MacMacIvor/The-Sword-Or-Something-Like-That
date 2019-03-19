@@ -118,8 +118,14 @@ bool HelloWorld::init()
 		
 		m_MonsterManager.spawn(this, &m_Platform);
 		m_MonsterManager.spawn(this, &m_Platform);
+
 		m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
-		
+
+		m_mainCharacter.saveInfoBecauseIHateCocos(&m_Platform, &m_mainCharacter.playerVelocityY, &m_mainCharacter.playerVelocityX, &m_mainCharacter.playerAgainstWall,
+			&m_mainCharacter.playerOnGround, m_mainCharacter.getMainCharacter(), &m_mainCharacter.health);
+
+
+
 		//m_MonsterManager.addMonster(*l_Monster2)
 		//l_Monster2->savePlatforms(toSave);
 
@@ -132,7 +138,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 	
 
 	if (m_mainCharacter.getHealth() > 0 && taunt == 0) {
-
+		/*
 		cocos2d::Vec2 position = m_mainCharacter.getMainCharacter()->getPosition();
 
 		
@@ -200,8 +206,69 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 			}
 		}
 		m_mainCharacter.getMainCharacter()->setPosition(position);
+		*/
+		m_mainCharacter.updatePlayer();
 		m_mainCharacter.updateHealthSprite();
 
+		double distToMove = 0;
+		if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMinX() < 300 && m_mainCharacter.getPlayerVelocityX() > 0) {
+			if (m_Level.checkMaxX(m_mainCharacter.getPlayerVelocityX(), this) != true ) {
+				//m_Level.moveBackGroundX(m_mainCharacter.getPlayerVelocityX(), this);
+				//m_Platform.moveHitBoxesX(m_Level.getMovedAmountX());
+				//m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountX(), 0);
+				distToMove = m_mainCharacter.getMainCharacter()->getPositionX() - (300 + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2));
+				distToMove = m_Level.playerMoveBackgroundX(-distToMove, this);
+				m_Platform.moveHitBoxesX(distToMove);
+				m_MonsterManager.moveMonstersWithScreen(distToMove, 0);
+				m_mainCharacter.getMainCharacter()->setPositionX(300 + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2));
+			}
+			else {
+				if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMinX() < 0)
+					m_mainCharacter.getMainCharacter()->setPositionX((m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2));
+			}
+		}
+
+		else if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMaxX() > 750 && m_mainCharacter.getPlayerVelocityX() <= 0) {
+			if (m_Level.checkMaxX(m_mainCharacter.getPlayerVelocityX(), this) == false ) {
+				//m_Level.moveBackGroundX(m_mainCharacter.getPlayerVelocityX(), this);
+				//m_Platform.moveHitBoxesX(m_Level.getMovedAmountX());
+				//m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountX(), 0);
+				distToMove = (750 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2)) - m_mainCharacter.getMainCharacter()->getPositionX();
+				distToMove = m_Level.playerMoveBackgroundX(distToMove, this);
+				m_Platform.moveHitBoxesX(distToMove);
+				m_MonsterManager.moveMonstersWithScreen(distToMove, 0);
+				m_mainCharacter.getMainCharacter()->setPositionX(750 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2));
+			}
+			else {
+				if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMaxX() >= this->getBoundingBox().getMaxX())
+					m_mainCharacter.getMainCharacter()->setPositionX(this->getBoundingBox().getMaxX() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2));
+			}
+		}
+		
+		if (m_mainCharacter.getMainCharacter()->getPositionY() > this->getBoundingBox().getMaxY() - 100) {
+			if (m_Level.checkMaxY(m_mainCharacter.getPlayerVelocityY(), this) == false) {
+				m_Level.moveBackGroundY(m_mainCharacter.getPlayerVelocityY(), this);
+				m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
+				m_mainCharacter.getMainCharacter()->setPositionY(this->getBoundingBox().getMaxY() - 100);
+				m_MonsterManager.moveMonstersWithScreen(0, m_Level.getMovedAmountY());
+
+			}
+			m_mainCharacter.getMainCharacter()->setPositionY(this->getBoundingBox().getMaxY() - 100);
+
+		}
+		else if (m_mainCharacter.getMainCharacter()->getPositionY() < 100) {
+			if (m_Level.checkMaxY(m_mainCharacter.getPlayerVelocityY(), this) == false) {
+				m_Level.moveBackGroundY(m_mainCharacter.getPlayerVelocityY(), this);
+				m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
+				m_MonsterManager.moveMonstersWithScreen(0, m_Level.getMovedAmountY());
+				m_mainCharacter.getMainCharacter()->setPositionY(100);
+			}
+			else {
+				if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMinX() < 0) {
+					m_mainCharacter.getMainCharacter()->setPositionY(0 + m_mainCharacter.getMainCharacter()->getBoundingBox().size.height / 2);
+				}
+			}
+		}
 		if (m_MonsterManager.isZipZilchZero()) {
 
 			m_mainCharacter.damage(m_mainCharacter.getMainCharacter(), m_MonsterManager.damageLeft(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()), m_MonsterManager.damageRight(m_mainCharacter.getMainCharacter(), m_mainCharacter.getInvincible()));
@@ -229,6 +296,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
 
 	}
+	
 	if (m_mainCharacter.isattack())
 	{
 		Sprite *attackBox = Sprite::create("Dead.png");
@@ -244,7 +312,7 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		m_MonsterManager.getHurt(attackBox);
 		attackBox->removeFromParentAndCleanup(true);
 	}
-
+	
 }
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
