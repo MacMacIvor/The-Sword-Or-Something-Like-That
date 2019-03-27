@@ -202,11 +202,11 @@ void OOP::Player::initAnimations()
 {
 
 	frameCache = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache();
-	frameCache->addSpriteFramesWithFile("B.plist");
+	frameCache->addSpriteFramesWithFile("r.plist");
 	//CCArray* testFrames = new CCArray;
-	for (int i = 1; i <= 4; i++)
+	for (int i = 1; i <= 8; i++)
 	{
-		cocos2d::CCString* filename = cocos2d::CCString::createWithFormat("a%d.png", i);
+		cocos2d::CCString* filename = cocos2d::CCString::createWithFormat("r%d.png", i);
 		cocos2d::CCSpriteFrame* frame = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(filename->getCString());
 		testframes.pushBack(frame);
 	}
@@ -217,7 +217,7 @@ void OOP::Player::initAnimations()
 	//idle animation
 	for (int i = 1; i <= 5; i++)
 	{
-		cocos2d::CCString* filename = cocos2d::CCString::createWithFormat("a1.png", i);
+		cocos2d::CCString* filename = cocos2d::CCString::createWithFormat("r1.png", i);
 		cocos2d::CCSpriteFrame* frame = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(filename->getCString());
 		
 		A_idle.pushBack(frame);
