@@ -28,6 +28,9 @@ void OOP::KeyboardListener::OnKeyReleased(cocos2d::EventKeyboard::KeyCode keyCod
 	switch (keyCode) {
 	case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
 		upArrow = false;
+		break;
+	case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		downArrow = false;
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_Z) {
 		zKey = false;
@@ -37,6 +40,9 @@ void OOP::KeyboardListener::OnKeyReleased(cocos2d::EventKeyboard::KeyCode keyCod
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_SHIFT) {
 		shiftKey = false;
+	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_ESCAPE) {
+		escapeKey = false;
 	}
 }
 
@@ -53,6 +59,9 @@ void OOP::KeyboardListener::OnKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode
 	switch (keyCode) {
 	case cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW:
 		upArrow = true;
+		break;
+	case cocos2d::EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+		downArrow = true;
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_Z) {
 		zKey = true;
@@ -62,6 +71,9 @@ void OOP::KeyboardListener::OnKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode
 	}
 	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_SHIFT) {
 		shiftKey = true;
+	}
+	if (keyCode == cocos2d::EventKeyboard::KeyCode::KEY_ESCAPE) {
+		escapeKey = true;
 	}
 	log("Key with keycode %d pressed", keyCode);
 }
@@ -80,6 +92,11 @@ bool const OOP::KeyboardListener::getUpArrow() const
 {
 	return upArrow;
 }
+
+bool const OOP::KeyboardListener::getDownArrow() const
+{
+	return downArrow;
+}
 	  
 bool const OOP::KeyboardListener::getShiftKey() const
 {
@@ -93,6 +110,11 @@ bool const OOP::KeyboardListener::getZKey() const
 bool const OOP::KeyboardListener::getXKey() const
 {
 	return xKey;
+}
+
+bool const OOP::KeyboardListener::getEscapeKey() const
+{
+	return escapeKey;
 }
 
 cocos2d::EventListenerKeyboard * OOP::KeyboardListener::getListener()

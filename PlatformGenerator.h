@@ -17,6 +17,8 @@ namespace cocos2d {
 	class Scene;
 }
 
+
+
 namespace OOP {
 
 	class PlatformGenerator : public cocos2d::Scene, public OOP::myLevels {
@@ -24,7 +26,7 @@ namespace OOP {
 		PlatformGenerator();
 		cocos2d::Sprite *getPlatform(int reference);
 		void const generateNew(cocos2d::Scene *help, OOP::myLevels* level);
-		int const getClosestY(cocos2d::Sprite* character, float velocityY);
+		int const getClosestY(float pointX, float pointY, float velocityY);
 		int const getClosestX(cocos2d::Sprite* character, float velocityX);
 
 
@@ -44,6 +46,7 @@ namespace OOP {
 		int typeHitBoxX, monsterTypeHitBoxX;
 		int typeHitBoxY, monsterTypeHitBoxY;
 
+		
 
 		int number = 0;
 		int index;

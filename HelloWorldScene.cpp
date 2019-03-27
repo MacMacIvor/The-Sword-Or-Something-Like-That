@@ -115,29 +115,30 @@ bool HelloWorld::init()
 		    this->addChild(label, 1);
 		}
 
-		
-		m_MonsterManager.spawn(this, &m_Platform);
-		m_MonsterManager.spawn(this, &m_Platform);
 
 		m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
+
 
 		m_mainCharacter.saveInfoBecauseIHateCocos(&m_Platform, &m_mainCharacter.playerVelocityY, &m_mainCharacter.playerVelocityX, &m_mainCharacter.playerAgainstWall,
 			&m_mainCharacter.playerOnGround, m_mainCharacter.getMainCharacter(), &m_mainCharacter.health);
 
-
+		m_MonsterManager.spawn(this, &m_Platform, &m_Level);
 
 		//m_MonsterManager.addMonster(*l_Monster2)
 		//l_Monster2->savePlatforms(toSave);
-
-
     return true;
 }
 
 void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction) {
 	static int taunt = 0;
 	
+	if (m_Menu.addMenuScreen(this, m_mainCharacter.getUpArrow(), m_mainCharacter.getDownArrow(),
+		m_mainCharacter.getEscapeKey(), m_mainCharacter.getZKey(), m_mainCharacter.getXKey())) {
+		;
+	}
 
-	if (m_mainCharacter.getHealth() > 0 && taunt == 0) {
+
+	else if (m_mainCharacter.getHealth() > 0 && taunt == 0) {
 		/*
 		cocos2d::Vec2 position = m_mainCharacter.getMainCharacter()->getPosition();
 
@@ -251,10 +252,8 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 				m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
 				m_mainCharacter.getMainCharacter()->setPositionY(this->getBoundingBox().getMaxY() - 100);
 				m_MonsterManager.moveMonstersWithScreen(0, m_Level.getMovedAmountY());
-
 			}
 			m_mainCharacter.getMainCharacter()->setPositionY(this->getBoundingBox().getMaxY() - 100);
-
 		}
 		else if (m_mainCharacter.getMainCharacter()->getPositionY() < 100) {
 			if (m_Level.checkMaxY(m_mainCharacter.getPlayerVelocityY(), this) == false) {
@@ -294,6 +293,8 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		m_mainCharacter.saveScene(this);
 		m_MonsterManager.monsterResest(this, &m_Platform);
 		m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
+		m_MonsterManager.spawn(this, &m_Platform, &m_Level);
+
 
 	}
 	

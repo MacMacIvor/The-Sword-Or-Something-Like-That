@@ -265,7 +265,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			if (*playerVelocityX == 0) {
 				*playerVelocityX = -1;
 			}
-			else if (*playerVelocityX >= -10 && *playerVelocityX < 0) {
+			else if (*playerVelocityX >= -5 && *playerVelocityX < 0) {
 				*playerVelocityX *= 1.5;
 			}
 			else if (*playerVelocityX > 0) {
@@ -279,7 +279,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			if (*playerVelocityX == 0) {
 				*playerVelocityX = 1;
 			}
-			else if (*playerVelocityX <= 10 && *playerVelocityX > 0) {
+			else if (*playerVelocityX <= 5 && *playerVelocityX > 0) {
 				*playerVelocityX *= 1.5;
 			}
 			else if (*playerVelocityX < 0) {
@@ -350,13 +350,19 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 	if (*onGround == false && *playerAgainstWall == 0) {
 		if (upArrow == true && *playerVelocityY > 0) {
 			*playerVelocityY -= 0.5 * GRAVITY * TIME_INTERVAL;
+			if (*playerVelocityY > -1 && *playerVelocityY < 4) {
+				*playerVelocityY = -1;
+			}
 		}
 		else if (upArrow == false && *playerVelocityY > 0) {
 			*playerVelocityY -= 2 * GRAVITY * TIME_INTERVAL;
+			if (*playerVelocityY > -1 && *playerVelocityY < 4) {
+				*playerVelocityY = -1;
+			}
 		}
 		else {
 			*playerVelocityY -= GRAVITY * TIME_INTERVAL;
-		}
+			}
 	}
 	else if (*onGround == false && *playerAgainstWall == 1) {
 		if (upArrow == true && *playerVelocityY > 0) {
@@ -418,7 +424,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 	}
 	else {
 		if (upArrow == true) {
-			*playerVelocityY = 10;
+			*playerVelocityY = 12;
 		}
 	}
 

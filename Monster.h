@@ -25,6 +25,8 @@ namespace OOP {
 
 		virtual void Update(float a_DeltaTime);
 		
+		virtual void move(float a_DeltaTime) = 0;
+
 		void saveScene(cocos2d::Scene *scene) { m_Scene = scene; };
 
 		virtual void moveBullets(float X, float Y) {};
@@ -39,6 +41,7 @@ namespace OOP {
 		void const reset();
 		cocos2d::Sprite m_MainCharacter;
 		cocos2d::Vec2 m_Spawn;
+		cocos2d::Vec2 m_OG_Spawn;
 
 		void beHert(int, bool);
 		bool isDead();
@@ -55,6 +58,7 @@ namespace OOP {
 		bool attack(cocos2d::Sprite *character);
 		void savePlatforms(OOP::PlatformGenerator *toSave);
 		virtual void Update(float a_DeltaTime);
+		void move(float a_DeltaTime) { ; };
 		virtual void moveBullets(float X, float Y);
 		virtual void cleanBullets();
 		virtual bool bulletDamage(cocos2d::Sprite *character);
@@ -70,16 +74,28 @@ namespace OOP {
 	class BasicMonster: public baseMonster {
 	public:
 		BasicMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite);
+		void move(float a_DeltaTime);
 		virtual void Update(float a_DeltaTime);
 		void savePlatforms(OOP::PlatformGenerator *toSave);
 	private:
 		OOP::PlatformGenerator *forCalculations;
 	};
 	
-	class MonsterManager {
+	class HeavyMonster : public baseMonster {
+	public:
+		HeavyMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite);
+		void move(float a_DeltaTime);
+		void Update(float a_DeltaTime);
+		void savePlatforms(OOP::PlatformGenerator *toSave);
+
+	private:
+		OOP::PlatformGenerator *forCalculations;
+	};
+
+	class MonsterManager: public OOP::myLevels {
 	public:
 		~MonsterManager();
-		void spawn(cocos2d::Scene* scene, OOP::PlatformGenerator * toSave);
+		void spawn(cocos2d::Scene* scene, OOP::PlatformGenerator * toSave, OOP::myLevels* level);
 		void const monsterResest(cocos2d::Scene* scene, OOP::PlatformGenerator * toSave);
 
 		void update(float a_DeltaTime);

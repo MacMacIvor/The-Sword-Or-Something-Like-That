@@ -26,12 +26,12 @@ void const OOP::myLevels::setLevel(int newLevel)
 	currentLevel = newLevel;
 }
 
-cocos2d::Sprite * const OOP::myLevels::getLevel(int currentLevel) const
+cocos2d::Sprite * const OOP::myLevels::getLevel() const
 {
 	return m_Levels[currentLevel];
 }
 
-int const OOP::myLevels::getLevel() const
+int const OOP::myLevels::getLevelNum() const
 {
 	return currentLevel;
 }

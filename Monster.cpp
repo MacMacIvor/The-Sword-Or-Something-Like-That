@@ -1,3 +1,5 @@
+#ifndef CPP_MONSTER
+#define CPP_MONSTER
 #include "Monster.h"
 
 OOP::baseMonster::baseMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite)
@@ -5,6 +7,7 @@ OOP::baseMonster::baseMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Spri
 {
 	swingCoolDown = 0;
 	m_Spawn = a_Spawn;
+	m_OG_Spawn = a_Spawn;
 	m_Speed = a_Speed;
 	spriteToUse = a_Sprite;
 }
@@ -56,7 +59,8 @@ void OOP::baseMonster::Update(float a_DeltaTime)
 
 void const OOP::baseMonster::reset()
 {
-	this->m_Monster.getPrimitive()->setPosition(m_Spawn);
+	this->cleanBullets();
+	this->m_Monster.getPrimitive()->removeFromParentAndCleanup(true);
 }
 
 void OOP::baseMonster::beHert(int dmg, bool isHit)
@@ -87,24 +91,55 @@ OOP::MonsterManager::~MonsterManager()
 	}
 }
 
-void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator * toSave)
+void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator * toSave, OOP::myLevels* level)
 {
-	static int i = 0;
-	if (i == 0) {
-		//64 bottom of edge and 64 for half the emeny sprite size
-		BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2(600.0f + 64, 64.0f + 240), 200, 0);
-		l_Monster->saveScene(scene);
-		l_Monster->savePlatforms(toSave);
-		scene->addChild(l_Monster->m_Monster.getPrimitive());
-		m_MonsterContainer.push_back(l_Monster);
-		i++;
-	}
-	else {
-		//64 bottom of edge and 64 for half the emeny sprite size
-		ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2(0.0f + 64, 64.0f + 240), 30, 1);
-		l_Monster2->saveScene(scene);
-		scene->addChild(l_Monster2->m_Monster.getPrimitive());
-		m_MonsterContainer.push_back(l_Monster2);
+	m_Scene = scene;
+	int number = 0;
+	for (int i = 0; i < (sizeof levelOneHitBox / sizeof levelOneHitBox[0]); i++) { //rows
+		for (int j = 0; j < (sizeof levelOneHitBox[0] / sizeof(int)); j++) { //collums
+			if (levelOneHitBox[i][j] != -1) {
+				if (levelOneHitBox[i][j] == 25)
+				{
+					if (number == 60 || number == 36) {
+						;
+					}
+					else {
+						;
+					}
+					
+				}
+				else {
+					if (levelOneHitBox[i][j] == 0) { //Light enemy
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -20, 0);
+						l_Monster->saveScene(scene);
+						l_Monster->savePlatforms(toSave);
+						scene->addChild(l_Monster->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster);
+					}
+					else if (levelOneHitBox[i][j] == 1) { //Shooting enemy
+						//64 bottom of edge and 64 for half the emeny sprite size
+						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1);
+						l_Monster2->saveScene(scene);
+						scene->addChild(l_Monster2->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster2);
+					}
+					else if (levelOneHitBox[i][j] == 2) { //Heavy enemy
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2);
+						l_Monster3->saveScene(scene);
+						l_Monster3->savePlatforms(toSave);
+						scene->addChild(l_Monster3->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster3);
+					}
+				}
+				/*
+				m_Platform[number]->setPosition(
+					level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+						level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+				*/
+				//help->addChild(m_Platform[number], 1);
+				number++;
+			}
+		}
 	}
 }
 
@@ -113,22 +148,37 @@ void const OOP::MonsterManager::monsterResest(cocos2d::Scene* scene, OOP::Platfo
 	for (unsigned int w = 0; w < m_MonsterContainer.size(); w++) {
 		m_MonsterContainer[w]->reset();
 	}
+	for (int i = m_MonsterContainer.size() - 1; i >= 0; i--) {
+		m_MonsterContainer.erase((m_MonsterContainer.begin() + (i)));
+	}
 }
 
 void OOP::MonsterManager::update(float a_DeltaTime)
 {
-	for (unsigned int w = 0; w < m_MonsterContainer.size(); w++) {
-		m_MonsterContainer[w]->Update(a_DeltaTime);
-		if (m_MonsterContainer[w]->isDead() == true) {
-			m_MonsterContainer[w]->m_Monster.getPrimitive()->removeFromParentAndCleanup(true);
-			m_MonsterContainer[w]->cleanBullets();
-			m_MonsterContainer.erase(m_MonsterContainer.begin() + w);
-			//delete m_MonsterContainer[w];
+	if (m_MonsterContainer.size() != 0) {
+		for (unsigned int w = 0; w < m_MonsterContainer.size(); w++) {
+			if (((m_MonsterContainer[w]->m_Monster.getPrimitive()->getBoundingBox().getMaxX() < m_Scene->getBoundingBox().getMaxX() &&
+				m_MonsterContainer[w]->m_Monster.getPrimitive()->getBoundingBox().getMaxX() > m_Scene->getBoundingBox().getMinX()) || (
+					m_MonsterContainer[w]->m_Monster.getPrimitive()->getBoundingBox().getMinX() < m_Scene->getBoundingBox().getMaxX() &&
+					m_MonsterContainer[w]->m_Monster.getPrimitive()->getBoundingBox().getMinX() > m_Scene->getBoundingBox().getMinX())) &&
+					(((m_MonsterContainer[w]->m_Monster.getPrimitive()->getBoundingBox().getMaxY() < m_Scene->getBoundingBox().getMaxY() &&
+						m_MonsterContainer[w]->m_Monster.getPrimitive()->getBoundingBox().getMaxY() > m_Scene->getBoundingBox().getMinY()) || (
+							m_MonsterContainer[w]->m_Monster.getPrimitive()->getBoundingBox().getMinY() < m_Scene->getBoundingBox().getMaxY() &&
+							m_MonsterContainer[w]->m_Monster.getPrimitive()->getBoundingBox().getMinY() > m_Scene->getBoundingBox().getMinY())))) {
 
-		}
-		else {
-			m_MonsterContainer[w]->attack(m_Character);
+				m_MonsterContainer[w]->Update(a_DeltaTime);
+				if (m_MonsterContainer[w]->isDead() == true) {
+					m_MonsterContainer[w]->m_Monster.getPrimitive()->removeFromParentAndCleanup(true);
+					m_MonsterContainer[w]->cleanBullets();
+					m_MonsterContainer.erase(m_MonsterContainer.begin() + w);
+					//delete m_MonsterContainer[w];
 
+				}
+				else {
+					m_MonsterContainer[w]->attack(m_Character);
+
+				}
+			}
 		}
 	}
 }
@@ -147,6 +197,8 @@ void OOP::MonsterManager::moveMonstersWithScreen(float amountX, float amountY)
 			m_MonsterContainer[y]->m_Monster.getPrimitive()->getPositionY() + amountY
 		);
 		m_MonsterContainer[y]->moveBullets(amountX, amountY);
+		m_MonsterContainer[y]->m_Spawn.x + amountX;
+		m_MonsterContainer[y]->m_Spawn.y + amountY;
 	}
 }
 
@@ -227,24 +279,62 @@ bool OOP::MonsterManager::getHurt(cocos2d::Sprite * m_MainCharacter)
 OOP::BasicMonster::BasicMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite)
 	:baseMonster(a_Spawn, a_Speed, a_Sprite) {}
 
+void OOP::BasicMonster::move(float a_DeltaTime)
+{
+	//Monster needs to move based off of speed and time
+	//Turns around if hits the edge of a platform or a wall
+	int closestX = forCalculations->getClosestX(m_Monster.getPrimitive(), -m_Speed * a_DeltaTime);
+	if (m_Speed > 0) {
+		int closestY = forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMidX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0);
+
+		if ((m_Monster.getPrimitive()->getBoundingBox().getMaxX()) + m_Speed * a_DeltaTime >= forCalculations->getPlatform(closestX)->getBoundingBox().getMinX() && closestX != 0) {
+			m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestX)->getBoundingBox().getMinX() - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+			m_Speed *= -1;
+		}
+		else if (m_Monster.getPrimitive()->getBoundingBox().getMaxX() + m_Speed * a_DeltaTime >= forCalculations->getPlatform(closestY)->getBoundingBox().getMaxX()){
+			if (m_Monster.getPrimitive()->getBoundingBox().getMinY() != forCalculations->getPlatform(forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMaxX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0))->getBoundingBox().getMaxY()) {
+				m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestY)->getBoundingBox().getMaxX() - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+				m_Speed *= -1;
+			}
+			else {
+				m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
+			}
+		}
+		else {
+			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
+		}
+	}
+	else if (m_Speed < 0) {
+		int closestY = forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMidX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0);
+
+		if ((m_Monster.getPrimitive()->getBoundingBox().getMinX()) + m_Speed * a_DeltaTime <= forCalculations->getPlatform(closestX)->getBoundingBox().getMaxX() && closestX != 0) {
+			m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestX)->getBoundingBox().getMaxX() + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+			m_Speed *= -1;
+		}
+		else if (m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime <= forCalculations->getPlatform(closestY)->getBoundingBox().getMinX()) {
+			if (m_Monster.getPrimitive()->getBoundingBox().getMinY() != forCalculations->getPlatform(forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMinX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0))->getBoundingBox().getMaxY()) {
+				m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestY)->getBoundingBox().getMinX() + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+				m_Speed *= -1;
+			}
+			else {
+				m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
+			}
+		}
+		else {
+			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
+		}
+	}
+	//m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
+}
+
 void OOP::BasicMonster::Update(float a_DeltaTime)
 {
-	m_Monster.getPrimitive()->getPosition();
+	//m_Monster.getPrimitive()->getPosition();
 	//(*forCalculations).getClosestX(m_Monster.getPrimitive(), m_Speed);
-	m_Monster.getPrimitive()->setPosition(
-		m_Monster.getPrimitive()->getPositionX(),// + m_Speed * a_DeltaTime,
-		m_Monster.getPrimitive()->getPositionY()
-	);
-	(*forCalculations).getClosestY(m_Monster.getPrimitive(), 0);
-	if ((*forCalculations).getTypeHitBoxY() != 1) {
-		m_Speed *= -1;
-	}
-	if (m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime < 0) {
-		m_Speed = m_Speed - m_Monster.getPrimitive()->getBoundingBox().getMinX() / a_DeltaTime;
-	}
-	if (m_Monster.getPrimitive()->getBoundingBox().getMinX() == 0) {
-		m_Speed = -200;
-	}
+	
+	//Add attack funtion here
+
+	this->move(a_DeltaTime);
 }
 
 void OOP::BasicMonster::savePlatforms(OOP::PlatformGenerator * toSave)
@@ -257,9 +347,12 @@ OOP::ShootingMonster::ShootingMonster(cocos2d::Vec2 a_Spawn, float a_Speed, int 
 
 bool OOP::ShootingMonster::attack(cocos2d::Sprite * character)
 {
-
 	if (shotCoolDown == 0) {
-		if (character->getBoundingBox().getMidX() - m_Spawn.x < 500) {
+		float distance = character->getBoundingBox().getMidX() - m_Monster.getPrimitive()->getBoundingBox().getMidX();
+		if (distance < 0) {
+			distance *= -1;
+		}
+		if (distance < 1000) {
 			float l_TempX = character->getPosition().x - m_Spawn.x;
 			float l_TempY = character->getPosition().y - m_Spawn.y;
 			float angle = atan2(l_TempY, l_TempX);
@@ -270,14 +363,14 @@ bool OOP::ShootingMonster::attack(cocos2d::Sprite * character)
 			//this->speedX = cos(angle) * extraSpeed;
 			//this->speedY = sin(angle) * extraSpeed;
 
-			OOP::Bullet * m_Bullets2 = new OOP::Bullet(m_Spawn, cocos2d::Vec2(l_X, l_Y), 200.0f);
+			OOP::Bullet * m_Bullets2 = new OOP::Bullet(m_Monster.getPrimitive()->getPosition(), cocos2d::Vec2(l_X, l_Y), 200.0f);
 			m_Scene->addChild(m_Bullets2->getBullet()->getBullet(), 1);
 			m_Bullets.push_back(m_Bullets2);
 
 			//m_Bullets->saveScene(m_Scene);
 			//m_Bullets->newBullet(*m_Bullets2);
 
-			shotCoolDown = 200;
+			shotCoolDown = 600;
 		}
 		//ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2(0.0f + 64, 64.0f + 64), 30, 0);
 		//l_Monster2->saveScene(scene);
@@ -295,40 +388,47 @@ void OOP::ShootingMonster::savePlatforms(OOP::PlatformGenerator * toSave)
 	forCalculations = toSave;
 }
 
-void OOP::ShootingMonster::Update(float a_DeltaTime)
-{
-	if (m_Bullets.size() > 0) {
-		for (int i = 0; i < m_Bullets.size(); i++) {
-			if (m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() > m_Scene->getBoundingBox().getMaxX() ||
-				m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() > m_Scene->getBoundingBox().getMaxY() ||
-				m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() < m_Scene->getBoundingBox().getMinX() ||
-				m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() < m_Scene->getBoundingBox().getMinY()
-				)
-			{
+void OOP::ShootingMonster::Update(float a_DeltaTime) {
+	int i = 0;
+	//if (m_Bullets.size() != 0) {
+		//for (int i = 0; i < m_Bullets.size(); i++) {
+			//if (m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() > m_Scene->getBoundingBox().getMaxX() ||
+			//	m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() > m_Scene->getBoundingBox().getMaxY() ||
+			//	m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() < m_Scene->getBoundingBox().getMinX() ||
+			//	m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() < m_Scene->getBoundingBox().getMinY()
+			//	)
+			//{
 				//m_Bullets[i]->getBullet()->getBullet()->removeFromParentAndCleanup(true);
 				//m_Bullets.erase(m_Bullets.begin() + i, m_Bullets.begin() + i);
 				//delete m_Bullets[i];
-			}
-		}
-		for (int i = 0; i < m_Bullets.size() - 1; i++) {
+			//}
+		//}
+		//for (int i = 0; i < m_Bullets.size() - 1; i++) {
+		while (i < m_Bullets.size()) {
 			m_Bullets[i]->update(a_DeltaTime);
+			i++;
 		}
-	}
-	//m_Monster.getPrimitive()->getPosition();
-	//(*forCalculations).getClosestX(m_Monster.getPrimitive(), m_Speed);
-	//m_Monster.getPrimitive()->setPosition(
-		//m_Monster.getPrimitive()->getPositionX(),// + m_Speed * a_DeltaTime,
-		//m_Monster.getPrimitive()->getPositionY()
-	//);
-	//(*forCalculations).getClosestY(m_Monster.getPrimitive(), 0);
-	//if ((*forCalculations).getTypeHitBoxY() != 1) {
-		//m_Speed *= -1;
+		//}
+		//}
+		//m_Monster.getPrimitive()->getPosition();
+		//(*forCalculations).getClosestX(m_Monster.getPrimitive(), m_Speed);
+		//m_Monster.getPrimitive()->setPosition(
+			//m_Monster.getPrimitive()->getPositionX(),// + m_Speed * a_DeltaTime,
+			//m_Monster.getPrimitive()->getPositionY()
+		//);
+		//(*forCalculations).getClosestY(m_Monster.getPrimitive(), 0);
+		//if ((*forCalculations).getTypeHitBoxY() != 1) {
+			//m_Speed *= -1;
+		//}
+		//if (m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime < 0) {
+			//m_Speed = m_Speed - m_Monster.getPrimitive()->getBoundingBox().getMinX() / a_DeltaTime;
+		//}
+		//if (m_Monster.getPrimitive()->getBoundingBox().getMinX() == 0) {
+			//m_Speed = -200;
+		//}
 	//}
-	//if (m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime < 0) {
-		//m_Speed = m_Speed - m_Monster.getPrimitive()->getBoundingBox().getMinX() / a_DeltaTime;
-	//}
-	//if (m_Monster.getPrimitive()->getBoundingBox().getMinX() == 0) {
-		//m_Speed = -200;
+	//else {
+	//	;
 	//}
 }
 
@@ -373,4 +473,64 @@ bool OOP::ShootingMonster::bulletDamage(cocos2d::Sprite * character)
 
 	}
 	return false;
+}
+#endif
+
+OOP::HeavyMonster::HeavyMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite)
+	:baseMonster(a_Spawn, a_Speed, a_Sprite) {}
+
+
+void OOP::HeavyMonster::move(float a_DeltaTime)
+{
+	int closestX = forCalculations->getClosestX(m_Monster.getPrimitive(), -m_Speed * a_DeltaTime);
+	if (m_Speed > 0) {
+		int closestY = forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMidX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0);
+
+		if ((m_Monster.getPrimitive()->getBoundingBox().getMaxX()) + m_Speed * a_DeltaTime >= forCalculations->getPlatform(closestX)->getBoundingBox().getMinX() && closestX != 0) {
+			m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestX)->getBoundingBox().getMinX() - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+			m_Speed *= -1;
+		}
+		else if (m_Monster.getPrimitive()->getBoundingBox().getMaxX() + m_Speed * a_DeltaTime >= forCalculations->getPlatform(closestY)->getBoundingBox().getMaxX()) {
+			if (m_Monster.getPrimitive()->getBoundingBox().getMinY() != forCalculations->getPlatform(forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMaxX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0))->getBoundingBox().getMaxY()) {
+				m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestY)->getBoundingBox().getMaxX() - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+				m_Speed *= -1;
+			}
+			else {
+				m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
+			}
+		}
+		else {
+			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
+		}
+	}
+	else if (m_Speed < 0) {
+		int closestY = forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMidX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0);
+
+		if ((m_Monster.getPrimitive()->getBoundingBox().getMinX()) + m_Speed * a_DeltaTime <= forCalculations->getPlatform(closestX)->getBoundingBox().getMaxX() && closestX != 0) {
+			m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestX)->getBoundingBox().getMaxX() + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+			m_Speed *= -1;
+		}
+		else if (m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime <= forCalculations->getPlatform(closestY)->getBoundingBox().getMinX()) {
+			if (m_Monster.getPrimitive()->getBoundingBox().getMinY() != forCalculations->getPlatform(forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMinX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0))->getBoundingBox().getMaxY()) {
+				m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestY)->getBoundingBox().getMinX() + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+				m_Speed *= -1;
+			}
+			else {
+				m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
+			}
+		}
+		else {
+			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
+		}
+	}
+}
+
+void OOP::HeavyMonster::Update(float a_DeltaTime)
+{
+	this->move(a_DeltaTime);
+}
+
+void OOP::HeavyMonster::savePlatforms(OOP::PlatformGenerator * toSave)
+{
+	forCalculations = toSave;
 }

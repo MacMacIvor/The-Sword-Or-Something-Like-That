@@ -32,9 +32,12 @@ namespace OOP {
 		bool const getLeftArrow() const { return keyBoard.getLeftArrow(); }
 		bool const getRightArrow() const { return keyBoard.getRightArrow(); }
 		bool const getUpArrow() const { return keyBoard.getUpArrow(); }
+		bool const getDownArrow() const { return keyBoard.getDownArrow(); }
 		bool const getShiftKey() const { return keyBoard.getShiftKey(); }
 		bool const getZKey() const { return keyBoard.getZKey(); }
 		bool const getXKey() const { return keyBoard.getXKey(); }
+		bool const getEscapeKey() const { return keyBoard.getEscapeKey(); }
+
 		float const getVelocityX() const;
 		float const getVelocityY() const;
 		void const setVelocityX(float newVelocity);
