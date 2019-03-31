@@ -19,7 +19,7 @@ class HelloWorld;
 namespace OOP {
 	class baseMonster {
 	public:
-		baseMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite);
+		baseMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes);
 
 		virtual bool attack(cocos2d::Sprite *character);
 
@@ -27,8 +27,9 @@ namespace OOP {
 		
 		virtual void move(float a_DeltaTime) = 0;
 
-		void saveScene(cocos2d::Scene *scene) { m_Scene = scene; };
+		void moveMaxes(float amountX) {	this->m_MaxMovement.y += amountX; this->m_MaxMovement.x += amountX; }
 
+		void saveScene(cocos2d::Scene *scene) { m_Scene = scene; };
 		virtual void moveBullets(float X, float Y) {};
 		virtual void cleanBullets() {};
 		virtual bool bulletDamage(cocos2d::Sprite *character) { return false; };
@@ -42,6 +43,7 @@ namespace OOP {
 		cocos2d::Sprite m_MainCharacter;
 		cocos2d::Vec2 m_Spawn;
 		cocos2d::Vec2 m_OG_Spawn;
+		cocos2d::Vec2 m_MaxMovement;
 
 		void beHert(int, bool);
 		bool isDead();
@@ -52,9 +54,10 @@ namespace OOP {
 		int spriteToUse = 0;
 		int swingCoolDown;
 	};
+	
 	class ShootingMonster : public baseMonster {
 	public:
-		ShootingMonster(cocos2d::Vec2 a_Spawn, float a_Speed, int a_Sprite);
+		ShootingMonster(cocos2d::Vec2 a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes);
 		bool attack(cocos2d::Sprite *character);
 		void savePlatforms(OOP::PlatformGenerator *toSave);
 		virtual void Update(float a_DeltaTime);
@@ -73,20 +76,22 @@ namespace OOP {
 
 	class BasicMonster: public baseMonster {
 	public:
-		BasicMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite);
+		BasicMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes);
 		void move(float a_DeltaTime);
 		virtual void Update(float a_DeltaTime);
 		void savePlatforms(OOP::PlatformGenerator *toSave);
+		cocos2d::Vec2 saveMax();
 	private:
 		OOP::PlatformGenerator *forCalculations;
 	};
 	
 	class HeavyMonster : public baseMonster {
 	public:
-		HeavyMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite);
+		HeavyMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes);
 		void move(float a_DeltaTime);
 		void Update(float a_DeltaTime);
 		void savePlatforms(OOP::PlatformGenerator *toSave);
+		cocos2d::Vec2 saveMax();
 
 	private:
 		OOP::PlatformGenerator *forCalculations;

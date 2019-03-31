@@ -120,7 +120,7 @@ bool HelloWorld::init()
 
 
 		m_mainCharacter.saveInfoBecauseIHateCocos(&m_Platform, &m_mainCharacter.playerVelocityY, &m_mainCharacter.playerVelocityX, &m_mainCharacter.playerAgainstWall,
-			&m_mainCharacter.playerOnGround, m_mainCharacter.getMainCharacter(), &m_mainCharacter.health);
+			&m_mainCharacter.playerOnGround, m_mainCharacter.getMainCharacter(), &m_mainCharacter.health, &m_mainCharacter.invincible, &m_Level.currentLevel);
 
 		m_MonsterManager.spawn(this, &m_Platform, &m_Level);
 
@@ -289,12 +289,11 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		taunt = 0;
 		m_mainCharacter.resetPlayer();
 		m_Level.resetLevel(this);
-		m_Platform.resetHitBox(this, &m_Level);
 		m_mainCharacter.saveScene(this);
+		m_mainCharacter.getMainCharacter()->setPosition(m_Platform.resetHitBox(this, &m_Level));
 		m_MonsterManager.monsterResest(this, &m_Platform);
 		m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
 		m_MonsterManager.spawn(this, &m_Platform, &m_Level);
-
 
 	}
 	

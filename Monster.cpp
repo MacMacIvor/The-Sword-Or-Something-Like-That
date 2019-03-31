@@ -2,7 +2,7 @@
 #define CPP_MONSTER
 #include "Monster.h"
 
-OOP::baseMonster::baseMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite)
+OOP::baseMonster::baseMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes)
 	:m_Monster(a_Spawn, a_Sprite)
 {
 	swingCoolDown = 0;
@@ -10,42 +10,12 @@ OOP::baseMonster::baseMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Spri
 	m_OG_Spawn = a_Spawn;
 	m_Speed = a_Speed;
 	spriteToUse = a_Sprite;
+	m_MaxMovement = a_Maxes;
 }
 
 bool OOP::baseMonster::attack(cocos2d::Sprite * character)
 {
-	if (swingCoolDown == 0) {
-
-		float temp = character->getBoundingBox().getMidX() - m_Monster.getPrimitive()->getBoundingBox().getMidX();
-		if (temp < 0) {
-			temp *= -1;
-		}
-		else {
-			//swing->setPosition(m_Monster.getPrimitive()->getBoundingBox().getMidX() - m_Monster.getPrimitive()->getBoundingBox().size.width / 2 - swing->getBoundingBox().size.width, m_Monster.getPrimitive()->getBoundingBox().getMidY());
-			//I HATE COCOS!!!!!!!
-		}
-		if (temp < 200) { //Less then the swing size
-			swingCoolDown = 100;
-		}
-	}
-	else if (swingCoolDown <= 70 && swingCoolDown >= 30) {
-		//Swing
-		float temp = character->getBoundingBox().getMidX() - m_Monster.getPrimitive()->getBoundingBox().getMidX();
-		if (temp < 0) {
-			temp *= -1;
-		}
-		if (temp < 200) {
-			return true; //Used for damage truth
-		}
-		swingCoolDown--;
-	}
-	else if (swingCoolDown == 29) {
-
-		swingCoolDown--;
-	}
-	else {
-		swingCoolDown--;
-	}
+	
 	return false;
 }
 
@@ -95,51 +65,319 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 {
 	m_Scene = scene;
 	int number = 0;
-	for (int i = 0; i < (sizeof levelOneHitBox / sizeof levelOneHitBox[0]); i++) { //rows
-		for (int j = 0; j < (sizeof levelOneHitBox[0] / sizeof(int)); j++) { //collums
-			if (levelOneHitBox[i][j] != -1) {
-				if (levelOneHitBox[i][j] == 25)
-				{
-					if (number == 60 || number == 36) {
-						;
-					}
-					else {
-						;
-					}
-					
-				}
-				else {
-					if (levelOneHitBox[i][j] == 0) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -20, 0);
+	switch (level->getLevelNum()) {
+	case 0:
+		for (int i = 0; i < (sizeof levelOneHitBox / sizeof levelOneHitBox[0]); i++) { //rows
+			for (int j = 0; j < (sizeof levelOneHitBox[0] / sizeof(int)); j++) { //collums
+				if (levelOneHitBox[i][j] != -1) {
+					if (levelOneHitBox[i][j] == 1) { //Light enemy
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
 						m_MonsterContainer.push_back(l_Monster);
 					}
-					else if (levelOneHitBox[i][j] == 1) { //Shooting enemy
+					else if (levelOneHitBox[i][j] == 5) { //Shooting enemy
 						//64 bottom of edge and 64 for half the emeny sprite size
-						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1);
+						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1, cocos2d::Vec2(0,0));
 						l_Monster2->saveScene(scene);
 						scene->addChild(l_Monster2->m_Monster.getPrimitive());
 						m_MonsterContainer.push_back(l_Monster2);
 					}
-					else if (levelOneHitBox[i][j] == 2) { //Heavy enemy
-						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2);
+					else if (levelOneHitBox[i][j] == 8) { //Heavy enemy
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster3->saveScene(scene);
 						l_Monster3->savePlatforms(toSave);
 						scene->addChild(l_Monster3->m_Monster.getPrimitive());
 						m_MonsterContainer.push_back(l_Monster3);
 					}
+					/*
+					m_Platform[number]->setPosition(
+						level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+					*/
+					//help->addChild(m_Platform[number], 1);
+					number++;
 				}
-				/*
-				m_Platform[number]->setPosition(
-					level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
-						level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
-				*/
-				//help->addChild(m_Platform[number], 1);
-				number++;
 			}
 		}
+		break;
+	case 1:
+		for (int i = 0; i < (sizeof levelTwoHitBox / sizeof levelTwoHitBox[0]); i++) { //rows
+			for (int j = 0; j < (sizeof levelTwoHitBox[0] / sizeof(int)); j++) { //collums
+				if (levelTwoHitBox[i][j] != -1) {
+					if (levelTwoHitBox[i][j] == 1) { //Light enemy
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster->saveScene(scene);
+						l_Monster->savePlatforms(toSave);
+						scene->addChild(l_Monster->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster);
+					}
+					else if (levelTwoHitBox[i][j] == 5) { //Shooting enemy
+						//64 bottom of edge and 64 for half the emeny sprite size
+						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1, cocos2d::Vec2(0,0));
+						l_Monster2->saveScene(scene);
+						scene->addChild(l_Monster2->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster2);
+					}
+					else if (levelTwoHitBox[i][j] == 8) { //Heavy enemy
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster3->saveScene(scene);
+						l_Monster3->savePlatforms(toSave);
+						scene->addChild(l_Monster3->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster3);
+					}
+					else if (levelTwoHitBox[i][j] == 4) { //Falling skipes
+						;
+					}
+
+
+
+
+
+
+
+					/*
+					m_Platform[number]->setPosition(
+						level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+					*/
+					//help->addChild(m_Platform[number], 1);
+					number++;
+				}
+			}
+		}
+		break;
+	case 2:
+		for (int i = 0; i < (sizeof levelThreeHitBox / sizeof levelThreeHitBox[0]); i++) { //rows
+			for (int j = 0; j < (sizeof levelThreeHitBox[0] / sizeof(int)); j++) { //collums
+				if (levelThreeHitBox[i][j] != -1) {
+					if (levelThreeHitBox[i][j] == 1) { //Light enemy
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster->saveScene(scene);
+						l_Monster->savePlatforms(toSave);
+						scene->addChild(l_Monster->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster);
+					}
+					else if (levelThreeHitBox[i][j] == 5) { //Shooting enemy
+						//64 bottom of edge and 64 for half the emeny sprite size
+						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1, cocos2d::Vec2(0, 0));
+						l_Monster2->saveScene(scene);
+						scene->addChild(l_Monster2->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster2);
+					}
+					else if (levelThreeHitBox[i][j] == 8) { //Heavy enemy
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster3->saveScene(scene);
+						l_Monster3->savePlatforms(toSave);
+						scene->addChild(l_Monster3->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster3);
+					}
+					else if (levelThreeHitBox[i][j] == 4) { //Falling skipes
+						;
+					}
+
+
+
+
+
+
+
+					/*
+					m_Platform[number]->setPosition(
+						level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+					*/
+					//help->addChild(m_Platform[number], 1);
+					number++;
+				}
+			}
+		}
+		break;
+	case 3:
+		for (int i = 0; i < (sizeof levelFourHitBox / sizeof levelFourHitBox[0]); i++) { //rows
+			for (int j = 0; j < (sizeof levelFourHitBox[0] / sizeof(int)); j++) { //collums
+				if (levelFourHitBox[i][j] != -1) {
+					if (levelFourHitBox[i][j] == 1) { //Light enemy
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster->saveScene(scene);
+						l_Monster->savePlatforms(toSave);
+						scene->addChild(l_Monster->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster);
+					}
+					else if (levelFourHitBox[i][j] == 5) { //Shooting enemy
+						//64 bottom of edge and 64 for half the emeny sprite size
+						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1, cocos2d::Vec2(0, 0));
+						l_Monster2->saveScene(scene);
+						scene->addChild(l_Monster2->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster2);
+					}
+					else if (levelFourHitBox[i][j] == 8) { //Heavy enemy
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster3->saveScene(scene);
+						l_Monster3->savePlatforms(toSave);
+						scene->addChild(l_Monster3->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster3);
+					}
+					else if (levelFourHitBox[i][j] == 4) { //Falling skipes
+						;
+					}
+
+
+
+
+
+
+
+					/*
+					m_Platform[number]->setPosition(
+						level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+					*/
+					//help->addChild(m_Platform[number], 1);
+					number++;
+				}
+			}
+		}
+		break;
+	case 4:
+		for (int i = 0; i < (sizeof levelFiveHitBox / sizeof levelFiveHitBox[0]); i++) { //rows
+			for (int j = 0; j < (sizeof levelFiveHitBox[0] / sizeof(int)); j++) { //collums
+				if (levelFiveHitBox[i][j] != -1) {
+					if (levelFiveHitBox[i][j] == 1) { //Light enemy
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster->saveScene(scene);
+						l_Monster->savePlatforms(toSave);
+						scene->addChild(l_Monster->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster);
+					}
+					else if (levelFiveHitBox[i][j] == 5) { //Shooting enemy
+						//64 bottom of edge and 64 for half the emeny sprite size
+						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1, cocos2d::Vec2(0, 0));
+						l_Monster2->saveScene(scene);
+						scene->addChild(l_Monster2->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster2);
+					}
+					else if (levelFiveHitBox[i][j] == 8) { //Heavy enemy
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster3->saveScene(scene);
+						l_Monster3->savePlatforms(toSave);
+						scene->addChild(l_Monster3->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster3);
+					}
+					else if (levelFiveHitBox[i][j] == 4) { //Falling skipes
+						;
+					}
+
+
+
+
+
+
+
+					/*
+					m_Platform[number]->setPosition(
+						level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+					*/
+					//help->addChild(m_Platform[number], 1);
+					number++;
+				}
+			}
+		}
+		break;
+	case 5:
+		for (int i = 0; i < (sizeof levelSixHitBox / sizeof levelSixHitBox[0]); i++) { //rows
+			for (int j = 0; j < (sizeof levelSixHitBox[0] / sizeof(int)); j++) { //collums
+				if (levelSixHitBox[i][j] != -1) {
+					if (levelSixHitBox[i][j] == 1) { //Light enemy
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster->saveScene(scene);
+						l_Monster->savePlatforms(toSave);
+						scene->addChild(l_Monster->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster);
+					}
+					else if (levelSixHitBox[i][j] == 5) { //Shooting enemy
+						//64 bottom of edge and 64 for half the emeny sprite size
+						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1, cocos2d::Vec2(0, 0));
+						l_Monster2->saveScene(scene);
+						scene->addChild(l_Monster2->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster2);
+					}
+					else if (levelSixHitBox[i][j] == 8) { //Heavy enemy
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster3->saveScene(scene);
+						l_Monster3->savePlatforms(toSave);
+						scene->addChild(l_Monster3->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster3);
+					}
+					else if (levelSixHitBox[i][j] == 4) { //Falling skipes
+						;
+					}
+
+
+
+
+
+
+
+					/*
+					m_Platform[number]->setPosition(
+						level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+					*/
+					//help->addChild(m_Platform[number], 1);
+					number++;
+				}
+			}
+		}
+		break;
+	case 6:
+		for (int i = 0; i < (sizeof levelSevenHitBox / sizeof levelSevenHitBox[0]); i++) { //rows
+			for (int j = 0; j < (sizeof levelSevenHitBox[0] / sizeof(int)); j++) { //collums
+				if (levelSevenHitBox[i][j] != -1) {
+					if (levelSevenHitBox[i][j] == 1) { //Light enemy
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster->saveScene(scene);
+						l_Monster->savePlatforms(toSave);
+						scene->addChild(l_Monster->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster);
+					}
+					else if (levelSevenHitBox[i][j] == 5) { //Shooting enemy
+						//64 bottom of edge and 64 for half the emeny sprite size
+						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1, cocos2d::Vec2(0, 0));
+						l_Monster2->saveScene(scene);
+						scene->addChild(l_Monster2->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster2);
+					}
+					else if (levelSevenHitBox[i][j] == 8) { //Heavy enemy
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						l_Monster3->saveScene(scene);
+						l_Monster3->savePlatforms(toSave);
+						scene->addChild(l_Monster3->m_Monster.getPrimitive());
+						m_MonsterContainer.push_back(l_Monster3);
+					}
+					else if (levelSevenHitBox[i][j] == 4) { //Falling skipes
+						;
+					}
+
+
+
+
+
+
+
+					/*
+					m_Platform[number]->setPosition(
+						level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+					*/
+					//help->addChild(m_Platform[number], 1);
+					number++;
+				}
+			}
+		}
+		break;
 	}
 }
 
@@ -199,6 +437,7 @@ void OOP::MonsterManager::moveMonstersWithScreen(float amountX, float amountY)
 		m_MonsterContainer[y]->moveBullets(amountX, amountY);
 		m_MonsterContainer[y]->m_Spawn.x + amountX;
 		m_MonsterContainer[y]->m_Spawn.y + amountY;
+		m_MonsterContainer[y]->moveMaxes(amountX);
 	}
 }
 
@@ -276,49 +515,30 @@ bool OOP::MonsterManager::getHurt(cocos2d::Sprite * m_MainCharacter)
 	return false;
 }
 
-OOP::BasicMonster::BasicMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite)
-	:baseMonster(a_Spawn, a_Speed, a_Sprite) {}
+OOP::BasicMonster::BasicMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes)
+	:baseMonster(a_Spawn, a_Speed, a_Sprite, a_Maxes) {}
 
 void OOP::BasicMonster::move(float a_DeltaTime)
 {
 	//Monster needs to move based off of speed and time
 	//Turns around if hits the edge of a platform or a wall
-	int closestX = forCalculations->getClosestX(m_Monster.getPrimitive(), -m_Speed * a_DeltaTime);
+	
 	if (m_Speed > 0) {
-		int closestY = forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMidX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0);
-
-		if ((m_Monster.getPrimitive()->getBoundingBox().getMaxX()) + m_Speed * a_DeltaTime >= forCalculations->getPlatform(closestX)->getBoundingBox().getMinX() && closestX != 0) {
-			m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestX)->getBoundingBox().getMinX() - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+		if ((m_Monster.getPrimitive()->getBoundingBox().getMaxX() + m_Speed * a_DeltaTime) > m_MaxMovement.y - m_Monster.getPrimitive()->getBoundingBox().size.width / 2) {
+			float tosee = m_Monster.getPrimitive()->getBoundingBox().getMaxX() + m_Speed * a_DeltaTime;
+			m_Monster.getPrimitive()->setPositionX(m_MaxMovement.y - m_Monster.getPrimitive()->getBoundingBox().size.width);
 			m_Speed *= -1;
-		}
-		else if (m_Monster.getPrimitive()->getBoundingBox().getMaxX() + m_Speed * a_DeltaTime >= forCalculations->getPlatform(closestY)->getBoundingBox().getMaxX()){
-			if (m_Monster.getPrimitive()->getBoundingBox().getMinY() != forCalculations->getPlatform(forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMaxX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0))->getBoundingBox().getMaxY()) {
-				m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestY)->getBoundingBox().getMaxX() - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
-				m_Speed *= -1;
-			}
-			else {
-				m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
-			}
 		}
 		else {
 			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
 		}
 	}
-	else if (m_Speed < 0) {
-		int closestY = forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMidX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0);
 
-		if ((m_Monster.getPrimitive()->getBoundingBox().getMinX()) + m_Speed * a_DeltaTime <= forCalculations->getPlatform(closestX)->getBoundingBox().getMaxX() && closestX != 0) {
-			m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestX)->getBoundingBox().getMaxX() + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+
+	else if (m_Speed < 0) {
+		if ((m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime) < m_MaxMovement.x + m_Monster.getPrimitive()->getBoundingBox().size.width / 2) {
+			m_Monster.getPrimitive()->setPositionX(m_MaxMovement.x + m_MaxMovement.x + m_Monster.getPrimitive()->getBoundingBox().size.width);
 			m_Speed *= -1;
-		}
-		else if (m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime <= forCalculations->getPlatform(closestY)->getBoundingBox().getMinX()) {
-			if (m_Monster.getPrimitive()->getBoundingBox().getMinY() != forCalculations->getPlatform(forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMinX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0))->getBoundingBox().getMaxY()) {
-				m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestY)->getBoundingBox().getMinX() + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
-				m_Speed *= -1;
-			}
-			else {
-				m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
-			}
 		}
 		else {
 			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
@@ -340,10 +560,17 @@ void OOP::BasicMonster::Update(float a_DeltaTime)
 void OOP::BasicMonster::savePlatforms(OOP::PlatformGenerator * toSave)
 {
 	forCalculations = toSave;
+	m_MaxMovement = saveMax();
 }
 
-OOP::ShootingMonster::ShootingMonster(cocos2d::Vec2 a_Spawn, float a_Speed, int a_Sprite)
-	:baseMonster(a_Spawn, a_Speed, a_Sprite) {}
+cocos2d::Vec2 OOP::BasicMonster::saveMax()
+{
+	return forCalculations->getMonsterMaxMovement(m_Spawn.x, m_Spawn.y - 64);
+
+}
+
+OOP::ShootingMonster::ShootingMonster(cocos2d::Vec2 a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes)
+	:baseMonster(a_Spawn, a_Speed, a_Sprite, a_Maxes) {}
 
 bool OOP::ShootingMonster::attack(cocos2d::Sprite * character)
 {
@@ -386,50 +613,16 @@ bool OOP::ShootingMonster::attack(cocos2d::Sprite * character)
 void OOP::ShootingMonster::savePlatforms(OOP::PlatformGenerator * toSave)
 {
 	forCalculations = toSave;
+
 }
 
 void OOP::ShootingMonster::Update(float a_DeltaTime) {
 	int i = 0;
-	//if (m_Bullets.size() != 0) {
-		//for (int i = 0; i < m_Bullets.size(); i++) {
-			//if (m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() > m_Scene->getBoundingBox().getMaxX() ||
-			//	m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() > m_Scene->getBoundingBox().getMaxY() ||
-			//	m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() < m_Scene->getBoundingBox().getMinX() ||
-			//	m_Bullets[i]->getBullet()->getBullet()->getBoundingBox().getMidX() < m_Scene->getBoundingBox().getMinY()
-			//	)
-			//{
-				//m_Bullets[i]->getBullet()->getBullet()->removeFromParentAndCleanup(true);
-				//m_Bullets.erase(m_Bullets.begin() + i, m_Bullets.begin() + i);
-				//delete m_Bullets[i];
-			//}
-		//}
-		//for (int i = 0; i < m_Bullets.size() - 1; i++) {
-		while (i < m_Bullets.size()) {
-			m_Bullets[i]->update(a_DeltaTime);
-			i++;
-		}
-		//}
-		//}
-		//m_Monster.getPrimitive()->getPosition();
-		//(*forCalculations).getClosestX(m_Monster.getPrimitive(), m_Speed);
-		//m_Monster.getPrimitive()->setPosition(
-			//m_Monster.getPrimitive()->getPositionX(),// + m_Speed * a_DeltaTime,
-			//m_Monster.getPrimitive()->getPositionY()
-		//);
-		//(*forCalculations).getClosestY(m_Monster.getPrimitive(), 0);
-		//if ((*forCalculations).getTypeHitBoxY() != 1) {
-			//m_Speed *= -1;
-		//}
-		//if (m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime < 0) {
-			//m_Speed = m_Speed - m_Monster.getPrimitive()->getBoundingBox().getMinX() / a_DeltaTime;
-		//}
-		//if (m_Monster.getPrimitive()->getBoundingBox().getMinX() == 0) {
-			//m_Speed = -200;
-		//}
-	//}
-	//else {
-	//	;
-	//}
+
+	while (i < m_Bullets.size()) {
+		m_Bullets[i]->update(a_DeltaTime);
+		i++;
+	}
 }
 
 void OOP::ShootingMonster::moveBullets(float X, float Y)
@@ -474,50 +667,29 @@ bool OOP::ShootingMonster::bulletDamage(cocos2d::Sprite * character)
 	}
 	return false;
 }
-#endif
 
-OOP::HeavyMonster::HeavyMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite)
-	:baseMonster(a_Spawn, a_Speed, a_Sprite) {}
+OOP::HeavyMonster::HeavyMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes)
+	:baseMonster(a_Spawn, a_Speed, a_Sprite, a_Maxes) {}
 
 
 void OOP::HeavyMonster::move(float a_DeltaTime)
 {
-	int closestX = forCalculations->getClosestX(m_Monster.getPrimitive(), -m_Speed * a_DeltaTime);
 	if (m_Speed > 0) {
-		int closestY = forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMidX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0);
-
-		if ((m_Monster.getPrimitive()->getBoundingBox().getMaxX()) + m_Speed * a_DeltaTime >= forCalculations->getPlatform(closestX)->getBoundingBox().getMinX() && closestX != 0) {
-			m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestX)->getBoundingBox().getMinX() - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+		if ((m_Monster.getPrimitive()->getBoundingBox().getMaxX() + m_Speed * a_DeltaTime) > m_MaxMovement.y - m_Monster.getPrimitive()->getBoundingBox().size.width / 2) {
+			float tosee = m_Monster.getPrimitive()->getBoundingBox().getMaxX() + m_Speed * a_DeltaTime;
+			m_Monster.getPrimitive()->setPositionX(m_MaxMovement.y - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
 			m_Speed *= -1;
-		}
-		else if (m_Monster.getPrimitive()->getBoundingBox().getMaxX() + m_Speed * a_DeltaTime >= forCalculations->getPlatform(closestY)->getBoundingBox().getMaxX()) {
-			if (m_Monster.getPrimitive()->getBoundingBox().getMinY() != forCalculations->getPlatform(forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMaxX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0))->getBoundingBox().getMaxY()) {
-				m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestY)->getBoundingBox().getMaxX() - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
-				m_Speed *= -1;
-			}
-			else {
-				m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
-			}
 		}
 		else {
 			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
 		}
 	}
-	else if (m_Speed < 0) {
-		int closestY = forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMidX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0);
 
-		if ((m_Monster.getPrimitive()->getBoundingBox().getMinX()) + m_Speed * a_DeltaTime <= forCalculations->getPlatform(closestX)->getBoundingBox().getMaxX() && closestX != 0) {
-			m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestX)->getBoundingBox().getMaxX() + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
+
+	else if (m_Speed < 0) {
+		if ((m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime) < m_MaxMovement.x + m_Monster.getPrimitive()->getBoundingBox().size.width / 2) {
+			m_Monster.getPrimitive()->setPositionX(m_MaxMovement.x + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
 			m_Speed *= -1;
-		}
-		else if (m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime <= forCalculations->getPlatform(closestY)->getBoundingBox().getMinX()) {
-			if (m_Monster.getPrimitive()->getBoundingBox().getMinY() != forCalculations->getPlatform(forCalculations->getClosestY(m_Monster.getPrimitive()->getBoundingBox().getMinX(), m_Monster.getPrimitive()->getBoundingBox().getMinY(), 0))->getBoundingBox().getMaxY()) {
-				m_Monster.getPrimitive()->setPositionX(forCalculations->getPlatform(closestY)->getBoundingBox().getMinX() + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
-				m_Speed *= -1;
-			}
-			else {
-				m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
-			}
 		}
 		else {
 			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
@@ -533,4 +705,15 @@ void OOP::HeavyMonster::Update(float a_DeltaTime)
 void OOP::HeavyMonster::savePlatforms(OOP::PlatformGenerator * toSave)
 {
 	forCalculations = toSave;
+	m_MaxMovement = saveMax();
 }
+
+cocos2d::Vec2 OOP::HeavyMonster::saveMax()
+{
+	return forCalculations->getMonsterMaxMovement(m_Monster.getPrimitive()->getBoundingBox().getMidX(), m_Monster.getPrimitive()->getBoundingBox().getMinY());
+}
+
+
+
+
+#endif

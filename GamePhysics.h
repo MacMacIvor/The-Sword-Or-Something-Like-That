@@ -9,9 +9,9 @@
 #include "cocos2d.h"
 #include <functional>
 #include "KeyboardInput.h"
-#include "proj.win32\GamePhysics.h"
+#include "GamePhysics.h"
 #endif
-#include "proj.win32\PlatformGenerator.h"
+#include "PlatformGenerator.h"
 
 namespace cocos2d {
 	class Vec2;
@@ -35,7 +35,7 @@ namespace OOP {
 		void const checkOnGround(bool *onGround, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxY, int * health);
 		void const checkAgainstWall(int *againstWall, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxX, int * health);
 
-		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health);
+		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, int * currentLevel);
 		void const playerPhysics(bool upArrow, bool LeftArrow, bool rightArrow, bool zKey, bool shiftKey);
 	private:
 		const float GRAVITY = 9.81;
@@ -46,10 +46,13 @@ namespace OOP {
 		bool wasHoldingZ = false;
 		float wallJumpBonus = 0;
 
+		int lockLeft, lockRight;
 		int *playerHealth;
 		double* playerVelocityY,* playerVelocityX;
 		int* playerAgainstWall = 0;
 		bool* onGround = false;
+		int* invincible;
+		int * m_CurrentLevel;
 		cocos2d::Sprite* m_MainCharacter;
 		OOP::PlatformGenerator* m_PlatformManager;
 		

@@ -3,9 +3,9 @@
 OOP::Player::Player()
 	:m_MainCharacter(cocos2d::Sprite::create("Capture1.PNG")), IHATECOCOSIDONTKNOWWHYTHISISSOFINICKYTOGETTOWORK(cocos2d::Sprite::create("Dead.png")), velocityX(0), velocityY(0)
 {
-	m_Health.push_back(cocos2d::Sprite::create("Health.png"));
-	m_Health.push_back(cocos2d::Sprite::create("Health.png"));
-	m_Health.push_back(cocos2d::Sprite::create("Health.png"));
+	m_Health.push_back(cocos2d::Sprite::create("Health2.png"));
+	m_Health.push_back(cocos2d::Sprite::create("Health2.png"));
+	m_Health.push_back(cocos2d::Sprite::create("Health2.png"));
 
 	initAnimations();
 }
@@ -34,50 +34,7 @@ void const OOP::Player::setVelocityY(float newVelocity)
 	velocityY = newVelocity;
 }
 
-void const OOP::Player::updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platformY, cocos2d::Sprite * platformX, int typeOfHitBoxX, int typeOfHitBoxY)
-{
-		if (keyBoard.getRightArrow() == true) {
-			if (aniCount != 1) {
-				direction = false;
-				runAnimation(testframes);
-				aniCount = 1;
-			}
-		}
-		else if (keyBoard.getLeftArrow() == true) {
-			if (aniCount != 2) {
-				direction = true;
-				runAnimation(testframes);
-				aniCount = 2;
-			}
-		}
-		else {
-			if (aniCount != 0)
-			{
-				runAnimation(A_idle);
-				aniCount = 0;
-			}
-		}
-		
-		toCalculate.checkOnGround(&onGround, m_MainCharacter, platformY, typeOfHitBoxY, &health);
-		toCalculate.checkAgainstWall(&againstWall, m_MainCharacter, platformX, typeOfHitBoxX, &health);
 
-		toCalculate.newVelocityY(velocityY, keyBoard.getUpArrow(), keyBoard.getLeftArrow(), keyBoard.getRightArrow(), keyBoard.getZKey(), keyBoard.getShiftKey(), &againstWall, &onGround, m_MainCharacter, platformY);
-		velocityY = toCalculate.getVelocityY();
-
-		toCalculate.newVelocityX(velocityX, m_MainCharacter, platformX);
-		velocityX = toCalculate.getVelocityX();
-
-		attack();
-		if (attCooldown)
-		{
-			attCooldown++;
-		}
-		if (attCooldown >= 30)
-		{
-			attCooldown = 0;
-		}
-
-}
 
 void const OOP::Player::updateHealthSprite() const
 {
@@ -179,9 +136,9 @@ void const OOP::Player::updatePlayer()
 	}
 }
 
-void const OOP::Player::saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double * velocityY, double * velocityX, int * againstWall, bool * onGround, cocos2d::Sprite * a_MainCharacter, int * health)
+void const OOP::Player::saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double * velocityY, double * velocityX, int * againstWall, bool * onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, int * a_CurrentLevel)
 {
-	toCalculate.saveInfoBecauseIHateCocos(a_PlatformManager, velocityY, velocityX, againstWall, onGround, a_MainCharacter, health);
+	toCalculate.saveInfoBecauseIHateCocos(a_PlatformManager, velocityY, velocityX, againstWall, onGround, a_MainCharacter, health, a_invincible, a_CurrentLevel);
 }
 
 cocos2d::EventListenerKeyboard * OOP::Player::getListener()
@@ -206,9 +163,9 @@ void OOP::Player::initAnimations()
 	//CCArray* testFrames = new CCArray;
 	for (int i = 1; i <= 8; i++)
 	{
-		cocos2d::CCString* filename = cocos2d::CCString::createWithFormat("r%d.png", i);
-		cocos2d::CCSpriteFrame* frame = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(filename->getCString());
-		testframes.pushBack(frame);
+			cocos2d::CCString* filename = cocos2d::CCString::createWithFormat("r%d.png", i);
+			cocos2d::CCSpriteFrame* frame = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(filename->getCString());
+			testframes.pushBack(frame);
 	}
 
 	testAnim = cocos2d::CCAnimation::createWithSpriteFrames(testframes, 0.1f);

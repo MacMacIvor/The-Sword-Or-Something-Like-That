@@ -42,7 +42,7 @@ namespace OOP {
 		float const getVelocityY() const;
 		void const setVelocityX(float newVelocity);
 		void const setVelocityY(float newVelocity);
-		void const updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platformY, cocos2d::Sprite * platformX, int typeOfHitBoxX, int typeOfHitBoxY);
+		//void const updateVelocities(cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platformY, cocos2d::Sprite * platformX, int typeOfHitBoxX, int typeOfHitBoxY);
 		void const updateHealthSprite() const;
 		void const saveScene(cocos2d::Scene * helloThere);
 		void const initHealth() const;
@@ -52,7 +52,7 @@ namespace OOP {
 
 
 		void const updatePlayer();
-		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health);
+		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, int * a_CurrentLevel);
 
 
 

@@ -144,7 +144,9 @@ bool const OOP::Menu::addMenuScreen(cocos2d::Scene * HelloWorld, bool Up, bool D
 			else if (menuSelect == 2) {
 				//MySystemShutdown();
 				//Exits the game
-				MessageBox();
+				
+				exit(1);
+				//MessageBox();
 
 			}
 			wasHoldingZKey = true;

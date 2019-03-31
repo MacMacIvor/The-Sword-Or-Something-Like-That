@@ -4,9 +4,16 @@
 #include "myLevels.h"
 
 OOP::myLevels::myLevels()
-	:testing(cocos2d::Sprite::create("TutorialFinalTiles2.jpg"))
 {
+
 	m_Levels.push_back(cocos2d::Sprite::create("TutorialFinalTiles2.jpg"));
+	m_Levels.push_back(cocos2d::Sprite::create("CaveTemplateFinal.png"));
+	m_Levels.push_back(cocos2d::Sprite::create("CaveTemplate2Final.png"));
+	m_Levels.push_back(cocos2d::Sprite::create("CaveTemplate3Image.png"));
+	m_Levels.push_back(cocos2d::Sprite::create("Mountain Template 1 Final Image.png"));
+	m_Levels.push_back(cocos2d::Sprite::create("Mountain Template 2 Final.png"));
+	m_Levels.push_back(cocos2d::Sprite::create("Mountain Template 3 Final Image.png"));
+
 	//testing = cocos2d::Sprite::create("Level 1.PNG");
 }
 
@@ -14,10 +21,12 @@ OOP::myLevels::~myLevels()
 {
 }
 
+
 void const OOP::myLevels::initLevel(cocos2d::Scene *help) const
 {
 	m_Levels[currentLevel]->setPosition((m_Levels[currentLevel]->getBoundingBox().size.width / 2), m_Levels[currentLevel]->getBoundingBox().size.height / 2);
 	help->addChild(m_Levels[currentLevel], 0);
+	//levelOneHitBox[1][1] = 8;// = alevelOneHitBox;
 }
 
 void const OOP::myLevels::setLevel(int newLevel)
@@ -144,8 +153,33 @@ float const OOP::myLevels::getMovedAmountY() const
 	return -movedAmountY;
 }
 
-void const OOP::myLevels::resetLevel(cocos2d::Scene * help) const
+void const OOP::myLevels::resetLevel(cocos2d::Scene * help)
 {
+	if (currentLevel > savePrevLevel) {
+		m_Levels[savePrevLevel]->removeFromParentAndCleanup(true);
+		switch (currentLevel) {
+		case 2:
+			m_Levels[currentLevel] = cocos2d::Sprite::create("CaveTemplate2Final.png");
+			break;
+		case 3:
+			m_Levels[currentLevel] = cocos2d::Sprite::create("CaveTemplate3Image.png");
+			break;
+		case 4:
+			m_Levels[currentLevel] = cocos2d::Sprite::create("Mountain Template 1 Final Image.png");
+			break;
+		case 5:
+			m_Levels[currentLevel] = cocos2d::Sprite::create("Mountain Template 2 Final.png");
+			break;
+		case 6:
+			m_Levels[currentLevel] = cocos2d::Sprite::create("Mountain Template 3 Final Image.png");
+			break;
+		case 7:
+			m_Levels[currentLevel] = cocos2d::Sprite::create("CaveTemplate2Final.png");
+			break;
+		}
+		help->addChild(m_Levels[currentLevel], 0);
+		savePrevLevel++;
+	}
 	m_Levels[currentLevel]->setPosition((m_Levels[currentLevel]->getBoundingBox().size.width / 2), m_Levels[currentLevel]->getBoundingBox().size.height / 2);
 }
 

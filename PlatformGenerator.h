@@ -25,10 +25,12 @@ namespace OOP {
 	public:
 		PlatformGenerator();
 		cocos2d::Sprite *getPlatform(int reference);
-		void const generateNew(cocos2d::Scene *help, OOP::myLevels* level);
-		int const getClosestY(float pointX, float pointY, float velocityY);
-		int const getClosestX(cocos2d::Sprite* character, float velocityX);
+		cocos2d::Vec2 const generateNew(cocos2d::Scene *help, OOP::myLevels* level);
+		//int const getClosestY(float pointX, float pointY, float velocityY);
+		//int const getClosestX(cocos2d::Sprite* character, float velocityX);
 
+		cocos2d::Vec2 getMonsterMaxMovement(float positionX, float positionY);
+		//float getMonsterMinY(float positionX, float positionY);
 
 		void const moveHitBoxesX(float X);
 		void const moveHitBoxesY(float Y);
@@ -36,11 +38,14 @@ namespace OOP {
 		int const getTypeHitBoxX() const;
 		int const getTypeHitBoxY() const;
 
-		void const resetHitBox(cocos2d::Scene *help, OOP::myLevels* level);
+		cocos2d::Vec2 const resetHitBox(cocos2d::Scene *help, OOP::myLevels* level);
 
 		int vectorSize = 0;
 		int getPlayerTypeOfHitBox(int index) { return types[index]; }
 	private:
+		int numberForMonsters = 0;
+
+
 		std::vector <cocos2d::Sprite *> m_Platform;
 		std::vector <int> types;
 		int typeHitBoxX, monsterTypeHitBoxX;
