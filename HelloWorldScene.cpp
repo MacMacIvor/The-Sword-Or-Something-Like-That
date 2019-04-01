@@ -132,7 +132,11 @@ bool HelloWorld::init()
 void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction) {
 	static int taunt = 0;
 	
-	if (m_Menu.addMenuScreen(this, m_mainCharacter.getUpArrow(), m_mainCharacter.getDownArrow(),
+	if (m_TitleScreen.addTitleScreen(this, m_mainCharacter.getUpArrow(), m_mainCharacter.getDownArrow(), m_mainCharacter.getZKey(), m_mainCharacter.getXKey())) {
+		;
+	}
+
+	else if (m_Menu.addMenuScreen(this, m_mainCharacter.getUpArrow(), m_mainCharacter.getDownArrow(),
 		m_mainCharacter.getEscapeKey(), m_mainCharacter.getZKey(), m_mainCharacter.getXKey())) {
 		;
 	}
@@ -246,26 +250,38 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 			}
 		}
 		
-		if (m_mainCharacter.getMainCharacter()->getPositionY() > this->getBoundingBox().getMaxY() - 100) {
-			if (m_Level.checkMaxY(m_mainCharacter.getPlayerVelocityY(), this) == false) {
-				m_Level.moveBackGroundY(m_mainCharacter.getPlayerVelocityY(), this);
-				m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
-				m_mainCharacter.getMainCharacter()->setPositionY(this->getBoundingBox().getMaxY() - 100);
-				m_MonsterManager.moveMonstersWithScreen(0, m_Level.getMovedAmountY());
-			}
-			m_mainCharacter.getMainCharacter()->setPositionY(this->getBoundingBox().getMaxY() - 100);
-		}
-		else if (m_mainCharacter.getMainCharacter()->getPositionY() < 100) {
-			if (m_Level.checkMaxY(m_mainCharacter.getPlayerVelocityY(), this) == false) {
-				m_Level.moveBackGroundY(m_mainCharacter.getPlayerVelocityY(), this);
-				m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
-				m_MonsterManager.moveMonstersWithScreen(0, m_Level.getMovedAmountY());
-				m_mainCharacter.getMainCharacter()->setPositionY(100);
+		double distToMoveY = 0;
+		if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMinY() < 400 && m_mainCharacter.getPlayerVelocityY() <= 0) {
+			if (m_Level.checkMaxY(m_mainCharacter.getPlayerVelocityY(), this) != true) {
+				//m_Level.moveBackGroundY(m_mainCharacter.getPlayerVelocityY(), this);
+				//m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
+				//m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountY(), 0);
+				distToMoveY = m_mainCharacter.getMainCharacter()->getPositionY() - (400 + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.height / 2));
+				distToMoveY = m_Level.playerMoveBackgroundY(distToMoveY, this);
+				m_Platform.moveHitBoxesY(distToMoveY);
+				m_MonsterManager.moveMonstersWithScreen(0, distToMoveY);
+				m_mainCharacter.getMainCharacter()->setPositionY(400 + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.height / 2));
 			}
 			else {
-				if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMinX() < 0) {
-					m_mainCharacter.getMainCharacter()->setPositionY(0 + m_mainCharacter.getMainCharacter()->getBoundingBox().size.height / 2);
-				}
+				if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMinY() < 0)
+					m_mainCharacter.getMainCharacter()->setPositionY((m_mainCharacter.getMainCharacter()->getBoundingBox().size.height / 2));
+			}
+		}
+
+		else if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMaxY() > 600 && m_mainCharacter.getPlayerVelocityY() >= 0) {
+			if (m_Level.checkMaxY(m_mainCharacter.getPlayerVelocityY(), this) == false) {
+				//m_Level.moveBackGroundY(m_mainCharacter.getPlayerVelocityY(), this);
+				//m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
+				//m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountY(), 0);
+				distToMoveY = -((600 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.height / 2)) - m_mainCharacter.getMainCharacter()->getPositionY());
+				distToMoveY = m_Level.playerMoveBackgroundY(distToMoveY, this);
+				m_Platform.moveHitBoxesY(distToMoveY);
+				m_MonsterManager.moveMonstersWithScreen(0, distToMoveY);
+				m_mainCharacter.getMainCharacter()->setPositionY(600 - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.height / 2));
+			}
+			else {
+				if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMaxY() >= this->getBoundingBox().getMaxY())
+					m_mainCharacter.getMainCharacter()->setPositionY(this->getBoundingBox().getMaxY() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.height / 2));
 			}
 		}
 		if (m_MonsterManager.isZipZilchZero()) {

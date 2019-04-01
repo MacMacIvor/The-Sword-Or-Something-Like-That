@@ -697,6 +697,12 @@ cocos2d::Vec2 const OOP::PlatformGenerator::resetHitBox(cocos2d::Scene *help, OO
 	return OOP::PlatformGenerator::generateNew(help, level);
 }
 
+int OOP::PlatformGenerator::getPlayerTypeOfHitBox(int index)
+{
+	int wut = types[index];
+	return types[index];
+}
+
 #endif
 
 

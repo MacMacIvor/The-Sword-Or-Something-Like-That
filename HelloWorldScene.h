@@ -32,6 +32,7 @@
 #include "proj.win32\myLevels.h"
 #include "proj.win32\Monster.h"
 #include "proj.win32\Menu.h"
+#include "proj.win32\TitleScreen.h"
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -54,6 +55,7 @@ public:
 	OOP::Player m_mainCharacter;
 	OOP::myLevels m_Level;
 	OOP::Menu m_Menu;
+	OOP::TitleScreen m_TitleScreen;
 
 
 private:

@@ -83,6 +83,7 @@ namespace OOP {
 		cocos2d::Vec2 saveMax();
 	private:
 		OOP::PlatformGenerator *forCalculations;
+		bool isAttacking = false;
 	};
 	
 	class HeavyMonster : public baseMonster {
@@ -94,6 +95,8 @@ namespace OOP {
 		cocos2d::Vec2 saveMax();
 
 	private:
+		int isAttacking = 0;
+		bool leftRight = true; //true is left and right is false for the monsters attack
 		OOP::PlatformGenerator *forCalculations;
 	};
 

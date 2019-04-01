@@ -158,7 +158,14 @@ bool const OOP::Menu::addMenuScreen(cocos2d::Scene * HelloWorld, bool Up, bool D
 				isMenu = false; //Return to game
 			}
 			else {
-				;//return to menu from a branch
+				removeMenuScreen(); //New Screen
+				initMenu(0);
+				m_Screen->setPosition(HelloWorld->getBoundingBox().getMidX(), HelloWorld->getBoundingBox().getMidY());
+				HelloWorld->addChild(m_Screen, 99);
+				m_Arrow->setPosition(590, 490);
+				HelloWorld->addChild(m_Arrow, 100);
+				isMenu = true;;//return to menu from a branch
+				menuSelect = 0;
 			}
 			wasHoldingXKey = true;
 		}

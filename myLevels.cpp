@@ -102,7 +102,7 @@ void const OOP::myLevels::moveBackGroundX(float X, cocos2d::Scene *help)
 	else if (m_Levels[currentLevel]->getBoundingBox().getMinX() + X > help->getBoundingBox().getMinX() && X > 0) 
 	
 	{
-		movedAmountX = X - (help->getBoundingBox().getMinX() - m_Levels[currentLevel]->getBoundingBox().getMinX());
+		movedAmountX = (help->getBoundingBox().getMinX() - m_Levels[currentLevel]->getBoundingBox().getMinX());
 		m_Levels[currentLevel]->setPosition(
 			m_Levels[currentLevel]->getPositionX() + (help->getBoundingBox().getMinX() - m_Levels[currentLevel]->getBoundingBox().getMinX()),
 			m_Levels[currentLevel]->getPositionY()
@@ -124,33 +124,36 @@ float const OOP::myLevels::getMovedAmountX() const
 void const OOP::myLevels::moveBackGroundY(float Y, cocos2d::Scene * help)
 {
 	movedAmountY = Y;
-		
-	if (m_Levels[currentLevel]->getBoundingBox().getMinY() - Y > help->getBoundingBox().getMinY() || m_Levels[currentLevel]->getBoundingBox().getMaxY() - Y < help->getBoundingBox().getMaxY()) {
-		if (m_Levels[currentLevel]->getBoundingBox().getMinY() - Y > help->getBoundingBox().getMinY()) {
-			movedAmountY = m_Levels[currentLevel]->getBoundingBox().getMinY() - help->getBoundingBox().getMinY();
-			m_Levels[currentLevel]->setPosition(
-				m_Levels[currentLevel]->getPositionX(),
-				m_Levels[currentLevel]->getPositionY() - movedAmountY);
-		}
-		else {
-			movedAmountY = m_Levels[currentLevel]->getBoundingBox().getMaxY() - help->getBoundingBox().getMaxY();
-			m_Levels[currentLevel]->setPosition(
-				m_Levels[currentLevel]->getPositionX(),
-				m_Levels[currentLevel]->getPositionY() - movedAmountY);
-		}
-	}
 
+	if (m_Levels[currentLevel]->getBoundingBox().getMaxY() + Y > help->getBoundingBox().getMaxY() && Y > 0)
+
+	{
+		movedAmountY = (help->getBoundingBox().getMaxY() - m_Levels[currentLevel]->getBoundingBox().getMaxY());
+		m_Levels[currentLevel]->setPosition(
+			m_Levels[currentLevel]->getPositionY() + (help->getBoundingBox().getMaxY() - m_Levels[currentLevel]->getBoundingBox().getMaxY()),
+			m_Levels[currentLevel]->getPositionY()
+		);
+	}
+	else if (m_Levels[currentLevel]->getBoundingBox().getMinY() + Y < help->getBoundingBox().getMinY() && Y < 0)
+
+	{
+		movedAmountY = (help->getBoundingBox().getMinY() - m_Levels[currentLevel]->getBoundingBox().getMinY());
+		m_Levels[currentLevel]->setPosition(
+			m_Levels[currentLevel]->getPositionY() + (help->getBoundingBox().getMinY() - m_Levels[currentLevel]->getBoundingBox().getMinY()),
+			m_Levels[currentLevel]->getPositionY()
+		);
+	}
 	else {
 		m_Levels[currentLevel]->setPosition(
-			m_Levels[currentLevel]->getPositionX(),
-			m_Levels[currentLevel]->getPositionY() - Y
+			m_Levels[currentLevel]->getPositionY(),
+			m_Levels[currentLevel]->getPositionY() + Y
 		);
 	}
 }
 
 float const OOP::myLevels::getMovedAmountY() const 
 {
-	return -movedAmountY;
+	return movedAmountY;
 }
 
 void const OOP::myLevels::resetLevel(cocos2d::Scene * help)
@@ -221,30 +224,38 @@ double const OOP::myLevels::playerMoveBackgroundX(double X, cocos2d::Scene *hell
 
 double const OOP::myLevels::playerMoveBackgroundY(double Y, cocos2d::Scene *helloWorld)
 {
-	if (m_Levels[currentLevel]->getBoundingBox().getMinY() - Y > helloWorld->getBoundingBox().getMinY() || m_Levels[currentLevel]->getBoundingBox().getMaxY() - Y < helloWorld->getBoundingBox().getMaxY()) {
-		if (m_Levels[currentLevel]->getBoundingBox().getMinY() - Y > helloWorld->getBoundingBox().getMinY()) {
-			double movedAmount = m_Levels[currentLevel]->getBoundingBox().getMinY() - helloWorld->getBoundingBox().getMinY();
-			m_Levels[currentLevel]->setPosition(
-				m_Levels[currentLevel]->getPositionX(),
-				m_Levels[currentLevel]->getPositionY() - movedAmount);
-			return movedAmount;
-		}
-		else {
-			float movedAmount = m_Levels[currentLevel]->getBoundingBox().getMaxY() - helloWorld->getBoundingBox().getMaxY();
-			m_Levels[currentLevel]->setPosition(
-				m_Levels[currentLevel]->getPositionX(),
-				m_Levels[currentLevel]->getPositionY() - movedAmount);
-			return movedAmountX;
-		}
+	if (Y == 0)
+	{
+		return 0;
 	}
+	helloWorld->getBoundingBox().getMaxY();
+	m_Levels[currentLevel]->getBoundingBox().getMaxY();
+	if (m_Levels[currentLevel]->getBoundingBox().getMaxY() - Y < helloWorld->getBoundingBox().getMaxY() && Y > 0)
+	{
+		double movedAmount = (helloWorld->getBoundingBox().getMaxY() - m_Levels[currentLevel]->getBoundingBox().getMaxY());
+		m_Levels[currentLevel]->setPosition(
+			m_Levels[currentLevel]->getPositionX(),
+			m_Levels[currentLevel]->getPositionY() + movedAmount
+		);
+		return movedAmount;
+	}
+	else if (m_Levels[currentLevel]->getBoundingBox().getMinY() - Y > helloWorld->getBoundingBox().getMinY() && Y < 0)
 
+	{
+		double movedAmount = (helloWorld->getBoundingBox().getMinY() - m_Levels[currentLevel]->getBoundingBox().getMinY());
+		m_Levels[currentLevel]->setPosition(
+			m_Levels[currentLevel]->getPositionX(),
+			m_Levels[currentLevel]->getPositionY() + movedAmount
+		);
+		return movedAmount;
+	}
 	else {
 		m_Levels[currentLevel]->setPosition(
 			m_Levels[currentLevel]->getPositionX(),
 			m_Levels[currentLevel]->getPositionY() - Y
 		);
-		return Y;
-	};
+		return -Y;
+	}
 }
 
 #endif // !H_MYLEVELS

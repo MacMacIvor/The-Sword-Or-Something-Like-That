@@ -270,7 +270,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			else if (*playerVelocityX >= -5 && *playerVelocityX < 0) {
 				*playerVelocityX *= 1.5;
 			}
-			else if (*playerVelocityX > 0) {
+			else if (*playerVelocityX > 0 && lockRight == 0) {
 				*playerVelocityX /= 1.5;
 				if (*playerVelocityX <= 1) {
 					*playerVelocityX = 0;
@@ -284,7 +284,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			else if (*playerVelocityX <= 5 && *playerVelocityX > 0) {
 				*playerVelocityX *= 1.5;
 			}
-			else if (*playerVelocityX < 0) {
+			else if (*playerVelocityX < 0 && lockLeft == 0) {
 				*playerVelocityX /= 1.5;
 				if (*playerVelocityX >= -1) {
 					*playerVelocityX = 0;
@@ -292,10 +292,10 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			}
 		}
 		else {
-			if (*playerVelocityX >= 1 || *playerVelocityX <= -1) {
+			if ((*playerVelocityX >= 1 || *playerVelocityX <= -1) && lockRight == 0 && lockLeft == 0) {
 				*playerVelocityX /= 1.25;
 			}
-			else {
+			else if (lockRight == 0 && lockLeft == 0) {
 				*playerVelocityX = 0;
 			}
 		}
@@ -305,7 +305,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			if (*playerVelocityX == 0) {
 				*playerVelocityX = 1;
 			}
-			else if (*playerVelocityX <= 10 && *playerVelocityX > 0) {
+			else if (*playerVelocityX <= 10 && *playerVelocityX > 0 && lockLeft == 0) {
 				*playerVelocityX *= 1.5;
 			}
 			else if (*playerVelocityX < 0) {
@@ -329,7 +329,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			if (*playerVelocityX == 0) {
 				*playerVelocityX = -1;
 			}
-			else if (*playerVelocityX >= -10 && *playerVelocityX < 0) {
+			else if (*playerVelocityX >= -10 && *playerVelocityX < 0 && lockRight == 0) {
 				*playerVelocityX *= 1.5;
 			}
 			else if (*playerVelocityX > 0) {
@@ -373,27 +373,19 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 		else if (upArrow == false && *playerVelocityY > 0) {
 			*playerVelocityY -= 2 * GRAVITY * TIME_INTERVAL;
 		}
+		else if (zKey == true) {
+			*playerVelocityX = 10;
+			*playerVelocityY = 12;
+			lockRight = 30;
+		}
 		else if (shiftKey == true) {
-			if (zKey == true) {
-				*playerVelocityX = 10;
-				*playerVelocityY = 8;
-				lockRight = 30;
-			}
-			else {
+			
 				*playerVelocityX = 0;
 				*playerVelocityY = 0;
-			}
 		}
 		else if (rightArrow == true) {
-			if (zKey == true) {
-				*playerVelocityX = 10;
-				*playerVelocityY = 8;
-				lockRight = 30;
-			}
-			else {
 				*playerVelocityX = 0;
 				*playerVelocityY -= 0.15 * GRAVITY * TIME_INTERVAL;
-			}
 		}
 		else {
 			*playerVelocityY -= GRAVITY * TIME_INTERVAL;
@@ -406,27 +398,17 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 		else if (upArrow == false && *playerVelocityY > 0) {
 			*playerVelocityY -= 2 * GRAVITY * TIME_INTERVAL;
 		}
+		else if (zKey == true) {
+			*playerVelocityX = -10;
+			*playerVelocityY = 12;
+			lockLeft = 30;
+		}
 		else if (shiftKey == true) {
-			if (zKey == true) {
-				*playerVelocityX = -12;
-				*playerVelocityY = 8;
-				lockLeft = 30;
-			}
-			else {
-				*playerVelocityX = 0;
 				*playerVelocityY = 0;
-			}
 		}
 		else if (leftArrow == true) {
-			if (zKey == true) {
-				*playerVelocityX = -12;
-				*playerVelocityY = 8;
-				lockLeft = 30;
-			}
-			else {
 				*playerVelocityX = 0;
 				*playerVelocityY -= 0.15 * GRAVITY * TIME_INTERVAL;
-			}
 		}
 		else {
 			*playerVelocityY -= GRAVITY * TIME_INTERVAL;
@@ -465,10 +447,10 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			//Bottom -top
 			//Right -left
 
-		if (m_PlatformManager->getPlatform(i)->getBoundingBox().getMidX() - m_MainCharacter->getBoundingBox().getMidX() < 400 &&
-			m_PlatformManager->getPlatform(i)->getBoundingBox().getMidX() - m_MainCharacter->getBoundingBox().getMidX() > -400 &&
-			m_PlatformManager->getPlatform(i)->getBoundingBox().getMidY() - m_MainCharacter->getBoundingBox().getMidY() < 400 &&
-			m_PlatformManager->getPlatform(i)->getBoundingBox().getMidY() - m_MainCharacter->getBoundingBox().getMidY() > -400) {
+		if (m_PlatformManager->getPlatform(i)->getBoundingBox().getMidX() - m_MainCharacter->getBoundingBox().getMidX() < 600 &&
+			m_PlatformManager->getPlatform(i)->getBoundingBox().getMidX() - m_MainCharacter->getBoundingBox().getMidX() > -600 &&
+			m_PlatformManager->getPlatform(i)->getBoundingBox().getMidY() - m_MainCharacter->getBoundingBox().getMidY() < 600 &&
+			m_PlatformManager->getPlatform(i)->getBoundingBox().getMidY() - m_MainCharacter->getBoundingBox().getMidY() > -600) {
 
 			/*
 				1 is regular enemy, 2 is the coffin platforms (so you can jump through the bottom and land on top, they're not in this one)
@@ -491,9 +473,9 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 					if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 7) {
 						*playerHealth = 0;
 					}
-					if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && invincible == 0) {
-						*playerHealth--;
-						*invincible = 10;
+					if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && *invincible == 0) {
+						*playerHealth -= 1;
+						*invincible = 100;
 					}
 					if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
 						*m_CurrentLevel = 2;
@@ -520,9 +502,9 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 7) {
 							*playerHealth = 0;
 						}
-						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && invincible == 0) {
-							*playerHealth--;
-							*invincible = 10;
+						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && *invincible == 0) {
+							*playerHealth -= 1;
+							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
 							*m_CurrentLevel = 2;
@@ -545,9 +527,9 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 							m_MainCharacter->getBoundingBox().getMidX() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX()))) {
 					alreadyMovedY = true;
 					*onGround = true;
-					if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && invincible == 0) {
-						*playerHealth--;
-						*invincible = 10;
+					if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && *invincible == 0) {
+						*playerHealth -= 1;
+						*invincible = 100;
 					}
 					if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
 						*m_CurrentLevel = 2;
@@ -578,9 +560,9 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 						//m_MainCharacter->setPositionX(m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX() - m_MainCharacter->getBoundingBox().size.width / 2);
 						Goal3 = m_MainCharacter->getBoundingBox().getMaxX() - m_PlatformManager->getPlatform(i)->getBoundingBox().getMinX();
 						alreadyMovedX = true;
-						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && invincible == 0) {
-							*playerHealth--;
-							*invincible = 10;
+						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && *invincible == 0) {
+							*playerHealth -= 1;
+							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
 							*m_CurrentLevel = 2;
@@ -610,9 +592,9 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 						//*playerVelocityX = 0;
 						alreadyMovedX = true;
 						Goal4 = m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() - m_MainCharacter->getBoundingBox().getMinX();
-						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && invincible == 0) {
-							*playerHealth--;
-							*invincible = 10;
+						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && *invincible == 0) {
+							*playerHealth -= 1;
+							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
 							*m_CurrentLevel = 2;
@@ -635,9 +617,9 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 					if (m_PlatformManager->getPlayerTypeOfHitBox(i) != 2) {
 						alreadyMovedX = true;
 						*playerAgainstWall = 2;
-						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && invincible == 0) {
-							*playerHealth--;
-							*invincible = 10;
+						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && *invincible == 0) {
+							*playerHealth -= 1;
+							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
 							*m_CurrentLevel = 2;
@@ -656,9 +638,9 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 					if (m_PlatformManager->getPlayerTypeOfHitBox(i) != 2) {
 						alreadyMovedX = true;
 						*playerAgainstWall = 1;
-						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && invincible == 0) {
-							*playerHealth--;
-							*invincible = 10;
+						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 6 && *invincible == 0) {
+							*playerHealth -= 1;
+							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
 							*m_CurrentLevel = 2;

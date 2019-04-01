@@ -25,22 +25,7 @@ namespace OOP {
 
 	};
 
-
-
-
-
-
-
 }
 
 
-
-
-
 #endif // !H_MENUUUUUUUUU
-
-/*
-auto test = cocos2d::Sprite::create("PauseScreen.png");
-		test->setPosition(this->getBoundingBox().getMidX(), this->getBoundingBox().getMidY());
-		addChild(test, 99);
-*/

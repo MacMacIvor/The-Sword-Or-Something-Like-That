@@ -41,7 +41,7 @@ namespace OOP {
 		cocos2d::Vec2 const resetHitBox(cocos2d::Scene *help, OOP::myLevels* level);
 
 		int vectorSize = 0;
-		int getPlayerTypeOfHitBox(int index) { return types[index]; }
+		int getPlayerTypeOfHitBox(int index);
 	private:
 		int numberForMonsters = 0;
 

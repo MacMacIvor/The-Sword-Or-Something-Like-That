@@ -553,8 +553,20 @@ void OOP::BasicMonster::Update(float a_DeltaTime)
 	//(*forCalculations).getClosestX(m_Monster.getPrimitive(), m_Speed);
 	
 	//Add attack funtion here
-
-	this->move(a_DeltaTime);
+	int hello = m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX();
+	if (m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() < 1500 &&
+		m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() > -1500 && isAttacking == false) {
+		isAttacking = true;
+		m_Speed *= 30;
+	}
+	else if (!(m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() < 1500 &&
+		m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() > -1500) && isAttacking == true) {
+		isAttacking = false;
+		m_Speed /= 30;
+	}
+	else {
+		this->move(a_DeltaTime);
+	}
 }
 
 void OOP::BasicMonster::savePlatforms(OOP::PlatformGenerator * toSave)
@@ -699,7 +711,33 @@ void OOP::HeavyMonster::move(float a_DeltaTime)
 
 void OOP::HeavyMonster::Update(float a_DeltaTime)
 {
-	this->move(a_DeltaTime);
+	int hello = m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX();
+	if (m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() < 1000 &&
+		m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() > -1000 && isAttacking == 0) { //Detecting character
+		isAttacking = 100;
+		hello > 0 ? leftRight = true : leftRight = false;
+	}
+	else if (isAttacking <= 100 && isAttacking >= 70) { //PrePounce
+		isAttacking--;
+	}
+	else if (isAttacking == 69) { //Thaidan if you see this don't even it was just a coincidence you immature fool
+		//Pounce starts
+		leftRight == true ? m_Speed *= -70 : m_Speed *= 70;
+		isAttacking--;
+	}
+	else if (isAttacking >= 40 && isAttacking <= 68) { //Pounce
+		this->move(a_DeltaTime);
+		isAttacking--;
+	}
+	else if (isAttacking == 39) {
+		leftRight == true ? m_Speed /= -70 : m_Speed /= 70;
+	}
+	else if (isAttacking <= 40 && isAttacking >= 1) { //Cooldown
+		isAttacking--;
+	}
+	else {
+		this->move(a_DeltaTime);
+	}
 }
 
 void OOP::HeavyMonster::savePlatforms(OOP::PlatformGenerator * toSave)
