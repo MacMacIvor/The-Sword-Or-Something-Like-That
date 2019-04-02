@@ -15,7 +15,18 @@ OOP::baseMonster::baseMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Spri
 
 bool OOP::baseMonster::attack(cocos2d::Sprite * character)
 {
-	
+	if (((character->getBoundingBox().getMaxX() < this->m_Monster.getPrimitive()->getBoundingBox().getMaxX() && 
+		character->getBoundingBox().getMaxX() > this->m_Monster.getPrimitive()->getBoundingBox().getMinX()) ||
+		(character->getBoundingBox().getMinX() < this->m_Monster.getPrimitive()->getBoundingBox().getMaxX() &&
+			character->getBoundingBox().getMinX() > this->m_Monster.getPrimitive()->getBoundingBox().getMinX()))
+		&&
+		((character->getBoundingBox().getMinY() <= this->m_Monster.getPrimitive()->getBoundingBox().getMaxY() &&
+			character->getBoundingBox().getMinY() >= this->m_Monster.getPrimitive()->getBoundingBox().getMinY()) ||
+			(character->getBoundingBox().getMaxY() <= this->m_Monster.getPrimitive()->getBoundingBox().getMaxY() &&
+				character->getBoundingBox().getMaxY() >= this->m_Monster.getPrimitive()->getBoundingBox().getMinY()))
+		) {
+		return true;
+	}
 	return false;
 }
 
@@ -41,15 +52,6 @@ void OOP::baseMonster::beHert(int dmg, bool isHit)
 	}
 }
 
-bool OOP::baseMonster::isDead()
-{
-	return (HP <= 0);
-}
-
-void OOP::baseMonster::setHP(int)
-{
-	HP = 0;
-}
 void OOP::baseMonster::takeDMG()
 {
 	HP--;
@@ -65,9 +67,15 @@ void OOP::baseMonster::reduceI()
 	I_frames--;
 }
 
+bool OOP::baseMonster::isDead()
+{
+	return (HP <= 0);
+}
 
-
-
+void OOP::baseMonster::setHP(int)
+{
+	HP = 0;
+}
 
 OOP::MonsterManager::~MonsterManager()
 {
@@ -86,7 +94,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelOneHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelOneHitBox[i][j] != -1) {
 					if (levelOneHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -100,7 +108,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 						m_MonsterContainer.push_back(l_Monster2);
 					}
 					else if (levelOneHitBox[i][j] == 8) { //Heavy enemy
-						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster3->saveScene(scene);
 						l_Monster3->savePlatforms(toSave);
 						scene->addChild(l_Monster3->m_Monster.getPrimitive());
@@ -122,7 +130,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelTwoHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelTwoHitBox[i][j] != -1) {
 					if (levelTwoHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -100, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -136,7 +144,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 						m_MonsterContainer.push_back(l_Monster2);
 					}
 					else if (levelTwoHitBox[i][j] == 8) { //Heavy enemy
-						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster3->saveScene(scene);
 						l_Monster3->savePlatforms(toSave);
 						scene->addChild(l_Monster3->m_Monster.getPrimitive());
@@ -168,7 +176,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelThreeHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelThreeHitBox[i][j] != -1) {
 					if (levelThreeHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -40, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -182,7 +190,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 						m_MonsterContainer.push_back(l_Monster2);
 					}
 					else if (levelThreeHitBox[i][j] == 8) { //Heavy enemy
-						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster3->saveScene(scene);
 						l_Monster3->savePlatforms(toSave);
 						scene->addChild(l_Monster3->m_Monster.getPrimitive());
@@ -214,7 +222,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelFourHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelFourHitBox[i][j] != -1) {
 					if (levelFourHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -40, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -228,7 +236,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 						m_MonsterContainer.push_back(l_Monster2);
 					}
 					else if (levelFourHitBox[i][j] == 8) { //Heavy enemy
-						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster3->saveScene(scene);
 						l_Monster3->savePlatforms(toSave);
 						scene->addChild(l_Monster3->m_Monster.getPrimitive());
@@ -451,7 +459,7 @@ void OOP::MonsterManager::moveMonstersWithScreen(float amountX, float amountY)
 		);
 		m_MonsterContainer[y]->moveBullets(amountX, amountY);
 		m_MonsterContainer[y]->m_Spawn.x += amountX;
-		m_MonsterContainer[y]->m_Spawn.y += amountY;
+		m_MonsterContainer[y]->m_Spawn.y += amountY; 
 		m_MonsterContainer[y]->moveMaxes(amountX);
 	}
 }
@@ -523,21 +531,19 @@ bool OOP::MonsterManager::getHurt(cocos2d::Sprite * m_MainCharacter)
 			&& (m_MainCharacter->getBoundingBox().getMinY() <= m_MonsterContainer[y]->m_Monster.getPrimitive()->getBoundingBox().getMaxY() &&
 				m_MainCharacter->getBoundingBox().getMaxY() >= m_MonsterContainer[y]->m_Monster.getPrimitive()->getBoundingBox().getMinY())
 			) {
-
 			if (m_MonsterContainer[y]->hashurt() == false)
 			{
-			
+
 				m_MonsterContainer[y]->takeDMG();
-			
+
 			}
-			
+
 			//m_MonsterContainer[y]->m_MainCharacter.getBoundingBox().
 			return true;
 		}
 	}
 	return false;
 }
-
 
 OOP::BasicMonster::BasicMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes)
 	:baseMonster(a_Spawn, a_Speed, a_Sprite, a_Maxes) {}
@@ -560,8 +566,8 @@ void OOP::BasicMonster::move(float a_DeltaTime)
 
 
 	else if (m_Speed < 0) {
-		if ((m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime) < m_MaxMovement.x + m_Monster.getPrimitive()->getBoundingBox().size.width / 2) {
-			m_Monster.getPrimitive()->setPositionX(m_MaxMovement.x + m_MaxMovement.x + m_Monster.getPrimitive()->getBoundingBox().size.width);
+		if ((m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime) < m_MaxMovement.x - m_Monster.getPrimitive()->getBoundingBox().size.width / 2) {
+			m_Monster.getPrimitive()->setPositionX(m_MaxMovement.x + m_MaxMovement.x - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
 			m_Speed *= -1;
 		}
 		else {
@@ -578,15 +584,15 @@ void OOP::BasicMonster::Update(float a_DeltaTime)
 	
 	//Add attack funtion here
 	int hello = m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX();
-	if (m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() < 1500 &&
-		m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() > -1500 && isAttacking == false) {
+	if (m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() < 700 &&
+		m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() > -700 && isAttacking == false) {
 		isAttacking = true;
-		m_Speed *= 30;
+		m_Speed *= 7;
 	}
-	else if (!(m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() < 1500 &&
-		m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() > -1500) && isAttacking == true) {
+	else if (!(m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() < 700 &&
+		m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() > -700) && isAttacking == true) {
 		isAttacking = false;
-		m_Speed /= 30;
+		m_Speed /= 7;
 	}
 	else {
 		this->move(a_DeltaTime);
@@ -594,6 +600,15 @@ void OOP::BasicMonster::Update(float a_DeltaTime)
 	if (hashurt())
 	{
 		reduceI();
+	}
+	if (m_Speed > 0)
+	{
+		m_Monster.getPrimitive()->setScaleX(1.0f);
+	}
+	else
+	{
+		m_Monster.getPrimitive()->setScaleX(-1.0f);
+
 	}
 }
 
@@ -614,55 +629,67 @@ OOP::ShootingMonster::ShootingMonster(cocos2d::Vec2 a_Spawn, float a_Speed, int 
 
 bool OOP::ShootingMonster::attack(cocos2d::Sprite * character)
 {
-	if (shotCoolDown == 0) {
+	if (shotCoolDown > 0) {
+		shotCoolDown--;
+	}
+	else if (shotCoolDown == 0) {
 		float distance = character->getBoundingBox().getMidX() - m_Monster.getPrimitive()->getBoundingBox().getMidX();
 		if (distance < 0) {
 			distance *= -1;
 		}
 		if (distance < 1000) {
-			float l_TempX = character->getPosition().x - m_Spawn.x;
-			float l_TempY = character->getPosition().y - m_Spawn.y;
-			float angle = atan2(l_TempY, l_TempX);
-			//float l_X = cos(angle);
-			//float l_Y = sin(angle);
-
-			//float angle = atan2(this->goalY - this->posY, this->goalX - this->posX);
-			//this->speedX = cos(angle) * extraSpeed;
-			//this->speedY = sin(angle) * extraSpeed;
-			double distanceToTarget = character->getPositionX() - m_Spawn.x;
-			double temp = (distanceToTarget*98.0f) / (500.0f*500.0f);
-			if (temp > 1)
-			{
-				angle = asin(1) / std::_Pi * 90;
+			const int AMOUNTOFTIME = 200;
+			static int timeOutForAnim = AMOUNTOFTIME;
+			if (timeOutForAnim == AMOUNTOFTIME) {
+				m_Monster.shootingMonsterShoot(true);
 			}
-			else if (temp < -1)
-			{
-				angle = asin(-1) / std::_Pi * 90;
+			if (timeOutForAnim > 0) {
+				timeOutForAnim--;
 			}
-			else
-			{
-				angle = asin(temp) / std::_Pi * 90;
+			else {
+				shotCoolDown = SHOOTCOOLDOWN_CONST;
+				timeOutForAnim = AMOUNTOFTIME;
+				m_Monster.shootingMonsterShoot(false);
+				float l_TempX = character->getPosition().x - m_Spawn.x;
+				float l_TempY = character->getPosition().y - m_Spawn.y;
+				float angle = atan2(l_TempY, l_TempX);
+				//float l_X = cos(angle);
+				//float l_Y = sin(angle);
+
+				double distanceToTarget = character->getPositionX() - m_Spawn.x;
+				double temp = (distanceToTarget*98.0f) / (500.0f*500.0f);
+				if (temp > 1)
+				{
+					angle = asin(1) / std::_Pi * 90;
+				}
+				else if (temp < -1)
+				{
+					angle = asin(-1) / std::_Pi * 90;
+				}
+				else
+				{
+					angle = asin(temp) / std::_Pi * 90;
+				}
+				//angle = asin(temp) / std::_Pi * 90;
+				float vel_X = cos(angle * (std::_Pi / 180));
+				float vel_Y = sin(angle * (std::_Pi / 180));
+
+				//float angle = atan2(this->goalY - this->posY, this->goalX - this->posX);
+				//this->speedX = cos(angle) * extraSpeed;
+				//this->speedY = sin(angle) * extraSpeed;
+
+				OOP::Bullet * m_Bullets2 = new OOP::Bullet(m_Monster.getPrimitive()->getPosition(), cocos2d::Vec2(vel_X, vel_Y), -500.0f);
+				m_Scene->addChild(m_Bullets2->getBullet()->getBullet(), 1);
+				m_Bullets.push_back(m_Bullets2);
+
+				//m_Bullets->saveScene(m_Scene);
+				//m_Bullets->newBullet(*m_Bullets2);
 			}
-			//angle = asin(temp) / std::_Pi * 90;
-			float vel_X = cos(angle * (std::_Pi / 180));
-			float vel_Y = sin(angle * (std::_Pi / 180));
-
-			OOP::Bullet * m_Bullets2 = new OOP::Bullet(m_Monster.getPrimitive()->getPosition(), cocos2d::Vec2(vel_X, vel_Y), -500.0f);
-			m_Scene->addChild(m_Bullets2->getBullet()->getBullet(), 1);
-			m_Bullets.push_back(m_Bullets2);
-
-			//m_Bullets->saveScene(m_Scene);
-			//m_Bullets->newBullet(*m_Bullets2);
-
-			shotCoolDown = 600;
 		}
 		//ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2(0.0f + 64, 64.0f + 64), 30, 0);
 		//l_Monster2->saveScene(scene);
 		//scene->addChild(l_Monster2->m_Monster.getPrimitive());
 		//m_MonsterContainer.push_back(l_Monster2);
-	}
-	else {
-		shotCoolDown--;
 	}
 	return false;
 }
@@ -736,6 +763,9 @@ void OOP::HeavyMonster::move(float a_DeltaTime)
 			float tosee = m_Monster.getPrimitive()->getBoundingBox().getMaxX() + m_Speed * a_DeltaTime;
 			m_Monster.getPrimitive()->setPositionX(m_MaxMovement.y - m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
 			m_Speed *= -1;
+			if (m_Speed < -30) {
+				m_Speed = -30;
+			}
 		}
 		else {
 			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
@@ -747,6 +777,9 @@ void OOP::HeavyMonster::move(float a_DeltaTime)
 		if ((m_Monster.getPrimitive()->getBoundingBox().getMinX() + m_Speed * a_DeltaTime) < m_MaxMovement.x + m_Monster.getPrimitive()->getBoundingBox().size.width / 2) {
 			m_Monster.getPrimitive()->setPositionX(m_MaxMovement.x + m_Monster.getPrimitive()->getBoundingBox().size.width / 2);
 			m_Speed *= -1;
+			if (m_Speed > 30) {
+				m_Speed = 30;
+			}
 		}
 		else {
 			m_Monster.getPrimitive()->setPositionX(m_Monster.getPrimitive()->getPositionX() + m_Speed * a_DeltaTime);
@@ -756,32 +789,54 @@ void OOP::HeavyMonster::move(float a_DeltaTime)
 
 void OOP::HeavyMonster::Update(float a_DeltaTime)
 {
-	int hello = m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX();
 	if (m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() < 1000 &&
 		m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX() > -1000 && isAttacking == 0) { //Detecting character
+		int hello = m_MainCharacter.getBoundingBox().getMidX() - this->m_Monster.getPrimitive()->getBoundingBox().getMidX();
 		isAttacking = 100;
 		hello > 0 ? leftRight = true : leftRight = false;
+		m_Monster.heavyMonsterAttackAnim(true);
 	}
 	else if (isAttacking <= 100 && isAttacking >= 70) { //PrePounce
 		isAttacking--;
 	}
 	else if (isAttacking == 69) { //Thaidan if you see this don't even it was just a coincidence you immature fool
 		//Pounce starts
+		if (m_Speed < 30 && m_Speed > 0)
+			m_Speed = 30;
+		if (m_Speed < 0 && m_Speed > -30)
+			m_Speed = -30;
 		leftRight == true ? m_Speed *= -70 : m_Speed *= 70;
 		isAttacking--;
 	}
-	else if (isAttacking >= 40 && isAttacking <= 68) { //Pounce
+	else if (isAttacking >= 60 && isAttacking <= 68) { //Pounce
 		this->move(a_DeltaTime);
 		isAttacking--;
 	}
-	else if (isAttacking == 39) {
+	else if (isAttacking == 59) {
 		leftRight == true ? m_Speed /= -70 : m_Speed /= 70;
-	}
-	else if (isAttacking <= 40 && isAttacking >= 1) { //Cooldown
 		isAttacking--;
+		m_Monster.heavyMonsterAttackAnim(false);
+	}
+	else if (isAttacking <= 60 && isAttacking >= 20) { //Cooldown
+		isAttacking--;
+
 	}
 	else {
+		if (m_Speed < 30 && m_Speed > 0)
+			m_Speed = 30;
+		if (m_Speed < 0 && m_Speed > -30)
+			m_Speed = -30;
 		this->move(a_DeltaTime);
+		isAttacking = 0;
+	}
+
+	if (m_Speed > 0)
+	{
+		m_Monster.getPrimitive()->setScaleX(-1.0f);
+	}
+	else
+	{
+		m_Monster.getPrimitive()->setScaleX(1.0f);
 	}
 }
 

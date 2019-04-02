@@ -68,7 +68,6 @@ cocos2d::Sprite * OOP::BulletSprite::getBullet()
 OOP::Bullet::Bullet(const cocos2d::Vec2 & a_StartPosition, cocos2d::Vec2 & a_Direction, float speed)
 	:m_Bullet(a_StartPosition)
 {
-
 	m_Direction = a_Direction;
 	m_Speed = speed;
 	//m_Bullet.getBullet()->setPosition(0, 0);
@@ -85,14 +84,12 @@ OOP::Bullet::Bullet(const cocos2d::Vec2 & a_StartPosition, cocos2d::Vec2 & a_Dir
 		angle = asin(temp) / std::_Pi * 90;
 	}
 	vel = m_Direction * m_Speed;
-
-
 }
 
 void OOP::Bullet::update(float timePeriod)
 {
-
 	cocos2d::Vec2 temp = m_Bullet.getBullet()->getPosition();
+	m_Bullet.getBullet()->setPosition(temp + (m_Direction * m_Speed * timePeriod));
 	vel = cocos2d::Vec2(vel.x, vel.y - 98.0 * timePeriod);
 	m_Bullet.getBullet()->setPosition(temp + (vel * timePeriod));
 }

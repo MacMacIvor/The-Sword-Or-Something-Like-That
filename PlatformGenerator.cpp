@@ -589,11 +589,8 @@ cocos2d::Vec2 OOP::PlatformGenerator::getMonsterMaxMovement(float positionX, flo
 			}
 		}
 		else if (bufferRight == 1) {
-			if ((m_Platform[i]->getBoundingBox().getMaxY() == positionY) && (m_Platform[i]->getBoundingBox().getMidX() == (m_Platform[i - 1]->getBoundingBox().getMidX() + 128))) {
+			if ((m_Platform[i]->getBoundingBox().getMaxY() == positionY) && (m_Platform[i]->getBoundingBox().getMidX() == (m_Platform[groundExtentionRight]->getBoundingBox().getMidX() + 128))) {
 				groundExtentionRight = i;
-			}
-			else {
-				bufferRight++;
 			}
 		}
 
@@ -612,11 +609,8 @@ cocos2d::Vec2 OOP::PlatformGenerator::getMonsterMaxMovement(float positionX, flo
 			}
 		}
 		else if (bufferLeft == 1) {
-			if (m_Platform[w]->getBoundingBox().getMaxY() == positionY && m_Platform[w]->getBoundingBox().getMidX() == (m_Platform[w + 1]->getBoundingBox().getMidX() - 128)) {
+			if (m_Platform[w]->getBoundingBox().getMaxY() == positionY && m_Platform[w]->getBoundingBox().getMidX() == (m_Platform[groundExtentionLeft]->getBoundingBox().getMidX() - 128)) {
 				groundExtentionLeft = w;
-			}
-			else {
-				bufferLeft++;
 			}
 		}
 	}

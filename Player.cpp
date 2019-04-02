@@ -105,7 +105,7 @@ void const OOP::Player::updatePlayer()
 	{
 		if (aniCount != 3) {
 			runAnimation(A_attack, 0.1);
-			getMainCharacter()->setPosition(getMainCharacter()->getPosition() + cocos2d::Vec2(0,20));
+			getMainCharacter()->setPosition(getMainCharacter()->getPosition() + cocos2d::Vec2(0, 20));
 			aniCount = 3;
 		}
 	}
@@ -145,6 +145,7 @@ void const OOP::Player::updatePlayer()
 			aniCount = 0;
 		}
 	}
+
 	if (!isattack()) {
 		toCalculate.playerPhysics(keyBoard.getUpArrow(), keyBoard.getLeftArrow(), keyBoard.getRightArrow(), keyBoard.getZKey(), keyBoard.getShiftKey());
 	}
@@ -204,7 +205,6 @@ void OOP::Player::initAnimations()
 
 	testAnim = cocos2d::CCAnimation::createWithSpriteFrames(testframes, 0.1f);
 	action = cocos2d::CCRepeatForever::create(cocos2d::CCAnimate::create(testAnim));
-
 	frameCache = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache();
 	frameCache->addSpriteFramesWithFile("i.plist");
 	//idle animation
@@ -215,7 +215,7 @@ void OOP::Player::initAnimations()
 		
 		A_idle.pushBack(frame);
 	}
-
+	
 	//attack animation
 	frameCache = cocos2d::CCSpriteFrameCache::sharedSpriteFrameCache();
 	frameCache->addSpriteFramesWithFile("att.plist");
@@ -227,13 +227,12 @@ void OOP::Player::initAnimations()
 		A_attack.pushBack(frame);
 	}
 
-
 }
 
 void OOP::Player::runAnimation(cocos2d::Vector<cocos2d::CCSpriteFrame *> animation, double delay)
 {
 	m_MainCharacter->stopAllActions();
-		cocos2d::CCAnimation *newtestAnim = cocos2d::CCAnimation::createWithSpriteFrames(animation, delay);
+	cocos2d::CCAnimation *newtestAnim = cocos2d::CCAnimation::createWithSpriteFrames(animation, delay);
 	cocos2d::CCAction *action = cocos2d::CCRepeatForever::create(cocos2d::CCAnimate::create(newtestAnim));
 	m_MainCharacter->runAction(action);
 	

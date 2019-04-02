@@ -177,7 +177,7 @@ float const OOP::Physics::getVelocityX() const
 
 bool OOP::Physics::isGrounded()
 {
-	if(*onGround == true)
+	if (*onGround == true)
 	{
 		return true;
 	}
@@ -279,7 +279,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			if (*playerVelocityX == 0) {
 				*playerVelocityX = -1;
 			}
-			else if (*playerVelocityX >= -5 && *playerVelocityX < 0) {
+			else if (*playerVelocityX >= -7.49 && *playerVelocityX < 0) {
 				*playerVelocityX *= 1.5;
 			}
 			else if (*playerVelocityX > 0 && lockRight == 0) {
@@ -293,7 +293,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			if (*playerVelocityX == 0) {
 				*playerVelocityX = 1;
 			}
-			else if (*playerVelocityX <= 5 && *playerVelocityX > 0) {
+			else if (*playerVelocityX <= 7.49 && *playerVelocityX > 0) {
 				*playerVelocityX *= 1.5;
 			}
 			else if (*playerVelocityX < 0 && lockLeft == 0) {
@@ -386,8 +386,8 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			*playerVelocityY -= 2 * GRAVITY * TIME_INTERVAL;
 		}
 		else if (zKey == true) {
-			*playerVelocityX = 10;
-			*playerVelocityY = 12;
+			*playerVelocityX = 15;
+			*playerVelocityY = 8;
 			lockRight = 30;
 		}
 		else if (shiftKey == true) {
@@ -411,8 +411,8 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			*playerVelocityY -= 2 * GRAVITY * TIME_INTERVAL;
 		}
 		else if (zKey == true) {
-			*playerVelocityX = -10;
-			*playerVelocityY = 12;
+			*playerVelocityX = -15;
+			*playerVelocityY = 8;
 			lockLeft = 30;
 		}
 		else if (shiftKey == true) {

@@ -76,7 +76,9 @@ namespace OOP {
 		int HP = 1;
 		std::vector <OOP::Bullet *> m_Bullets;
 		OOP::PlatformGenerator *forCalculations;
-		int shotCoolDown = 0;
+		
+		const int SHOOTCOOLDOWN_CONST = 430;
+		int shotCoolDown = SHOOTCOOLDOWN_CONST;
 	};
 
 	class BasicMonster: public baseMonster {

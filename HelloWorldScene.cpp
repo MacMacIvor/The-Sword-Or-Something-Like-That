@@ -131,7 +131,6 @@ bool HelloWorld::init()
 
 void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction) {
 	static int taunt = 0;
-	
 	if (m_TitleScreen.addTitleScreen(this, m_mainCharacter.getUpArrow(), m_mainCharacter.getDownArrow(), m_mainCharacter.getZKey(), m_mainCharacter.getXKey())) {
 		;
 	}
