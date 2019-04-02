@@ -161,6 +161,9 @@ void const OOP::myLevels::resetLevel(cocos2d::Scene * help)
 	if (currentLevel > savePrevLevel) {
 		m_Levels[savePrevLevel]->removeFromParentAndCleanup(true);
 		switch (currentLevel) {
+		case 1:
+			m_Levels[currentLevel] = cocos2d::Sprite::create("CaveTemplateFinal.png");
+			break;
 		case 2:
 			m_Levels[currentLevel] = cocos2d::Sprite::create("CaveTemplate2Final.png");
 			break;

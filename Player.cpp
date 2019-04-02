@@ -68,13 +68,13 @@ void const OOP::Player::initHealth() const
 	m_scene->addChild(m_Health[2], 2);
 }
 
-void const OOP::Player::resetPlayer()
+void const OOP::Player::resetPlayer(cocos2d::Vec2 position)
 {
 	velocityX = 0;
 	velocityY = 0;
 	health = MAX_HEALTH;
 	invincible = 0;
-	m_MainCharacter->setPosition(100, 400);
+	m_MainCharacter->setPosition(position);
 }
 
 int const OOP::Player::getHealth() const

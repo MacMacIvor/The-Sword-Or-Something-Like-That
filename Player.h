@@ -46,7 +46,7 @@ namespace OOP {
 		void const updateHealthSprite() const;
 		void const saveScene(cocos2d::Scene * helloThere);
 		void const initHealth() const;
-		void const resetPlayer();
+		void const resetPlayer(cocos2d::Vec2 position = cocos2d::Vec2(100, 400));
 		int const getHealth() const;
 		void damage(cocos2d::Sprite * m_MainCharacter, bool left, bool right);
 
@@ -82,10 +82,10 @@ namespace OOP {
 		double playerVelocityY = 0;
 		double playerVelocityX = 0;
 		
+		cocos2d::Sprite *m_MainCharacter;
 
 	private:
 		cocos2d::Scene* m_scene;
-		cocos2d::Sprite *m_MainCharacter;
 		cocos2d::Sprite *IHATECOCOSIDONTKNOWWHYTHISISSOFINICKYTOGETTOWORK;
 		std::vector <cocos2d::Sprite *> m_Health;
 		std::vector <std::string> animation;

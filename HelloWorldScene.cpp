@@ -54,12 +54,11 @@ bool HelloWorld::init()
 	m_Level.initLevel(this);
 	m_Platform.generateNew(this, &m_Level);
 
-
 	m_mainCharacter.getMainCharacter()->setPosition(100, 400);
 	//this->addChild(m_mainCharacter.getMainCharacter(), 0);
 	std::string s = "a1.png";
 	m_mainCharacter.getMainCharacter()->setTexture(s);
-	this->addChild(m_mainCharacter.getMainCharacter(), 0);
+	this->addChild(m_mainCharacter.getMainCharacter(), 5);
 	//this be thing 
 
 
@@ -89,13 +88,14 @@ bool HelloWorld::init()
 
 
 	m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
-	this->addChild(m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos(), 3);
+	this->addChild(m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos(), 6);
 
 	this->scheduleUpdate();
 
 	
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(m_mainCharacter.getListener(), this);
 	
+
 	m_mainCharacter.saveScene(this);
 	//m_mainCharacter.updateHealthSprite();
 	m_mainCharacter.initHealth();
@@ -131,6 +131,8 @@ bool HelloWorld::init()
 
 void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariableHereToRecogniseTheUpdateFunction) {
 	static int taunt = 0;
+
+
 	if (m_TitleScreen.addTitleScreen(this, m_mainCharacter.getUpArrow(), m_mainCharacter.getDownArrow(), m_mainCharacter.getZKey(), m_mainCharacter.getXKey())) {
 		;
 	}
@@ -140,77 +142,8 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		;
 	}
 
-
 	else if (m_mainCharacter.getHealth() > 0 && taunt == 0) {
-		/*
-		cocos2d::Vec2 position = m_mainCharacter.getMainCharacter()->getPosition();
-
 		
-		m_Platform.getClosestY(m_mainCharacter.getMainCharacter(), m_mainCharacter.getVelocityY());
-		m_Platform.getClosestX(m_mainCharacter.getMainCharacter(), m_mainCharacter.getVelocityX());
-
-		m_mainCharacter.updateVelocities(m_mainCharacter.getMainCharacter(),
-			m_Platform.getPlatform(m_Platform.getClosestY(m_mainCharacter.getMainCharacter(), m_mainCharacter.getVelocityY())),
-			m_Platform.getPlatform(m_Platform.getClosestX(m_mainCharacter.getMainCharacter(), m_mainCharacter.getVelocityX())), m_Platform.getTypeHitBoxX(), m_Platform.getTypeHitBoxY());
-
-		position.x -= m_mainCharacter.getVelocityX();
-		position.y += m_mainCharacter.getVelocityY();
-
-
-
-
-		if (position.x < this->getBoundingBox().getMidX() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2) && m_mainCharacter.getVelocityX() >= 0) {
-			if (m_Level.checkMaxX(m_mainCharacter.getVelocityX(), this) != true) {
-				m_Level.moveBackGroundX(m_mainCharacter.getVelocityX(), this);
-				m_Platform.moveHitBoxesX(m_Level.getMovedAmountX());
-				m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountX(), 0);
-				position.x = this->getBoundingBox().getMidX() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
-			}
-			else {
-				if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMidX() <= this->getBoundingBox().getMinX() + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2))
-					position.x = this->getBoundingBox().getMinX() + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
-			}
-		}
-
-		else if (position.x > this->getBoundingBox().getMidX() + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2) && m_mainCharacter.getVelocityX() <= 0) {
-			if (m_Level.checkMaxX(m_mainCharacter.getVelocityX(), this) == false) {
-				m_Level.moveBackGroundX(m_mainCharacter.getVelocityX(), this);
-				m_Platform.moveHitBoxesX(m_Level.getMovedAmountX());
-				m_MonsterManager.moveMonstersWithScreen(m_Level.getMovedAmountX(), 0);
-				position.x = this->getBoundingBox().getMidX() + (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
-			}
-			else {
-				if(m_mainCharacter.getMainCharacter()->getBoundingBox().getMidX() >= this->getBoundingBox().getMaxX() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2))
-				position.x = this->getBoundingBox().getMaxX() - (m_mainCharacter.getMainCharacter()->getBoundingBox().size.width / 2);
-			}
-		}
-
-		if (position.y > this->getBoundingBox().getMaxY() - 100) {
-			if (m_Level.checkMaxY(m_mainCharacter.getVelocityY(), this) == false) {
-				m_Level.moveBackGroundY(m_mainCharacter.getVelocityY(), this);
-				m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
-				position.y = this->getBoundingBox().getMaxY() - 100;
-				m_MonsterManager.moveMonstersWithScreen(0, m_Level.getMovedAmountY());
-
-			}
-			position.y = this->getBoundingBox().getMaxY() - 100;
-
-		}
-		else if (position.y < 100) {
-			if (m_Level.checkMaxY(m_mainCharacter.getVelocityY(), this) == false) {
-				m_Level.moveBackGroundY(m_mainCharacter.getVelocityY(), this);
-				m_Platform.moveHitBoxesY(m_Level.getMovedAmountY());
-				m_MonsterManager.moveMonstersWithScreen(0, m_Level.getMovedAmountY());
-				position.y = 100;
-			}
-			else {
-				if (m_mainCharacter.getMainCharacter()->getBoundingBox().getMinX() < 0) {
-					position.y = 0 + m_mainCharacter.getMainCharacter()->getBoundingBox().size.height / 2;
-				}
-			}
-		}
-		m_mainCharacter.getMainCharacter()->setPosition(position);
-		*/
 		m_mainCharacter.updatePlayer();
 		m_mainCharacter.updateHealthSprite();
 
@@ -300,18 +233,45 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		taunt++;
 	}
 	else {
+
 		if (m_Level.toIncreaseLevel == true) {
-			m_Level.setLevel(m_Level.getLevelNum() + 1);
+			m_Level.currentLevel += 1;
+			m_Level.resetLevel(this);
+			m_mainCharacter.resetPlayer(m_Platform.resetHitBox(this, &m_Level));
+			m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
+			m_mainCharacter.saveScene(this);
+			m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
+			m_MonsterManager.monsterResest(this, &m_Platform);
+			m_MonsterManager.spawn(this, &m_Platform, &m_Level);
+			taunt = 0;
+			m_Level.toIncreaseLevel = false;
+			m_mainCharacter.health = 0;
+			//m_Level.initLevel(this);
+			//m_Platform.generateNew(this, &m_Level);
+			//m_mainCharacter.getMainCharacter()->setPosition(100, 400);
+			//m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
+			//m_mainCharacter.saveScene(this);
+			//m_mainCharacter.updateHealthSprite();
+			//m_mainCharacter.initHealth();
+			//m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
+
+
+			//m_mainCharacter.saveInfoBecauseIHateCocos(&m_Platform, &m_mainCharacter.playerVelocityY, &m_mainCharacter.playerVelocityX, &m_mainCharacter.playerAgainstWall,
+				//&m_mainCharacter.playerOnGround, m_mainCharacter.getMainCharacter(), &m_mainCharacter.health, &m_mainCharacter.invincible, &m_Level.toIncreaseLevel);
+
+			//m_MonsterManager.spawn(this, &m_Platform, &m_Level);
 		}
-		m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
-		taunt = 0;
-		m_mainCharacter.resetPlayer();
-		m_Level.resetLevel(this);
-		m_mainCharacter.saveScene(this);
-		m_mainCharacter.getMainCharacter()->setPosition(m_Platform.resetHitBox(this, &m_Level));
-		m_MonsterManager.monsterResest(this, &m_Platform);
-		m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
-		m_MonsterManager.spawn(this, &m_Platform, &m_Level);
+		else {
+			m_Level.resetLevel(this);
+			m_mainCharacter.resetPlayer(m_Platform.resetHitBox(this, &m_Level));
+			m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
+			m_mainCharacter.saveScene(this);
+			m_MonsterManager.getMainCharacter(m_mainCharacter.getMainCharacter());
+			m_MonsterManager.monsterResest(this, &m_Platform);
+			m_MonsterManager.spawn(this, &m_Platform, &m_Level);
+			taunt = 0;
+			m_Level.toIncreaseLevel = false;
+		}
 
 	}
 	

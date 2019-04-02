@@ -326,9 +326,9 @@ namespace OOP {
 		cocos2d::Sprite* testing;
 		
 
-		int savePrevLevel = 1;
+		int savePrevLevel = 0;
 
-		int currentPosition = 0;
+		int currentPosition = 1;
 		float movedAmountX;
 		float movedAmountY;
 
