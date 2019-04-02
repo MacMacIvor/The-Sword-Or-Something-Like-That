@@ -175,6 +175,18 @@ float const OOP::Physics::getVelocityX() const
 	return new_VelocityX;
 }
 
+bool OOP::Physics::isGrounded()
+{
+	if(*onGround == true)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void const OOP::Physics::checkOnGround(bool *onGround, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxY, int * health)
 {
 	if (m_MainCharacter->getBoundingBox().getMinY() <= platform->getBoundingBox().getMaxY() && m_MainCharacter->getBoundingBox().getMinY() >= platform->getBoundingBox().getMinY()) {

@@ -48,9 +48,13 @@ namespace OOP {
 		void beHert(int, bool);
 		bool isDead();
 		void setHP(int);
+		void takeDMG();
+		bool hashurt();
+		void reduceI();
 
 	private:
-		int HP = 1;//health
+		int HP = 2;//health
+		int I_frames = 0;
 		int spriteToUse = 0;
 		int swingCoolDown;
 	};
@@ -69,6 +73,7 @@ namespace OOP {
 
 
 	private:
+		int HP = 1;
 		std::vector <OOP::Bullet *> m_Bullets;
 		OOP::PlatformGenerator *forCalculations;
 		int shotCoolDown = 0;
@@ -82,6 +87,7 @@ namespace OOP {
 		void savePlatforms(OOP::PlatformGenerator *toSave);
 		cocos2d::Vec2 saveMax();
 	private:
+		int HP = 2;
 		OOP::PlatformGenerator *forCalculations;
 		bool isAttacking = false;
 	};
@@ -95,6 +101,7 @@ namespace OOP {
 		cocos2d::Vec2 saveMax();
 
 	private:
+		int HP = 4;
 		int isAttacking = 0;
 		bool leftRight = true; //true is left and right is false for the monsters attack
 		OOP::PlatformGenerator *forCalculations;

@@ -50,6 +50,21 @@ void OOP::baseMonster::setHP(int)
 {
 	HP = 0;
 }
+void OOP::baseMonster::takeDMG()
+{
+	HP--;
+	I_frames = 50;
+}
+bool OOP::baseMonster::hashurt()
+{
+	return I_frames;
+}
+
+void OOP::baseMonster::reduceI()
+{
+	I_frames--;
+}
+
 
 
 
@@ -435,8 +450,8 @@ void OOP::MonsterManager::moveMonstersWithScreen(float amountX, float amountY)
 			m_MonsterContainer[y]->m_Monster.getPrimitive()->getPositionY() + amountY
 		);
 		m_MonsterContainer[y]->moveBullets(amountX, amountY);
-		m_MonsterContainer[y]->m_Spawn.x + amountX;
-		m_MonsterContainer[y]->m_Spawn.y + amountY;
+		m_MonsterContainer[y]->m_Spawn.x += amountX;
+		m_MonsterContainer[y]->m_Spawn.y += amountY;
 		m_MonsterContainer[y]->moveMaxes(amountX);
 	}
 }
@@ -508,12 +523,21 @@ bool OOP::MonsterManager::getHurt(cocos2d::Sprite * m_MainCharacter)
 			&& (m_MainCharacter->getBoundingBox().getMinY() <= m_MonsterContainer[y]->m_Monster.getPrimitive()->getBoundingBox().getMaxY() &&
 				m_MainCharacter->getBoundingBox().getMaxY() >= m_MonsterContainer[y]->m_Monster.getPrimitive()->getBoundingBox().getMinY())
 			) {
-			m_MonsterContainer[y]->setHP(0);
+
+			if (m_MonsterContainer[y]->hashurt() == false)
+			{
+			
+				m_MonsterContainer[y]->takeDMG();
+			
+			}
+			
+			//m_MonsterContainer[y]->m_MainCharacter.getBoundingBox().
 			return true;
 		}
 	}
 	return false;
 }
+
 
 OOP::BasicMonster::BasicMonster(cocos2d::Vec2 & a_Spawn, float a_Speed, int a_Sprite, const cocos2d::Vec2 a_Maxes)
 	:baseMonster(a_Spawn, a_Speed, a_Sprite, a_Maxes) {}
@@ -567,6 +591,10 @@ void OOP::BasicMonster::Update(float a_DeltaTime)
 	else {
 		this->move(a_DeltaTime);
 	}
+	if (hashurt())
+	{
+		reduceI();
+	}
 }
 
 void OOP::BasicMonster::savePlatforms(OOP::PlatformGenerator * toSave)
@@ -595,14 +623,31 @@ bool OOP::ShootingMonster::attack(cocos2d::Sprite * character)
 			float l_TempX = character->getPosition().x - m_Spawn.x;
 			float l_TempY = character->getPosition().y - m_Spawn.y;
 			float angle = atan2(l_TempY, l_TempX);
-			float l_X = cos(angle);
-			float l_Y = sin(angle);
+			//float l_X = cos(angle);
+			//float l_Y = sin(angle);
 
 			//float angle = atan2(this->goalY - this->posY, this->goalX - this->posX);
 			//this->speedX = cos(angle) * extraSpeed;
 			//this->speedY = sin(angle) * extraSpeed;
+			double distanceToTarget = character->getPositionX() - m_Spawn.x;
+			double temp = (distanceToTarget*98.0f) / (500.0f*500.0f);
+			if (temp > 1)
+			{
+				angle = asin(1) / std::_Pi * 90;
+			}
+			else if (temp < -1)
+			{
+				angle = asin(-1) / std::_Pi * 90;
+			}
+			else
+			{
+				angle = asin(temp) / std::_Pi * 90;
+			}
+			//angle = asin(temp) / std::_Pi * 90;
+			float vel_X = cos(angle * (std::_Pi / 180));
+			float vel_Y = sin(angle * (std::_Pi / 180));
 
-			OOP::Bullet * m_Bullets2 = new OOP::Bullet(m_Monster.getPrimitive()->getPosition(), cocos2d::Vec2(l_X, l_Y), 200.0f);
+			OOP::Bullet * m_Bullets2 = new OOP::Bullet(m_Monster.getPrimitive()->getPosition(), cocos2d::Vec2(vel_X, vel_Y), -500.0f);
 			m_Scene->addChild(m_Bullets2->getBullet()->getBullet(), 1);
 			m_Bullets.push_back(m_Bullets2);
 
