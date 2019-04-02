@@ -14,12 +14,29 @@ cocos2d::Sprite * OOP::PlatformGenerator::getPlatform(int reference)
 
 cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OOP::myLevels* level)
 {
+	if (m_Platform.size() > 0) {
+		for (int i = 0; i < m_Platform.size(); i++) {
+			m_Platform.pop_back();
+		}
+	}
+	if(types.size() > 0) {
+		for (int i = 0; i < types.size(); i++) {
+			types.erase(types.begin() + i);
+		}
+	}
 	number = 0;
 	cocos2d::Vec2 mainCharacterSpawn;
 	switch (level->getLevelNum()) {
 	case 0:
 		for (int i = 0; i < (sizeof levelOneHitBox / sizeof levelOneHitBox[level->getLevelNum()]); i++) { //collums
 			for (int j = 0; j < (sizeof levelOneHitBox[level->getLevelNum()] / sizeof(int)); j++) { //rows
+				if (i == 0 && j == 0) {
+					if (types.size() > 0) {
+						for (int i = 0; i < types.size(); i++) {
+							types.erase(types.begin() + i);
+						}
+					}
+				}
 				/*
 				1 is regular enemy, 2 is the coffin platforms (so you can jump through the bottom and land on top, they're not in this one)
 				3 is ground, 4 is falling spikes, 5 is shooty boy, 6 is spikes on the ground, 7 is death pit (only in the  mountain level), 8 is heavy enemy

@@ -56,7 +56,6 @@ void OOP::baseMonster::takeDMG()
 {
 	HP--;
 	this->m_Speed *= -1;
-	I_frames = 50;
 }
 
 bool OOP::baseMonster::hashurt()

@@ -624,10 +624,10 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 			else if (alreadyMovedX == false) {
 				//Left of player
 				if (m_MainCharacter->getBoundingBox().getMinX() == m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxX() && ((
-					m_MainCharacter->getBoundingBox().getMinY() + 10 < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
-					m_MainCharacter->getBoundingBox().getMinY() + 10 > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()) || (
-						m_MainCharacter->getBoundingBox().getMaxY() - 10 < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
-						m_MainCharacter->getBoundingBox().getMaxY() - 10 > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()) || (
+					m_MainCharacter->getBoundingBox().getMinY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+					m_MainCharacter->getBoundingBox().getMinY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()) || (
+						m_MainCharacter->getBoundingBox().getMaxY() < m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
+						m_MainCharacter->getBoundingBox().getMaxY() > m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()) || (
 							m_MainCharacter->getBoundingBox().getMidY() <= m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() &&
 							m_MainCharacter->getBoundingBox().getMidY() >= m_PlatformManager->getPlatform(i)->getBoundingBox().getMinY()))) {
 					if (m_PlatformManager->getPlayerTypeOfHitBox(i) != 2) {
