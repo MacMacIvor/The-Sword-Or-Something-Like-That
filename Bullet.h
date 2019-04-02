@@ -26,8 +26,10 @@ namespace OOP {
 		cocos2d::Scene *m_Scene;
 		OOP::BulletSprite *getBullet();
 	private:
+		cocos2d::Vec2 vel;
 		BulletSprite m_Bullet;
 		cocos2d::Vec2 m_Direction;
+		cocos2d::Vec2 Velocity;
 		float m_Speed = 0.0f;
 	};
 	class BulletManager {

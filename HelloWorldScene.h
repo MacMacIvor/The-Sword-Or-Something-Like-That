@@ -56,10 +56,11 @@ public:
 	OOP::myLevels m_Level;
 	OOP::Menu m_Menu;
 	OOP::TitleScreen m_TitleScreen;
+	//CocosDenshion::SimpleAudioEngine  * music;
 
 
 private:
-	
+	int music = 1;
 
 };
 

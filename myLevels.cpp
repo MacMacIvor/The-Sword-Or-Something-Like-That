@@ -3,6 +3,11 @@
 
 #include "myLevels.h"
 
+int OOP::myLevels::getLVL()
+{
+	return currentLevel;
+}
+
 OOP::myLevels::myLevels()
 {
 
@@ -14,6 +19,7 @@ OOP::myLevels::myLevels()
 	m_Levels.push_back(cocos2d::Sprite::create("Mountain Template 2 Final.png"));
 	m_Levels.push_back(cocos2d::Sprite::create("Mountain Template 3 Final Image.png"));
 
+	
 	//testing = cocos2d::Sprite::create("Level 1.PNG");
 }
 

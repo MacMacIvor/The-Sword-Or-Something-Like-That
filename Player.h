@@ -65,7 +65,7 @@ namespace OOP {
 		cocos2d::Sprite *getTheLastAmountOfPatienceIHaveWithCocos(); //Returns the listener that holds the event
 
 		void initAnimations();
-		void runAnimation(cocos2d::Vector<cocos2d::CCSpriteFrame *>);
+		void runAnimation(cocos2d::Vector<cocos2d::CCSpriteFrame *>, double);
 
 		void attack();
 		bool isattack();
@@ -101,16 +101,21 @@ namespace OOP {
 		int attCooldown = 0;
 		cocos2d::CCAction *action;
 		bool direction = false;//true==left     false==right
-
+		int timeGrounded;
 
 		//animation things
 		cocos2d::CCSpriteFrameCache* frameCache;
 		cocos2d::Vector<cocos2d::CCSpriteFrame *> testframes;
 		cocos2d::CCAnimation* testAnim;
 
+		bool airAtt = false;
 
 		//animations
 		cocos2d::Vector<cocos2d::CCSpriteFrame *> A_idle;
+		cocos2d::Vector<cocos2d::CCSpriteFrame *> A_attack;
+		cocos2d::Vector<cocos2d::CCSpriteFrame *> A_jump;
+		cocos2d::Vector<cocos2d::CCSpriteFrame *> a_hang;
+
 	};
 }
 

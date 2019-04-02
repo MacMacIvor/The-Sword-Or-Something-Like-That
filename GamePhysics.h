@@ -37,6 +37,8 @@ namespace OOP {
 
 		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, int * currentLevel);
 		void const playerPhysics(bool upArrow, bool LeftArrow, bool rightArrow, bool zKey, bool shiftKey);
+		bool isGrounded();
+		int isOnWall();
 	private:
 		const float GRAVITY = 9.81;
 		const float TIME_INTERVAL = 0.05;
