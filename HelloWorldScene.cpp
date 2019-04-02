@@ -120,7 +120,7 @@ bool HelloWorld::init()
 
 
 		m_mainCharacter.saveInfoBecauseIHateCocos(&m_Platform, &m_mainCharacter.playerVelocityY, &m_mainCharacter.playerVelocityX, &m_mainCharacter.playerAgainstWall,
-			&m_mainCharacter.playerOnGround, m_mainCharacter.getMainCharacter(), &m_mainCharacter.health, &m_mainCharacter.invincible, &m_Level.currentLevel);
+			&m_mainCharacter.playerOnGround, m_mainCharacter.getMainCharacter(), &m_mainCharacter.health, &m_mainCharacter.invincible, &m_Level.toIncreaseLevel);
 
 		m_MonsterManager.spawn(this, &m_Platform, &m_Level);
 
@@ -300,6 +300,9 @@ void HelloWorld::update(float justSomeRandomThingBecauseCososNeedsAFloatVariable
 		taunt++;
 	}
 	else {
+		if (m_Level.toIncreaseLevel == true) {
+			m_Level.setLevel(m_Level.getLevelNum() + 1);
+		}
 		m_mainCharacter.getTheLastAmountOfPatienceIHaveWithCocos()->setPosition(-100, -100);
 		taunt = 0;
 		m_mainCharacter.resetPlayer();

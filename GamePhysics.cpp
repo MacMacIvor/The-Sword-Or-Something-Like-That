@@ -249,7 +249,7 @@ void const OOP::Physics::checkAgainstWall(int * againstWall, cocos2d::Sprite * m
 
 }
 
-void const OOP::Physics::saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double * velocityY, double * velocityX, int * againstWall, bool * a_onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, int * currentLevel)
+void const OOP::Physics::saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double * velocityY, double * velocityX, int * againstWall, bool * a_onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_Invincible, bool * a_increaseLevel)
 {
 	playerVelocityX = velocityX;
 	playerVelocityY = velocityY;
@@ -258,8 +258,8 @@ void const OOP::Physics::saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_Pla
 	playerAgainstWall = againstWall;
 	m_MainCharacter = a_MainCharacter;
 	playerHealth = health;
-	invincible = a_invincible;
-	m_CurrentLevel = currentLevel;
+	invincible = a_Invincible;
+	increaseLevel = a_increaseLevel;
 }
 
 void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightArrow, bool zKey, bool shiftKey)
@@ -490,7 +490,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 						*invincible = 100;
 					}
 					if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
-						*m_CurrentLevel = 2;
+						*increaseLevel = true;
 						*playerHealth = 0;
 					}
 					//m_MainCharacter->setPositionY(m_PlatformManager->getPlatform(i)->getBoundingBox().getMaxY() + m_MainCharacter->getBoundingBox().size.height / 2);
@@ -519,7 +519,8 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
-							*m_CurrentLevel = 2;
+							
+							*increaseLevel = true;
 							*playerHealth = 0;
 						}
 						alreadyMovedY = true;
@@ -544,7 +545,8 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 						*invincible = 100;
 					}
 					if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
-						*m_CurrentLevel = 2;
+						*increaseLevel = true;
+
 						*playerHealth = 0;
 					}
 				}
@@ -577,7 +579,8 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
-							*m_CurrentLevel = 2;
+							*increaseLevel = true;
+
 							*playerHealth = 0;
 						}
 						//*playerAgainstWall = 1;
@@ -609,7 +612,8 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
-							*m_CurrentLevel = 2;
+							*increaseLevel = true;
+
 							*playerHealth = 0;
 						}
 					}
@@ -634,7 +638,8 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
-							*m_CurrentLevel = 2;
+							*increaseLevel = true;
+
 							*playerHealth = 0;
 						}
 					}
@@ -655,7 +660,7 @@ void const OOP::Physics::playerPhysics(bool upArrow, bool leftArrow, bool rightA
 							*invincible = 100;
 						}
 						if (m_PlatformManager->getPlayerTypeOfHitBox(i) == 99 && *playerHealth != 0) {
-							*m_CurrentLevel = 2;
+							*increaseLevel = true;
 							*playerHealth = 0;
 						}
 					}

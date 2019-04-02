@@ -6,7 +6,7 @@
 OOP::myLevels::myLevels()
 {
 
-	m_Levels.push_back(cocos2d::Sprite::create("TutorialFinalTiles2.jpg"));
+	m_Levels.push_back(cocos2d::Sprite::create("TutorialFinalTiles2.png"));
 	m_Levels.push_back(cocos2d::Sprite::create("CaveTemplateFinal.png"));
 	m_Levels.push_back(cocos2d::Sprite::create("CaveTemplate2Final.png"));
 	m_Levels.push_back(cocos2d::Sprite::create("CaveTemplate3Image.png"));

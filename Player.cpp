@@ -171,7 +171,7 @@ void const OOP::Player::updatePlayer()
 	}
 }
 
-void const OOP::Player::saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double * velocityY, double * velocityX, int * againstWall, bool * onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, int * a_CurrentLevel)
+void const OOP::Player::saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double * velocityY, double * velocityX, int * againstWall, bool * onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, bool * a_CurrentLevel)
 {
 	toCalculate.saveInfoBecauseIHateCocos(a_PlatformManager, velocityY, velocityX, againstWall, onGround, a_MainCharacter, health, a_invincible, a_CurrentLevel);
 }

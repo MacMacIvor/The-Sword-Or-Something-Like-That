@@ -18,20 +18,20 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 	cocos2d::Vec2 mainCharacterSpawn;
 	switch (level->getLevelNum()) {
 	case 0:
-		for (int i = 0; i < (sizeof levelOneHitBox / sizeof levelOneHitBox[level->getLevelNum()]); i++) { //rows
-			for (int j = 0; j < (sizeof levelOneHitBox[level->getLevelNum()] / sizeof(int)); j++) { //collums
-				if (levelOneHitBox[i][j] != -1) {
-					if (levelOneHitBox[i][j] == 25)
-					{
-						if (number == 60 || number == 36) {
-							types.push_back(1);
-							m_Platform.push_back(cocos2d::Sprite::create("testforms3.png"));
-						}
-						else {
-							types.push_back(1);
-							m_Platform.push_back(cocos2d::Sprite::create("testforms3.png"));
+		for (int i = 0; i < (sizeof levelOneHitBox / sizeof levelOneHitBox[level->getLevelNum()]); i++) { //collums
+			for (int j = 0; j < (sizeof levelOneHitBox[level->getLevelNum()] / sizeof(int)); j++) { //rows
+				/*
+				1 is regular enemy, 2 is the coffin platforms (so you can jump through the bottom and land on top, they're not in this one)
+				3 is ground, 4 is falling spikes, 5 is shooty boy, 6 is spikes on the ground, 7 is death pit (only in the  mountain level), 8 is heavy enemy
+				0 is nothing and -1 is nothing
+				99 next level
 
-						}
+				*/
+				if (levelOneHitBox[i][j] != -1) {
+					if (levelOneHitBox[i][j] == 2) {
+						types.push_back(2);
+						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
+
 						m_Platform[number]->setPosition(
 							level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
 							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
@@ -40,12 +40,52 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelOneHitBox[i][j] == 0 || levelOneHitBox[i][j] == 1 || levelOneHitBox[i][j] == 2) {
+					else if (levelOneHitBox[i][j] == 3)
+					{
+						types.push_back(3);
+						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
+
+						m_Platform[number]->setPosition(
+							level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+						);
+
+						help->addChild(m_Platform[number], 1);
+						number++;
+					}
+					else if (levelOneHitBox[i][j] == 6) {
+						types.push_back(6);
+						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
+
+						m_Platform[number]->setPosition(
+							level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+						);
+
+						help->addChild(m_Platform[number], 1);
+						number++;
+					}
+					else if (levelOneHitBox[i][j] == 10) {
+						types.push_back(99);
+						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
+
+						m_Platform[number]->setPosition(
+							level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
+							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
+						);
+
+						help->addChild(m_Platform[number], 1);
+						number++;
+					}
+					else if (levelOneHitBox[i][j] == 9) {
+						mainCharacterSpawn = cocos2d::Vec2(level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64);
+					}
+					else if (levelOneHitBox[i][j] == 1 || levelOneHitBox[i][j] == 5 || levelOneHitBox[i][j] == 8 || levelOneHitBox[i][j] == 4) {
 						;
 					}
 					else {
-						types.push_back(2);
-						m_Platform.push_back(cocos2d::Sprite::create("testforms3.png"));
+						types.push_back(7);
+						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
 						m_Platform[number]->setPosition(
 							level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
 							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
@@ -86,7 +126,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 					{
 						types.push_back(3);
 						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
-						
+
 						m_Platform[number]->setPosition(
 							level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
 							level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64
@@ -107,7 +147,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelTwoHitBox[i][j] == 99) {
+					else if (levelTwoHitBox[i][j] == 10) {
 						types.push_back(99);
 						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
 
@@ -119,7 +159,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelTwoHitBox[i][j] == 98) {
+					else if (levelTwoHitBox[i][j] == 9) {
 						mainCharacterSpawn = cocos2d::Vec2(level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64);
 					}
 					else if (levelTwoHitBox[i][j] == 1 || levelTwoHitBox[i][j] == 5 || levelTwoHitBox[i][j] == 8 || levelTwoHitBox[i][j] == 4) {
@@ -189,7 +229,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelThreeHitBox[i][j] == 99) {
+					else if (levelThreeHitBox[i][j] == 10) {
 						types.push_back(99);
 						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
 
@@ -201,7 +241,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelThreeHitBox[i][j] == 98) {
+					else if (levelThreeHitBox[i][j] == 9) {
 						mainCharacterSpawn = cocos2d::Vec2(level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64);
 					}
 					else if (levelThreeHitBox[i][j] == 1 || levelThreeHitBox[i][j] == 5 || levelThreeHitBox[i][j] == 8 || levelThreeHitBox[i][j] == 4) {
@@ -271,7 +311,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelFourHitBox[i][j] == 99) {
+					else if (levelFourHitBox[i][j] == 10) {
 						types.push_back(99);
 						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
 
@@ -283,7 +323,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelFourHitBox[i][j] == 98) {
+					else if (levelFourHitBox[i][j] == 9) {
 						mainCharacterSpawn = cocos2d::Vec2(level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64);
 					}
 					else if (levelFourHitBox[i][j] == 1 || levelFourHitBox[i][j] == 5 || levelFourHitBox[i][j] == 8 || levelFourHitBox[i][j] == 4) {
@@ -353,7 +393,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelFiveHitBox[i][j] == 99) {
+					else if (levelFiveHitBox[i][j] == 10) {
 						types.push_back(99);
 						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
 
@@ -365,7 +405,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelFiveHitBox[i][j] == 98) {
+					else if (levelFiveHitBox[i][j] == 9) {
 						mainCharacterSpawn = cocos2d::Vec2(level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64);
 					}
 					else if (levelFiveHitBox[i][j] == 1 || levelFiveHitBox[i][j] == 5 || levelFiveHitBox[i][j] == 8 || levelFiveHitBox[i][j] == 4) {
@@ -435,7 +475,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelSixHitBox[i][j] == 99) {
+					else if (levelSixHitBox[i][j] == 10) {
 						types.push_back(99);
 						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
 
@@ -447,7 +487,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelSixHitBox[i][j] == 98) {
+					else if (levelSixHitBox[i][j] == 9) {
 						mainCharacterSpawn = cocos2d::Vec2(level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64);
 					}
 					else if (levelSixHitBox[i][j] == 1 || levelSixHitBox[i][j] == 5 || levelSixHitBox[i][j] == 8 || levelSixHitBox[i][j] == 4) {
@@ -517,7 +557,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelSevenHitBox[i][j] == 99) {
+					else if (levelSevenHitBox[i][j] == 10) {
 						types.push_back(99);
 						m_Platform.push_back(cocos2d::Sprite::create("testforms.png"));
 
@@ -529,7 +569,7 @@ cocos2d::Vec2 const OOP::PlatformGenerator::generateNew(cocos2d::Scene *help, OO
 						help->addChild(m_Platform[number], 1);
 						number++;
 					}
-					else if (levelSevenHitBox[i][j] == 98) {
+					else if (levelSevenHitBox[i][j] == 9) {
 						mainCharacterSpawn = cocos2d::Vec2(level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64);
 					}
 					else if (levelSevenHitBox[i][j] == 1 || levelSevenHitBox[i][j] == 5 || levelSevenHitBox[i][j] == 8 || levelSevenHitBox[i][j] == 4) {

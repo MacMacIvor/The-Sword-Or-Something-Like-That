@@ -52,7 +52,7 @@ namespace OOP {
 
 
 		void const updatePlayer();
-		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, int * a_CurrentLevel);
+		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, bool * a_CurrentLevel);
 
 
 

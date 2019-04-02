@@ -55,6 +55,7 @@ void OOP::baseMonster::beHert(int dmg, bool isHit)
 void OOP::baseMonster::takeDMG()
 {
 	HP--;
+	this->m_Speed *= -1;
 	I_frames = 50;
 }
 bool OOP::baseMonster::hashurt()
@@ -94,7 +95,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelOneHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelOneHitBox[i][j] != -1) {
 					if (levelOneHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -100, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -102,18 +103,28 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 					}
 					else if (levelOneHitBox[i][j] == 5) { //Shooting enemy
 						//64 bottom of edge and 64 for half the emeny sprite size
-						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1, cocos2d::Vec2(0,0));
+						ShootingMonster * l_Monster2 = new ShootingMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 0, 1, cocos2d::Vec2(0, 0));
 						l_Monster2->saveScene(scene);
 						scene->addChild(l_Monster2->m_Monster.getPrimitive());
 						m_MonsterContainer.push_back(l_Monster2);
 					}
 					else if (levelOneHitBox[i][j] == 8) { //Heavy enemy
-						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster3->saveScene(scene);
 						l_Monster3->savePlatforms(toSave);
 						scene->addChild(l_Monster3->m_Monster.getPrimitive());
 						m_MonsterContainer.push_back(l_Monster3);
 					}
+					else if (levelOneHitBox[i][j] == 4) { //Falling skipes
+						;
+					}
+
+
+
+
+
+
+
 					/*
 					m_Platform[number]->setPosition(
 						level->getLevel()->getBoundingBox().getMinX() + (128 * j) + 64,
@@ -176,7 +187,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelThreeHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelThreeHitBox[i][j] != -1) {
 					if (levelThreeHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -40, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -100, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -222,7 +233,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelFourHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelFourHitBox[i][j] != -1) {
 					if (levelFourHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -40, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -100, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -268,7 +279,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelFiveHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelFiveHitBox[i][j] != -1) {
 					if (levelFiveHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -100, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -282,7 +293,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 						m_MonsterContainer.push_back(l_Monster2);
 					}
 					else if (levelFiveHitBox[i][j] == 8) { //Heavy enemy
-						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster3->saveScene(scene);
 						l_Monster3->savePlatforms(toSave);
 						scene->addChild(l_Monster3->m_Monster.getPrimitive());
@@ -314,7 +325,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelSixHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelSixHitBox[i][j] != -1) {
 					if (levelSixHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -100, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -328,7 +339,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 						m_MonsterContainer.push_back(l_Monster2);
 					}
 					else if (levelSixHitBox[i][j] == 8) { //Heavy enemy
-						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster3->saveScene(scene);
 						l_Monster3->savePlatforms(toSave);
 						scene->addChild(l_Monster3->m_Monster.getPrimitive());
@@ -360,7 +371,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 			for (int j = 0; j < (sizeof levelSevenHitBox[0] / sizeof(int)); j++) { //collums
 				if (levelSevenHitBox[i][j] != -1) {
 					if (levelSevenHitBox[i][j] == 1) { //Light enemy
-						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 20, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						BasicMonster * l_Monster = new BasicMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -100, 0, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster->saveScene(scene);
 						l_Monster->savePlatforms(toSave);
 						scene->addChild(l_Monster->m_Monster.getPrimitive());
@@ -374,7 +385,7 @@ void OOP::MonsterManager::spawn(cocos2d::Scene * scene, OOP::PlatformGenerator *
 						m_MonsterContainer.push_back(l_Monster2);
 					}
 					else if (levelSevenHitBox[i][j] == 8) { //Heavy enemy
-						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), 30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
+						HeavyMonster * l_Monster3 = new HeavyMonster(cocos2d::Vec2((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 64), -30, 2, toSave->getMonsterMaxMovement((128 * j) + 64, level->getLevel()->getBoundingBox().getMaxY() - (128 * i) - 128));
 						l_Monster3->saveScene(scene);
 						l_Monster3->savePlatforms(toSave);
 						scene->addChild(l_Monster3->m_Monster.getPrimitive());

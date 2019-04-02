@@ -35,7 +35,7 @@ namespace OOP {
 		void const checkOnGround(bool *onGround, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxY, int * health);
 		void const checkAgainstWall(int *againstWall, cocos2d::Sprite * m_MainCharacter, cocos2d::Sprite * platform, int typeOfHitBoxX, int * health);
 
-		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, int * currentLevel);
+		void const saveInfoBecauseIHateCocos(OOP::PlatformGenerator *a_PlatformManager, double *velocityY, double *velocityX, int *againstWall, bool *onGround, cocos2d::Sprite * a_MainCharacter, int * health, int * a_invincible, bool * increaseLevel);
 		void const playerPhysics(bool upArrow, bool LeftArrow, bool rightArrow, bool zKey, bool shiftKey);
 		bool isGrounded();
 	private:
@@ -53,7 +53,7 @@ namespace OOP {
 		int* playerAgainstWall = 0;
 		bool* onGround = false;
 		int* invincible;
-		int * m_CurrentLevel;
+		bool * increaseLevel;
 		cocos2d::Sprite* m_MainCharacter;
 		OOP::PlatformGenerator* m_PlatformManager;
 		
